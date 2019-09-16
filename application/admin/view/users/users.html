@@ -1,0 +1,58 @@
+{extend name="layouts/main" /}
+{block name="main"}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <a class="layui-btn" href="/admin/users/add"><i class="layui-icon"></i>添加用户</a>
+                </div>
+                <div class="layui-card-body layui-table-body layui-table-main">
+                    <table class="layui-table layui-form">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>用户来源</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="users" id="item"}
+                        <tr>
+                            <td>{$item.id}</td>
+                            <td>{$item.user_name}</td>
+                            <td>{$item.user_source==0?"网站":"微信"}</td>
+                            <td>
+                                <a href="/admin/users/add/{$item.id}"><i class="iconfont" title="编辑">&#xe69e;</i></a>&nbsp;&nbsp;
+                                <a  href="javascript:delConfirm('/admin/users/delete/{$item.id}')"><i class="iconfont" style="color: red" title="删除">&#xe69d;</i></a>
+                            </td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                    {empty name="users"}
+                    暂无数据
+                    {/empty}
+                    <div class="page">{$users|raw}</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use('layer', function(){
+        var layer = layui.layer;
+    });
+
+    function delConfirm(jumpurl){
+        layer.confirm(
+            '确定要删除此数据么?',
+            function (){
+                window.location.href = jumpurl;
+            }
+        );
+    }
+</script>
+{/block}

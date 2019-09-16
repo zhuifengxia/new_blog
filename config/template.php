@@ -32,4 +32,9 @@ return [
     'taglib_begin' => '{',
     // 标签库标签结束标记
     'taglib_end'   => '}',
+    //标签常量
+    'tpl_replace_string'  =>  [
+        '__LAYUI__'=>'/static/admin/lib/layui',
+        '__ADMIN__'=>'/static/admin',
+    ]
 ];

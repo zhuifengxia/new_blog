@@ -4,9 +4,61 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0ee82eb3b9bfe584418480049a4ee652",
-    "content-hash": "296bd8a1d28e39d56dcd80ce7be249f3",
+    "hash": "5e5d977321b2f597c27d8daaa4c05adc",
+    "content-hash": "c176015f7b2a21f4e918b27d023e337a",
     "packages": [
+        {
+            "name": "mo/mo-common",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zhuifengxia/mo_common.git",
+                "reference": "a700bcb0ed16ed6ebd19df3941cccf1a997d7411"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zhuifengxia/mo_common/zipball/a700bcb0ed16ed6ebd19df3941cccf1a997d7411",
+                "reference": "a700bcb0ed16ed6ebd19df3941cccf1a997d7411",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Support/Constants.php"
+                ],
+                "classmap": [
+                    "src/Payment/Wxpay/Enterprice.php",
+                    "src/WeChat/WxBizDataCrypt.php"
+                ],
+                "psr-4": {
+                    "MoCommon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "momo",
+                    "email": "xirizhifeng@163.com"
+                }
+            ],
+            "description": "mo common library",
+            "time": "2019-08-30 06:51:17"
+        },
         {
             "name": "topthink/framework",
             "version": "v5.1.38.1",
@@ -115,7 +167,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "mo/mo-common": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

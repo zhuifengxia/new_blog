@@ -1,0 +1,16 @@
+{extend name="layouts/admin" /}
+{block name="main"}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <blockquote class="layui-elem-quote">欢迎管理员：
+                        <span class="x-red">{$Think.session.adminuser.user_name}</span>！当前时间:{php}echo date('Y-m-d H:i:s');{/php}
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

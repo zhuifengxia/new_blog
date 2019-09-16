@@ -15,6 +15,32 @@ Route::get('think', function () {
 
 Route::get('hello/:name', 'index/hello');
 
+
+/**
+ * 登陆
+ */
+Route::group('admin',[
+    'auth'=>['admin/Adminauth/Login',['method' => 'get']],
+    'dologin'=>['admin/Adminauth/doLogin',['method' => 'post']],
+    'loginOut'=>['admin/Adminauth/loginOut'],
+]);
+
+
+/**
+ * 后台管理相关
+ */
+Route::group('admin',[
+    //首页
+    'index'=>['admin/Admin/index',['method' => 'get']],
+    //用户管理
+    'users/list'   => ['admin/Users/userList', ['method' => 'get']],
+    'users/add/[:id]' => ['admin/Users/addUser', ['method' => 'get']],
+    'users/doAdd' => ['admin/Users/doAddUser', ['method' => 'post']],
+    'users/delete/:id' => ['admin/Users/delUser', ['method' => 'get']],
+]);
+
+
+
 return [
 
 ];

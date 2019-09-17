@@ -1,0 +1,82 @@
+{extend name="layouts/main" /}
+{block name="main"}
+<style>
+    .fileinput-button {
+        position: relative;
+        display: inline-block;
+        margin-left: 10px;
+        float: left;
+        margin-right: 10px;
+    }
+
+    .fileinput-button input {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        opacity: 0;
+        -ms-filter: 'alpha(opacity=0)';
+        font-size: 30px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <a>{$details.id?"编辑":"添加"}微语</a>
+                </div>
+                <div class="layui-card-body layui-table-body layui-table-main">
+                    <form action="/admin/gossips/doAdd" method="post" class="layui-form" enctype="multipart/form-data">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">微语内容</label>
+                            <input type="hidden" name="id" value="{$details.id}"/>
+                            <div class="layui-input-inline">
+                                <input type="text" name="data_msg" value="{$details.data_msg}" class="layui-input"
+                                       placeholder="请输入微语内容">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">附件图片</label>
+                            <span class="fileinput-button layui-btn">
+                        <span>上传</span>
+                        <input type="file" name="data_img" id="data_img" onchange="readfile()"/>
+                        </span>
+                            <div>
+                                <img src="{$details.data_img}" style="max-width:150px;max-width:150px;"
+                                     title="{$details.data_img}" id="imgdata_img">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //选择图片之后加载在页面
+    function readfile() {
+        var fileimg = document.getElementById("imgdata_img");
+        var file = document.getElementById("data_img");
+        let reader = new FileReader();
+        var file1 = file.files[0];
+        reader.readAsDataURL(file1);
+        reader.onload = function (result) {
+            //reader对象的result属性存储流读取的数据
+            fileimg.src = reader.result;
+        }
+    }
+
+    layui.use('form', function () {
+        var form = layui.form;
+    });
+</script>
+{/block}

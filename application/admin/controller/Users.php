@@ -60,9 +60,11 @@ class Users extends Base
             $this->error('已经存在，请重新输入', '/admin/users/add/' . $id);
         } else {
             if ($id) {
+                $_POST['update_time'] = time();
                 $userModel->updateOne($_POST, ['id' => $id]);
             } else {
                 $_POST['create_time'] = time();
+                $_POST['update_time'] = time();
                 $userModel->addOne($_POST);
             }
 

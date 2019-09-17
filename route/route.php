@@ -37,6 +37,11 @@ Route::group('admin',[
     'users/add/[:id]' => ['admin/Users/addUser', ['method' => 'get']],
     'users/doAdd' => ['admin/Users/doAddUser', ['method' => 'post']],
     'users/delete/:id' => ['admin/Users/delUser', ['method' => 'get']],
+    //微语管理
+    'gossips/list'   => ['admin/Gossips/msgList', ['method' => 'get']],
+    'gossips/add/[:id]' => ['admin/Gossips/addMsg', ['method' => 'get']],
+    'gossips/doAdd' => ['admin/Gossips/doAddMsg', ['method' => 'post']],
+    'gossips/delete/:id' => ['admin/Gossips/delMsg', ['method' => 'get']],
 ]);
 
 

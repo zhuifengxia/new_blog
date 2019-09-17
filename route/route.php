@@ -42,6 +42,14 @@ Route::group('admin',[
     'gossips/add/[:id]' => ['admin/Gossips/addMsg', ['method' => 'get']],
     'gossips/doAdd' => ['admin/Gossips/doAddMsg', ['method' => 'post']],
     'gossips/delete/:id' => ['admin/Gossips/delMsg', ['method' => 'get']],
+
+    //文章分类管理
+    'types/list'   => ['admin/Types/typeList', ['method' => 'get']],
+    'types/test'   => ['admin/Types/test', ['method' => 'get']],
+    'types/add/[:id]' => ['admin/Types/addType', ['method' => 'get']],
+    'types/doAdd' => ['admin/Types/doAddType', ['method' => 'post']],
+    'types/delete/:id' => ['admin/Types/delType', ['method' => 'get']],
+
 ]);
 
 

@@ -9,6 +9,8 @@
 namespace app\admin\controller;
 use app\common\model\ArticleType as TypeModel;
 use app\common\model\Articles as ArtModel;
+use MoCommon\Support\UploadFiles;
+
 class Articles extends Base
 {
     /**
@@ -17,63 +19,98 @@ class Articles extends Base
     public function artList()
     {
         $artModel = new ArtModel();
-        $types=$artModel->dataList([],1);
-        $this->assign('articles', $types);
+        $articles = $artModel->artList([]);
+        $this->assign('articles', $articles);
         return $this->fetch('articles');
     }
 
     /**
-     * 添加/编辑分类
+     * 添加/编辑文章信息
      */
-    public function addType($id=0)
+    public function addArt($id=0)
     {
-        $typeModel = new TypeModel();
+        $artModel = new ArtModel();
         if ($id) {
             //获取编辑的详情数据信息
-            $detail = $typeModel->oneDetail(['id' => $id]);
+            $detail = $artModel->oneDetail(['id' => $id]);
         } else {
-            $detail = $typeModel->toArray();
+            $detail = $artModel->toArray();
         }
+        //获取文章分类列表数据
+        $typeModel=new TypeModel();
+        $types=$typeModel->dataList();
         $this->assign("details", $detail);
+        $this->assign("types", $types);
         return $this->fetch();
     }
 
     /**
-     * 分类信息保存
+     * 文章信息保存
      */
-    public function doAddType()
+    public function doAddArt()
     {
-        $typeModel = new TypeModel();
+        $artModel = new ArtModel();
         //是否存在
         $id = input('id', 0);
-        $type_name = input('type_name', '');
+        $article_title = input('article_title', '');
+        $is_top = input('is_top', 0);
+        $is_publish = input('is_publish', 1);
+        $article_img = $_FILES['article_img'];
+        $insert = $_POST;
+        $insert['is_top']=$is_top;
+        $insert['is_publish']=$is_publish;
         $where = [
-            ['type_name', '=', $type_name],
+            ['article_title', '=', $article_title],
         ];
         if ($id) {
             $where[] = ['id', '<>', $id];
         }
-        $data = $typeModel->oneDetail($where);
+        $data = $artModel->oneDetail($where);
         if ($data) {
-            $this->error('已经存在，请重新输入', '/admin/types/add/' . $id);
+            $this->error('已经存在，请重新输入', '/admin/articles/add/' . $id);
         } else {
-            if ($id) {
-                $typeModel->updateOne($_POST, ['id' => $id]);
-            } else {
-                $typeModel->addOne($_POST);
+            if ($article_img['tmp_name']) {
+                //有文件上传
+                $filepath = env('root_path') . 'public/static/upload/articles/' . date('Ymd') . "/";
+                $fileresult = UploadFiles::single_file_upload("", $article_img, $filepath, '');
+                if ($fileresult['status'] != 0 && !empty($fileresult['data'])) {
+                    $this->error($fileresult['msg']);
+                }
+                $fileurl = $fileresult['data'];
+                $insert['article_img'] = '/static/upload/articles/' . date('Ymd') . '/' . $fileurl;
             }
-            $this->success('保存成功', '/admin/types/list');
+            if ($id) {
+                $data = $artModel->oneDetail(['id' => $id]);
+                //查看原来的信息是否有图片，有的话删除原来的图片
+                if ($data['article_img']) {
+                    //删除原来的图片文件
+                    @unlink(env('root_path') . "public" . $data['article_img']);
+                }
+                $insert['update_time'] = time();
+                $artModel->updateOne($insert, ['id' => $id]);
+            } else {
+                $insert['create_time'] = time();
+                $insert['update_time'] = time();
+                $artModel->addOne($insert);
+            }
+            $this->success('保存成功', '/admin/articles/list');
         }
     }
 
     /**
-     * 删除文章分类
-     * @param $id 分类id
+     * 删除文章
+     * @param $id 文章id
      */
-    public function delType($id)
+    public function delArt($id)
     {
-        $typeModel = new TypeModel();
-        $typeModel->deleteOne(['id' => $id]);
-        $this->success('删除成功', '/admin/types/list');
+        $artModel = new ArtModel();
+        $data = $artModel->oneDetail(['id' => $id]);
+        $artModel->deleteOne(['id' => $id]);
+        //删除图片文件信息
+        if ($data['article_img']) {
+            //删除原来的图片文件
+            @unlink(env('root_path') . "public" . $data['article_img']);
+        }
+        $this->success('删除成功', '/admin/articles/list');
     }
 }

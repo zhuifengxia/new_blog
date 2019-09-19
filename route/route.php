@@ -45,10 +45,15 @@ Route::group('admin',[
 
     //文章分类管理
     'types/list'   => ['admin/Types/typeList', ['method' => 'get']],
-    'types/test'   => ['admin/Types/test', ['method' => 'get']],
     'types/add/[:id]' => ['admin/Types/addType', ['method' => 'get']],
     'types/doAdd' => ['admin/Types/doAddType', ['method' => 'post']],
     'types/delete/:id' => ['admin/Types/delType', ['method' => 'get']],
+
+    //文章管理
+    'articles/list'   => ['admin/Articles/artList', ['method' => 'get']],
+    'articles/add/[:id]' => ['admin/Articles/addArt', ['method' => 'get']],
+    'articles/doAdd' => ['admin/Articles/doAddArt', ['method' => 'post']],
+    'articles/delete/:id' => ['admin/Articles/delArt', ['method' => 'get']],
 
 ]);
 

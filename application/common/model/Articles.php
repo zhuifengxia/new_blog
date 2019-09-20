@@ -43,10 +43,10 @@ class Articles extends Base
     //获取数据列表
     public function artList($where=[])
     {
-
         $tablename = strtolower(self::getName());
         $data = db($tablename)
             ->where($where)
+            ->order('create_time desc')
             ->paginate(15)
             ->each(function ($item, $key) {
                 $status = [0 => '原创', 1 => '转载', 2 => '翻译'];

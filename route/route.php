@@ -13,8 +13,6 @@ Route::get('think', function () {
     return 'hello,ThinkPHP5!';
 });
 
-Route::get('hello/:name', 'index/hello');
-
 
 /**
  * 登陆
@@ -57,7 +55,15 @@ Route::group('admin',[
 
 ]);
 
-
+/**
+ * 前台管理相关
+ */
+Route::group('/',[
+    //首页
+    'index/[:typeid]'=>['index/Index/index',['method' => 'get']],
+    //文章详情
+    'article/[:id]'=>['index/Index/artDetails',['method' => 'get']],
+]);
 
 return [
 

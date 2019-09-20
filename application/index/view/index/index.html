@@ -1,0 +1,51 @@
+{layout name="layouts/index" /}
+<div class="banner">
+    <div class="cont w1000">
+        <div class="title">
+            <h3>{$config.blog_title}</h3><br/>
+            <h4 style="font-size: 30px;">{$config.blog_info|raw}</h4>
+        </div>
+        <div class="amount">
+            <p><span class="text">访问量</span><span class="access">{$traffic_num}</span></p>
+            <p><span class="text">文章数</span><span class="daily-record">{$art_num}</span></p>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="cont w1000">
+        <div class="title">
+        <span class="layui-breadcrumb" style="visibility:visible">
+             <a href="/" {$typeid==0?'class="active"':''}>全部</a>
+             <span lay-separator="">|</span>
+             {volist name="types" id="item" key="k"}
+             <a href="/index/{$item.id}" {$typeid==$item.id?'class="active"':''}>{$item.type_name}</a>
+            {if $k!=count($types)}
+             <span lay-separator="">|</span>
+            {/if}
+             {/volist}
+        </span>
+        </div>
+        <div class="list-item">
+            {volist name="artlist" id="item"}
+            <div class="item">
+                <div class="layui-fluid">
+                    <div class="layui-row">
+                        <div class="layui-col-xs12 layui-col-sm4 layui-col-md5">
+                            <div class="img"><img src="{$item.article_img}" alt=""></div>
+                        </div>
+                        <div class="layui-col-xs12 layui-col-sm8 layui-col-md7">
+                            <div class="item-cont">
+                                <h3>{$item.article_title}</h3>
+                                <h5>{$item.type_name}</h5>
+                                <p>{$item.article_digest}</p>
+                                <a href="article/article/{$item.id}" class="go-icon"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/volist}
+        </div>
+        <div id="demo" style="text-align: center;"></div>
+    </div>
+</div>

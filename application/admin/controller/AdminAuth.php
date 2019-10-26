@@ -9,14 +9,14 @@ namespace app\admin\controller;
 use MoCommon\Support\Helper;
 use think\Controller;
 
-class Adminauth extends Controller
+class AdminAuth extends Controller
 {
     /**
      * 后台账号登录页面
      */
     public function Login()
     {
-        session('adminuser',null);
+        session('admin_user',null);
         // 获取包含域名的完整URL地址
         $this->assign('domain',$this->request->url(true));
         return $this->fetch('login');
@@ -44,7 +44,7 @@ class Adminauth extends Controller
                 ->where('user_name', $username)
                 ->where('user_pwd', md5($password))
                 ->update($data);
-            session('adminuser', $adminuser);
+            session('admin_user', $adminuser);
             echo json_encode(['code' => 0, 'msg' => "登陆成功"]);
             exit();
         } else {
@@ -58,7 +58,7 @@ class Adminauth extends Controller
      */
     public function loginOut()
     {
-        session('adminuser',null);
+        session('admin_user',null);
         $this->success('退出成功！', "/admin/auth");
     }
 }

@@ -12,7 +12,7 @@ class LoginAuth
 {
     use \traits\controller\Jump;
     public function run(){
-       if(!session('adminuser')){
+       if(!session('admin_user')){
            return $this->error('请登录！','/admin/auth');
        }
     }

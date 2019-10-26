@@ -17,7 +17,7 @@ class Base extends Controller
     {
         parent::initialize();
         //验证登陆
-        Hook::listen('CheckAuth');
+        Hook::listen('admin_check');
         #渲染面包屑
         $this->setCrumbs();
     }

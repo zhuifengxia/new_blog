@@ -14,20 +14,16 @@ Route::get('think', function () {
 });
 
 
-/**
- * 登陆
- */
-Route::group('admin',[
-    'auth'=>['admin/Adminauth/Login',['method' => 'get']],
-    'dologin'=>['admin/Adminauth/doLogin',['method' => 'post']],
-    'loginOut'=>['admin/Adminauth/loginOut'],
-]);
-
 
 /**
  * 后台管理相关
  */
 Route::group('admin',[
+    //登录相关
+    'auth'=>['admin/AdminAuth/Login',['method' => 'get']],
+    'dologin'=>['admin/AdminAuth/doLogin',['method' => 'post']],
+    'loginOut'=>['admin/AdminAuth/loginOut'],
+
     //首页
     'index'=>['admin/Admin/index',['method' => 'get']],
     //用户管理

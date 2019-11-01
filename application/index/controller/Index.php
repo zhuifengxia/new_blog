@@ -52,7 +52,7 @@ class Index extends Base
     public function whisper()
     {
         $gossipsModel = new Gossips();
-        $data = $gossipsModel->dataList();
+        $data = $gossipsModel->gossipList();
         $this->assign('page_num', 2);
         $this->assign('data', $data);
         return $this->fetch();

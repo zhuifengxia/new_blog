@@ -16,7 +16,7 @@ class Gossips extends Base
         parent::__construct($data);
     }
 
-    public function dataList($where = [], $paginate = 0)
+    public function gossipList()
     {
         $data=db('gossips')
             ->order('id desc')

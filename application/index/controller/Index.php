@@ -8,6 +8,7 @@
 namespace app\index\controller;
 
 use app\common\model\Articles;
+use app\common\model\Gossips;
 
 class Index extends Base
 {
@@ -43,5 +44,17 @@ class Index extends Base
     public function artDetails()
     {
 
+    }
+
+    /**
+     * 微语列表数据
+     */
+    public function whisper()
+    {
+        $gossipsModel = new Gossips();
+        $data = $gossipsModel->dataList();
+        $this->assign('page_num', 2);
+        $this->assign('data', $data);
+        return $this->fetch();
     }
 }

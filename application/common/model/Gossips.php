@@ -15,4 +15,16 @@ class Gossips extends Base
     {
         parent::__construct($data);
     }
+
+    public function dataList($where = [], $paginate = 0)
+    {
+        $data=db('gossips')
+            ->order('id desc')
+            ->select();
+        for ($i=0;$i<count($data);$i++){
+            $data[$i]['publish_date']=date('Y/m/d',$data[$i]['create_time']);
+            $data[$i]['publish_time']=date('H:i',$data[$i]['create_time']);
+        }
+        return $data;
+    }
 }

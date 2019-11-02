@@ -28,7 +28,7 @@ class Index extends Controller
             ->select();
         //获取十条文章信息
         $article = db('articles')
-            ->field('id,article_title,article_img,publish_time,read_num')
+            ->field('id,article_title,article_img,update_time,read_num')
             ->where('is_logic_del', 0)
             ->order('id desc')
             ->limit(10)

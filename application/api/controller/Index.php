@@ -40,6 +40,6 @@ class Index extends Controller
         for ($i = 0; $i < count($article); $i++) {
             $article[$i]['update_time'] = date('Y-m-d H:i', $article[$i]['update_time']);
         }
-        return json(['banner' => $banner, 'wish' => $wish, 'artlist' => $article, 'page' => $page]);
+        return json(['banner' => $banner, 'wish' => $wish, 'artlist' => $article, 'page' => $page + 1]);
     }
 }

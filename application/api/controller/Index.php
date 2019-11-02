@@ -33,6 +33,9 @@ class Index extends Controller
             ->order('id desc')
             ->limit(10)
             ->select();
+        for ($i = 0; $i < count($article); $i++) {
+            $article[$i]['update_time'] = date('Y-m-d H:i', $article['update_time']);
+        }
         return json(['banner' => $banner, 'wish' => $wish, 'artlist' => $article]);
     }
 }

@@ -62,6 +62,15 @@ Route::group('/',[
     'whisper'=>['index/Index/whisper',['method' => 'get']],
 ]);
 
+/**
+ * 小程序接口相关
+ */
+Route::group('api',[
+    //首页
+    'index'=>['api/Index/index',['method' => 'get']],
+]);
+
+
 return [
 
 ];

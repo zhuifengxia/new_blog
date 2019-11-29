@@ -16,10 +16,11 @@ class Gossips extends Base
         parent::__construct($data);
     }
 
-    public function gossipList()
+    public function gossipList($page=1)
     {
         $data=db('gossips')
-            ->order('id desc')
+            ->order('create_time desc')
+            ->page($page,1)
             ->select();
         for ($i=0;$i<count($data);$i++){
             $data[$i]['publish_date']=date('Y/m/d',$data[$i]['create_time']);

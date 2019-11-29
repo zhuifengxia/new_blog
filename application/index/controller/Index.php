@@ -57,4 +57,13 @@ class Index extends Base
         $this->assign('data', $data);
         return $this->fetch();
     }
+
+    //微语下一页数据
+    public function whisperNext()
+    {
+        $page = input("page", 1);
+        $gossipsModel = new Gossips();
+        $data = $gossipsModel->gossipList($page);
+        return json($data);
+    }
 }

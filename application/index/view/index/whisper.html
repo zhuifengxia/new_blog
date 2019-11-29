@@ -15,44 +15,96 @@
                     <div class="img-box">
                         <img src="{$item.data_img}">
                     </div>
-                    <div class="op-list">
-                        <p class="like"><i class="layui-icon layui-icon-praise"></i><span>1200</span></p>
-                        <p class="edit"><i class="layui-icon layui-icon-reply-fill"></i><span>1200</span></p>
-                        <p class="off"><span>展开</span><i class="layui-icon layui-icon-down"></i></p>
-                    </div>
-                </div>
-                <div class="review-version layui-hide">
-<!--                    <div class="form">-->
-<!--                        <img src="../res/img/header2.png">-->
-<!--                        <form class="layui-form" action="">-->
-<!--                            <div class="layui-form-item layui-form-text">-->
-<!--                                <div class="layui-input-block">-->
-<!--                                    <textarea name="desc" class="layui-textarea"></textarea>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="layui-form-item">-->
-<!--                                <div class="layui-input-block" style="text-align: right;">-->
-<!--                                    <button class="layui-btn definite">确定</button>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </form>-->
-<!--                    </div>-->
-                    <div class="list-cont">
-<!--                        <div class="cont">-->
-<!--                            <div class="img">-->
-<!--                                <img src="../res/img/header.png" alt="">-->
-<!--                            </div>-->
-<!--                            <div class="text">-->
-<!--                                <p class="tit"><span class="name">吳亦凡</span><span class="data">2018/06/06</span></p>-->
-<!--                                <p class="ct">敢问大师，师从何方？上古高人呐逐一地看完你的作品后，我的心久久 不能平静！这世间怎么可能还有如此精辟的作品？我不敢相信自己的眼睛。自从改革开放以后，我就以为再也不会有任何作品能打动我，没想到今天看到这个如此精妙绝伦的作品好厉害！</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-                    </div>
                 </div>
             </div>
             {/volist}
-
         </div>
-        <div id="demo" style="text-align: center;"></div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        // 页数
+        var page = 1;
+        // dropload
+        $('.cont').dropload({
+            scrollArea : window,
+            domUp : {
+                domClass   : 'dropload-up',
+                domRefresh : '<div class="dropload-refresh">↓下拉刷新</div>',
+                domUpdate  : '<div class="dropload-update">↑释放更新</div>',
+                domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>'
+            },
+            domDown : {
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+                domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                domNoData  : '<div class="dropload-noData">没有更多数据了</div>'
+            },
+            loadDownFn : function(me){
+                page++;
+                $.ajax({
+                    type: 'POST',
+                    url: '/whisper/next',
+                    data:"page="+page,
+                    dataType:"json",
+                    success: function(res){
+                        var html='';
+                        if(res.length>0){
+                            $.each(res,function (index,item) {
+                                html += '<div class="item-box">\n' +
+                                    '                <div class="item">\n' +
+                                    '                    <div class="whisper-title">\n' +
+                                    '                        <i class="layui-icon layui-icon-date"></i><span class="hour">'+item.publish_time+'</span><span class="date">'+item.publish_date+'</span>\n' +
+                                    '                    </div>\n' +
+                                    '                    <p class="text-cont">\n' +
+                                    '                        '+item.data_msg+'\n' +
+                                    '                    </p>\n' +
+                                    '                    <div class="img-box">\n' +
+                                    '                        <img src="'+item.data_img+'">\n' +
+                                    '                    </div>\n' +
+                                    '                </div>\n' +
+                                    '            </div>';
+                            })
+                        }else{
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            // 插入数据到页面，放到最后面
+                            $('.whisper-list').append(html);
+                            // 每次数据插入，必须重置
+                            me.resetload();
+                        },1000);
+                    },
+                    error: function(xhr, type){
+                        alert('Ajax error!');
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            },
+            threshold : 50
+        });
+        b();
+        $('#gotop').click(function(){
+            $(document).scrollTop(0);
+        });
+        function b(){
+            h = $(window).height();
+            t = $(document).scrollTop();
+            if(t > h){
+                $('#gotop').show();
+            }else{
+                $('#gotop').hide();
+            }
+        }
+        $(window).scroll(function(e){
+            b();
+        });
+    });
+</script>
+<!--文章列表加载代码end-->

@@ -41,21 +41,21 @@ class Articles extends Base
     }
 
     //获取数据列表
-    public function artList($where=[])
+    public function artList($where=[],$page=1)
     {
         $tablename = strtolower(self::getName());
         $data = db($tablename)
             ->where($where)
             ->order('create_time desc')
-            ->paginate(15)
-            ->each(function ($item, $key) {
-                $status = [0 => '原创', 1 => '转载', 2 => '翻译'];
-                $item['article_type']=$status[$item['article_type']];
-                $typeModel = new TypeModel();
-                $typename = $typeModel->oneDetail(['id' => $item['type_id']]);
-                $item['type_name'] = $typename['type_name'];
-                return $item;
-            });
+            ->page($page, 10)
+            ->select();
+        for ($i = 0; $i < count($data); $i++) {
+            $status = [0 => '原创', 1 => '转载', 2 => '翻译'];
+            $data[$i]['article_type'] = $status[$data[$i]['article_type']];
+            $typeModel = new TypeModel();
+            $typename = $typeModel->oneDetail(['id' => $data[$i]['type_id']]);
+            $data[$i]['type_name'] = $typename['type_name'];
+        }
         return $data;
     }
 }

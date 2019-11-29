@@ -11,7 +11,7 @@
         </div>
     </div>
 </div>
-<div class="content">
+<div class="content" id="artdiv">
     <div class="cont w1000">
         <div class="title">
         <span class="layui-breadcrumb" style="visibility:visible">
@@ -46,6 +46,103 @@
             </div>
             {/volist}
         </div>
-        <div id="demo" style="text-align: center;"></div>
     </div>
 </div>
+<script>
+    function locationDiv(typeid) {
+        if(typeid){
+            $("html,body").animate({scrollTop: $("#artdiv").offset().top}, 500);
+        }
+    }
+    locationDiv({$typeid})
+</script>
+
+<script type="text/javascript">
+    $(function(){
+        // 页数
+        var page = 1;
+        // dropload
+        $('.cont').dropload({
+            scrollArea : window,
+            domUp : {
+                domClass   : 'dropload-up',
+                domRefresh : '<div class="dropload-refresh">↓下拉刷新</div>',
+                domUpdate  : '<div class="dropload-update">↑释放更新</div>',
+                domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>'
+            },
+            domDown : {
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+                domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                domNoData  : '<div class="dropload-noData">没有更多数据了</div>'
+            },
+            loadDownFn : function(me){
+                page++;
+                $.ajax({
+                    type: 'POST',
+                    url: '/artnext',
+                    data:"typeid={$typeid}&page="+page,
+                    dataType:"json",
+                    success: function(res){
+                        var html='';
+                        if(res.length>0){
+                            $.each(res,function (index,item) {
+                                html += '<div class="item">\n' +
+                                    '                <div class="layui-fluid">\n' +
+                                    '                    <div class="layui-row">\n' +
+                                    '                        <div class="layui-col-xs12 layui-col-sm4 layui-col-md5">\n' +
+                                    '                            <div class="img"><img src="'+item.article_img+'" alt=""></div>\n' +
+                                    '                        </div>\n' +
+                                    '                        <div class="layui-col-xs12 layui-col-sm8 layui-col-md7">\n' +
+                                    '                            <div class="item-cont">\n' +
+                                    '                                <h3>'+item.article_title+'</h3>\n' +
+                                    '                                <h5>'+item.type_name+'</h5>\n' +
+                                    '                                <p>'+item.article_digest+'</p>\n' +
+                                    '                                <a href="article/article/'+item.id+'" class="go-icon"></a>\n' +
+                                    '                            </div>\n' +
+                                    '                        </div>\n' +
+                                    '                    </div>\n' +
+                                    '                </div>\n' +
+                                    '            </div>';
+                            })
+                        }else{
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            // 插入数据到页面，放到最后面
+                            $('.list-item').append(html);
+                            // 每次数据插入，必须重置
+                            me.resetload();
+                        },1000);
+                    },
+                    error: function(xhr, type){
+                        alert('Ajax error!');
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            },
+            threshold : 50
+        });
+        b();
+        $('#gotop').click(function(){
+            $(document).scrollTop(0);
+        });
+        function b(){
+            h = $(window).height();
+            t = $(document).scrollTop();
+            if(t > h){
+                $('#gotop').show();
+            }else{
+                $('#gotop').hide();
+            }
+        }
+        $(window).scroll(function(e){
+            b();
+        });
+    });
+</script>

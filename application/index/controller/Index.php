@@ -41,6 +41,20 @@ class Index extends Base
         return $this->fetch('index');
     }
 
+    //文章下一页
+    public function artNext()
+    {
+        $page = input("page", 1);
+        $typeid = input("typeid", 0);
+        $where[] = ['is_logic_del', '=', 0];
+        $artModel = new Articles();
+        if ($typeid) {
+            $where[] = ['type_id', '=', $typeid];
+        }
+        $artlist = $artModel->artList($where, $page);
+        return json($artlist);
+    }
+
     public function artDetails()
     {
 

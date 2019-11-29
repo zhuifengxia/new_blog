@@ -58,8 +58,10 @@ Route::group('/',[
     //首页
     'index/[:typeid]'=>['index/Index/index',['method' => 'get']],
     //文章详情
-    'article/[:id]'=>['index/Index/artDetails',['method' => 'get']],
+    'article/:id'=>['index/Index/artDetails',['method' => 'get']],
     'artnext'=>['index/Index/artNext',['method' => 'post']],
+    'artPost'=>['index/Index/artPost',['method' => 'post']],
+    'posting'=>['index/Index/artPostSubmit',['method' => 'post']],
     'whisper'=>['index/Index/whisper',['method' => 'get']],
     'whisper/next'=>['index/Index/whisperNext',['method' => 'post']],
 ]);

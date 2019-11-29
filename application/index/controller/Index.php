@@ -55,9 +55,44 @@ class Index extends Base
         return json($artlist);
     }
 
-    public function artDetails()
+    /**
+     * 详情数据
+     * @param $id
+     * @return mixed
+     */
+    public function artDetails($id)
     {
+        $artModel = new Articles();
+        $artdata = $artModel->artDetail($id);
+        $this->assign("artdata", $artdata["data"]);
+        $this->assign("postdata", $artdata["post_data"]);
+        $this->assign("artids", ["next_id" => $artdata["next_id"], "per_id" => $artdata["per_id"]]);
+        $this->assign('page_num', 1);
+        return $this->fetch();
+    }
 
+    /**
+     * 文章评论列表
+     */
+    public function artPost()
+    {
+        $artid = input("artid", 0);
+        $page = input("page", 1);
+        $artModel = new Articles();
+        $data = $artModel->posting($artid, $page);
+        return json($data);
+    }
+
+    /**
+     * 提交评论
+     */
+    public function artPostSubmit()
+    {
+        $artid = input("artid", 0);
+        $postmsg = input("postmsg", "");
+        $artModel = new Articles();
+        $data = $artModel->postingSubmit($artid, $postmsg);
+        return json(["status" => 0, "data" => $data]);
     }
 
     /**

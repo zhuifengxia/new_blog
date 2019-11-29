@@ -16,7 +16,7 @@ class Types extends Base
     public function typeList()
     {
         $typeModel = new TypeModel();
-        $types=$typeModel->dataList([],1);
+        $types=$typeModel->dataList(TypeModel::class);
         $this->assign('types', $types);
         return $this->fetch('types');
     }
@@ -29,7 +29,7 @@ class Types extends Base
         $typeModel = new TypeModel();
         if ($id) {
             //获取编辑的详情数据信息
-            $detail = $typeModel->oneDetail(['id' => $id]);
+            $detail = $typeModel->oneDetail(TypeModel::class,['id' => $id]);
         } else {
             $detail = $typeModel->toArray();
         }
@@ -52,14 +52,14 @@ class Types extends Base
         if ($id) {
             $where[] = ['id', '<>', $id];
         }
-        $data = $typeModel->oneDetail($where);
+        $data = $typeModel->oneDetail(TypeModel::class,$where);
         if ($data) {
             $this->error('已经存在，请重新输入', '/admin/types/add/' . $id);
         } else {
             if ($id) {
-                $typeModel->updateOne($_POST, ['id' => $id]);
+                $typeModel->updateOne(TypeModel::class,$_POST, ['id' => $id]);
             } else {
-                $typeModel->addOne($_POST);
+                $typeModel->addOne(TypeModel::class,$_POST);
             }
             $this->success('保存成功', '/admin/types/list');
         }
@@ -72,7 +72,7 @@ class Types extends Base
     public function delType($id)
     {
         $typeModel = new TypeModel();
-        $typeModel->deleteOne(['id' => $id]);
+        $typeModel->deleteOne(TypeModel::class,['id' => $id]);
         $this->success('删除成功', '/admin/types/list');
     }
 }

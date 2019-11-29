@@ -32,13 +32,13 @@ class Articles extends Base
         $artModel = new ArtModel();
         if ($id) {
             //获取编辑的详情数据信息
-            $detail = $artModel->oneDetail(['id' => $id]);
+            $detail = $artModel->oneDetail(ArtModel::class,['id' => $id]);
         } else {
             $detail = $artModel->toArray();
         }
         //获取文章分类列表数据
         $typeModel=new TypeModel();
-        $types=$typeModel->dataList();
+        $types=$typeModel->dataList(TypeModel::class);
         $this->assign("details", $detail);
         $this->assign("types", $types);
         return $this->fetch();
@@ -65,7 +65,7 @@ class Articles extends Base
         if ($id) {
             $where[] = ['id', '<>', $id];
         }
-        $data = $artModel->oneDetail($where);
+        $data = $artModel->oneDetail(ArtModel::class,$where);
         if ($data) {
             $this->error('已经存在，请重新输入', '/admin/articles/add/' . $id);
         } else {
@@ -80,18 +80,16 @@ class Articles extends Base
                 $insert['article_img'] = '/static/upload/articles/' . date('Ymd') . '/' . $fileurl;
             }
             if ($id) {
-                $data = $artModel->oneDetail(['id' => $id]);
+                $data = $artModel->oneDetail(ArtModel::class,['id' => $id]);
                 //查看原来的信息是否有图片，有的话删除原来的图片
                 if ($data['article_img']) {
                     //删除原来的图片文件
                     @unlink(env('root_path') . "public" . $data['article_img']);
                 }
-                $insert['update_time'] = time();
-                $artModel->updateOne($insert, ['id' => $id]);
+
+                $artModel->updateOne(ArtModel::class,$insert, ['id' => $id]);
             } else {
-                $insert['create_time'] = time();
-                $insert['update_time'] = time();
-                $artModel->addOne($insert);
+                $artModel->addOne(ArtModel::class,$insert);
             }
             $this->success('保存成功', '/admin/articles/list');
         }
@@ -104,8 +102,8 @@ class Articles extends Base
     public function delArt($id)
     {
         $artModel = new ArtModel();
-        $data = $artModel->oneDetail(['id' => $id]);
-        $artModel->deleteOne(['id' => $id]);
+        $data = $artModel->oneDetail(ArtModel::class,['id' => $id]);
+        $artModel->deleteOne(ArtModel::class,['id' => $id]);
         //删除图片文件信息
         if ($data['article_img']) {
             //删除原来的图片文件

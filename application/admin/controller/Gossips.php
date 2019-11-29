@@ -18,7 +18,7 @@ class Gossips extends Base
     public function msgList()
     {
         $msgModel = new GossipModel();
-        $msgs=$msgModel->dataList([],1);
+        $msgs=$msgModel->dataList(GossipModel::class,[],1);
         $this->assign('gossips', $msgs);
         return $this->fetch('gossips');
     }
@@ -31,7 +31,7 @@ class Gossips extends Base
         $msgModel = new GossipModel();
         if ($id) {
             //获取编辑的详情数据信息
-            $detail = $msgModel->oneDetail(['id' => $id]);
+            $detail = $msgModel->oneDetail(GossipModel::class,['id' => $id]);
         } else {
             $detail = $msgModel->toArray();
         }
@@ -55,7 +55,7 @@ class Gossips extends Base
         if ($id) {
             $where[] = ['id', '<>', $id];
         }
-        $data = $msgModel->oneDetail($where);
+        $data = $msgModel->oneDetail(GossipModel::class,$where);
         if ($data) {
             $this->error('已经存在，请重新输入', '/admin/gossips/add/' . $id);
         } else {
@@ -73,18 +73,15 @@ class Gossips extends Base
                 $insert['data_img'] = '/static/upload/gossips/' . date('Ymd') . '/' . $fileurl;
             }
             if ($id) {
-                $data = $msgModel->oneDetail(['id'=>$id]);
+                $data = $msgModel->oneDetail(GossipModel::class,['id'=>$id]);
                 //查看原来的信息是否有图片，有的话删除原来的图片
                 if ($data['data_img']) {
                     //删除原来的图片文件
                     @unlink(env('root_path') . "public" . $data['data_img']);
                 }
-                $insert['update_time'] = time();
-                $msgModel->updateOne($insert, ['id' => $id]);
+                $msgModel->updateOne(GossipModel::class,$insert, ['id' => $id]);
             } else {
-                $insert['create_time'] = time();
-                $insert['update_time'] = time();
-                $msgModel->addOne($insert);
+                $msgModel->addOne(GossipModel::class,$insert);
             }
             $this->success('保存成功', '/admin/gossips/list');
         }
@@ -97,8 +94,8 @@ class Gossips extends Base
     public function delMsg($id)
     {
         $msgModel = new GossipModel();
-        $data = $msgModel->oneDetail(['id' => $id]);
-        $msgModel->deleteOne(['id' => $id]);
+        $data = $msgModel->oneDetail(GossipModel::class,['id' => $id]);
+        $msgModel->deleteOne(GossipModel::class,['id' => $id]);
         //删除图片文件信息
         if ($data['data_img']) {
             //删除原来的图片文件

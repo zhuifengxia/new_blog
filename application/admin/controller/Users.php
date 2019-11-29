@@ -17,7 +17,7 @@ class Users extends Base
     public function userList()
     {
         $userModel = new UserModel();
-        $users=$userModel->dataList([],1);
+        $users=$userModel->dataList(UserModel::class,[],1);
         $this->assign('users', $users);
         return $this->fetch('users');
     }
@@ -30,7 +30,7 @@ class Users extends Base
         $userModel = new UserModel();
         if ($id) {
             //获取编辑的详情数据信息
-            $detail = $userModel->oneDetail(['id' => $id]);
+            $detail = $userModel->oneDetail(UserModel::class,['id' => $id]);
         } else {
             $detail = $userModel->toArray();
         }
@@ -55,17 +55,14 @@ class Users extends Base
         if ($id) {
             $where[] = ['id', '<>', $id];
         }
-        $data = $userModel->oneDetail($where);
+        $data = $userModel->oneDetail(UserModel::class,$where);
         if ($data) {
             $this->error('已经存在，请重新输入', '/admin/users/add/' . $id);
         } else {
             if ($id) {
-                $_POST['update_time'] = time();
-                $userModel->updateOne($_POST, ['id' => $id]);
+                $userModel->updateOne(UserModel::class,$_POST, ['id' => $id]);
             } else {
-                $_POST['create_time'] = time();
-                $_POST['update_time'] = time();
-                $userModel->addOne($_POST);
+                $userModel->addOne(UserModel::class,$_POST);
             }
 
             $this->success('保存成功', '/admin/users/list');
@@ -79,7 +76,7 @@ class Users extends Base
     public function delUser($id)
     {
         $userModel = new UserModel();
-        $userModel->deleteOne(['id'=>$id]);
+        $userModel->deleteOne(UserModel::class,['id'=>$id]);
         $this->success('删除成功', '/admin/users/list');
     }
 }

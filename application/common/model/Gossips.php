@@ -20,7 +20,7 @@ class Gossips extends Base
     {
         $data=db('gossips')
             ->order('create_time desc')
-            ->page($page,1)
+            ->page($page,10)
             ->select();
         for ($i=0;$i<count($data);$i++){
             $data[$i]['publish_date']=date('Y/m/d',$data[$i]['create_time']);

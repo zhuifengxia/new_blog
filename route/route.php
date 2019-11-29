@@ -60,6 +60,7 @@ Route::group('/',[
     //文章详情
     'article/[:id]'=>['index/Index/artDetails',['method' => 'get']],
     'whisper'=>['index/Index/whisper',['method' => 'get']],
+    'whisper/next'=>['index/Index/whisperNext',['method' => 'post']],
 ]);
 
 /**

@@ -78,6 +78,7 @@ Route::group('/',[
     'message'=>['index/Index/msgList',['method' => 'get|post']],
 
     'album'=>['index/Index/albumList',['method' => 'get|post']],
+    'about'=>['index/Index/about',['method' => 'get|post']],
 ]);
 
 /**

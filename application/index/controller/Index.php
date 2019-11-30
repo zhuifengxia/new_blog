@@ -157,4 +157,11 @@ class Index extends Base
             return $this->fetch();
         }
     }
+
+    //关于我
+    public function about()
+    {
+        $this->assign('page_num', 5);
+        return $this->fetch();
+    }
 }

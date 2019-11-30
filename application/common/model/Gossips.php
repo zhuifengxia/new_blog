@@ -19,6 +19,7 @@ class Gossips extends Base
     public function gossipList($page=1)
     {
         $data=db('gossips')
+            ->where("data_type",0)
             ->order('create_time desc')
             ->page($page,10)
             ->select();

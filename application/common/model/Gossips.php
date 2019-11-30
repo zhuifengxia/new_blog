@@ -11,7 +11,7 @@ namespace app\common\model;
 
 class Gossips extends Base
 {
-    public function __construct($data = ['id'=>0,'data_msg'=>'','data_img'=>'','create_time'=>0,'update_time'=>0,'is_logic_del'=>0])
+    public function __construct($data = ['id'=>0,'data_msg'=>'','data_img'=>'','data_location'=>'','create_time'=>0,'update_time'=>0,'is_logic_del'=>0])
     {
         parent::__construct($data);
     }

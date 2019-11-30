@@ -58,7 +58,7 @@ class Articles extends Base
         $is_publish = input('is_publish', 1);
         $article_img = $_FILES['article_img'];
         if(empty($article_img)){
-            $article_img=input("article_img","");
+            $article_img=input("article_img1","");
         }
         $insert = $_POST;
         $insert['is_top']=$is_top;
@@ -86,7 +86,7 @@ class Articles extends Base
             if ($id) {
                 $data = $artModel->oneDetail(ArtModel::class,['id' => $id]);
                 //查看原来的信息是否有图片，有的话删除原来的图片
-                if ($data['article_img']) {
+                if ($data['article_img'] && $article_img['tmp_name']) {
                     //删除原来的图片文件
                     @unlink(env('root_path') . "public" . $data['article_img']);
                 }

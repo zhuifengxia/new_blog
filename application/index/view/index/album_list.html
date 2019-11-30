@@ -1,0 +1,120 @@
+{layout name="layouts/index" /}
+<div class="album-content w1000"  id="layer-photos-demo" class="layer-photos-demo">
+    <div class="img-info">
+        <img src="{$newone.data_img}" alt="" style="width: 700px;height: 400px;">
+        <div class="title">
+            <p class="data">最新上传<span>{$newone.create_time|date="Y/m/d"}</span></p>
+            <p class="text">{$newone.data_msg}</p>
+        </div>
+    </div>
+    <div class="img-list">
+        <div class="layui-fluid" style="padding:0">
+            <div class="layui-row layui-col-space30 space">
+                {volist name="data" id="item"}
+                <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">
+                    <div class="item">
+                        <img src="{$item.data_img}">
+                        <div class="cont-text">
+                            <div class="data">{$item.create_time|date="Y/m/d"}</div>
+                            <p class="address"><i class="layui-icon layui-icon-location"></i><span>{$item.data_location}</span></p>
+                            <p class="briefly">{$item.data_msg}</p>
+                        </div>
+                    </div>
+                </div>
+                {/volist}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#layer-photos-demo").on("click","img",function (e) {
+        console.log(e)
+        layer.photos({
+            photos: { "data": [{"src": e.target.currentSrc}] }
+        });
+    })
+</script>
+
+<script type="text/javascript">
+    $(function(){
+        // 页数
+        var page = 1;
+        // dropload
+        $('.img-list').dropload({
+            scrollArea : window,
+            domUp : {
+                domClass   : 'dropload-up',
+                domRefresh : '<div class="dropload-refresh">↓下拉刷新</div>',
+                domUpdate  : '<div class="dropload-update">↑释放更新</div>',
+                domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>'
+            },
+            domDown : {
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+                domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                domNoData  : '<div class="dropload-noData">没有更多数据了</div>'
+            },
+            loadDownFn : function(me){
+                page++;
+                $.ajax({
+                    type: 'POST',
+                    url: '/album',
+                    data:"isajax=1&page="+page,
+                    dataType:"json",
+                    success: function(res){
+                        var html='';
+                        if(res.length>0){
+                            $.each(res,function (index,item) {
+                                html += ' <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">\n' +
+                                    '                    <div class="item">\n' +
+                                    '                        <img src="'+item.data_img+'">\n' +
+                                    '                        <div class="cont-text">\n' +
+                                    '                            <div class="data">'+formatTime(item.create_time,"Y/m/d")+'</div>\n' +
+                                    '                            <p class="address"><i class="layui-icon layui-icon-location"></i><span>'+item.data_location+'</span></p>\n' +
+                                    '                            <p class="briefly">'+item.data_msg+'</p>\n' +
+                                    '                        </div>\n' +
+                                    '                    </div>\n' +
+                                    '                </div>';
+                            })
+                        }else{
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            // 插入数据到页面，放到最后面
+                            $('.space').append(html);
+                            // 每次数据插入，必须重置
+                            me.resetload();
+                        },1000);
+                    },
+                    error: function(xhr, type){
+                        alert('Ajax error!');
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            },
+            threshold : 50
+        });
+        b();
+        $('#gotop').click(function(){
+            $(document).scrollTop(0);
+        });
+        function b(){
+            h = $(window).height();
+            t = $(document).scrollTop();
+            if(t > h){
+                $('#gotop').show();
+            }else{
+                $('#gotop').hide();
+            }
+        }
+        $(window).scroll(function(e){
+            b();
+        });
+    });
+</script>

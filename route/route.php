@@ -37,6 +37,12 @@ Route::group('admin',[
     'gossips/doAdd' => ['admin/Gossips/doAddMsg', ['method' => 'post']],
     'gossips/delete/:id' => ['admin/Gossips/delMsg', ['method' => 'get']],
 
+    //照片管理
+    'album/list'   => ['admin/Album/msgList', ['method' => 'get']],
+    'album/add/[:id]' => ['admin/Album/addMsg', ['method' => 'get']],
+    'album/doAdd' => ['admin/Album/doAddMsg', ['method' => 'post']],
+    'album/delete/:id' => ['admin/Album/delMsg', ['method' => 'get']],
+
     //文章分类管理
     'types/list'   => ['admin/Types/typeList', ['method' => 'get']],
     'types/add/[:id]' => ['admin/Types/addType', ['method' => 'get']],
@@ -70,6 +76,8 @@ Route::group('/',[
     'whisper/next'=>['index/Index/whisperNext',['method' => 'post']],
 
     'message'=>['index/Index/msgList',['method' => 'get|post']],
+
+    'album'=>['index/Index/albumList',['method' => 'get|post']],
 ]);
 
 /**

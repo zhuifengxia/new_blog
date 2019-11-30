@@ -18,7 +18,7 @@ class Gossips extends Base
     public function msgList()
     {
         $msgModel = new GossipModel();
-        $msgs=$msgModel->dataList(GossipModel::class,[],1);
+        $msgs=$msgModel->dataList(GossipModel::class,["data_type"=>0],1);
         $this->assign('gossips', $msgs);
         return $this->fetch('gossips');
     }
@@ -49,6 +49,9 @@ class Gossips extends Base
         $id = input('id', 0);
         $data_msg = input('data_msg', '');
         $data_img = $_FILES['data_img'];
+        if(empty($data_img)){
+            $data_img=input("data_img1","");
+        }
         $where = [
             ['data_msg', '=', $data_msg],
         ];
@@ -75,7 +78,7 @@ class Gossips extends Base
             if ($id) {
                 $data = $msgModel->oneDetail(GossipModel::class,['id'=>$id]);
                 //查看原来的信息是否有图片，有的话删除原来的图片
-                if ($data['data_img']) {
+                if ($data['data_img'] && $data_img['tmp_name']) {
                     //删除原来的图片文件
                     @unlink(env('root_path') . "public" . $data['data_img']);
                 }

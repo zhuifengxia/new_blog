@@ -135,4 +135,26 @@ class Index extends Base
             return $this->fetch();
         }
     }
+
+    //网站相册
+    public function albumList()
+    {
+        $isajax = input("isajax", 0);
+        $page = input("page", 1);
+        $albumModel = new Gossips();
+        //获取最新一条数据
+        $newone = db("gossips")
+            ->where("data_type", 1)
+            ->order("create_time desc")
+            ->find();
+        $data = $albumModel->dataList(Gossips::class, "data_type=1 AND id!={$newone["id"]}", 2, $page);
+        if ($isajax) {
+            return json($data);
+        } else {
+            $this->assign("newone", $newone);
+            $this->assign("data", $data);
+            $this->assign('page_num', 4);
+            return $this->fetch();
+        }
+    }
 }

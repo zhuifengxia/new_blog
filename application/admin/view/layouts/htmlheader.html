@@ -16,7 +16,11 @@
 <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 <script>
+    let layer;
     // 是否开启刷新记忆tab功能
     // var is_remember = false;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
 </script>
 </head>

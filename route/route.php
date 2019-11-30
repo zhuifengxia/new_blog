@@ -49,6 +49,10 @@ Route::group('admin',[
     'articles/doAdd' => ['admin/Articles/doAddArt', ['method' => 'post']],
     'articles/delete/:id' => ['admin/Articles/delArt', ['method' => 'get']],
 
+    //评论管理
+    'posting/list/[:typeid]'   => ['admin/Posting/postList', ['method' => 'get']],
+    'posting/delete/:id' => ['admin/Posting/delPost', ['method' => 'get']],
+
 ]);
 
 /**

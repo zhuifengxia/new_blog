@@ -5,38 +5,44 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    <a class="layui-btn" href="/admin/gossips/add"><i class="layui-icon"></i>添加微语</a>
+                    <select class="layui-select" onchange="window.location.href=this.options[selectedIndex].value">
+                        <option value="/admin/posting/list/0" {$typeid==0?"selected":""}>网站留言</option>
+                        <option value="/admin/posting/list/1" {$typeid==1?"selected":""}>文章评论</option>
+                    </select>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-table layui-form">
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>微语</th>
-                            <th>微语配图</th>
+                            <th>文章名称</th>
+                            <th>评论人</th>
+                            <th>评论人IP</th>
+                            <th>评论内容</th>
                             <th>发布时间</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {volist name="gossips" id="item"}
+                        {volist name="data" id="item"}
                         <tr>
                             <td>{$item.id}</td>
-                            <td>{$item.data_msg}</td>
-                            <td><img src="{$item.data_img}" style="width:100px;height:100px"/></td>
+                            <td>{$item.article_title|default='网站留言'}</td>
+                            <td>{$item.nick_name}</td>
+                            <td>{$item.post_ip}</td>
+                            <td>{$item.post_content}</td>
                             <td>{$item.create_time|date='Y-m-d H:i'}</td>
                             <td>
-                                <a href="/admin/gossips/add/{$item.id}"><i class="iconfont" title="编辑">&#xe69e;</i></a>&nbsp;&nbsp;
-                                <a  href="javascript:delConfirm('/admin/gossips/delete/{$item.id}')"><i class="iconfont" style="color: red" title="删除">&#xe69d;</i></a>
+                                <a  href="javascript:delConfirm('/admin/posting/delete/{$item.id}')"><i class="iconfont" style="color: red" title="删除">&#xe69d;</i></a>
                             </td>
                         </tr>
                         {/volist}
                         </tbody>
                     </table>
-                    {empty name="gossips"}
+                    {empty name="data"}
                     暂无数据
                     {/empty}
-                    <div class="page">{$gossips|raw}</div>
+                    <div class="page">{$data|raw}</div>
                 </div>
 
             </div>

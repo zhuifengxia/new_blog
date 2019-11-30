@@ -73,35 +73,11 @@ class Articles extends Base
             ->where("id", "<", $id)
             ->order("id desc")
             ->value("id");
-        //获取前十条文章评论信息
-        $postnum = db("posting")
-            ->where("data_id", $id)
-            ->where("is_logic_del", 0)
-            ->count();
-        $posting = db("posting")
-            ->where("data_id", $id)
-            ->where("is_logic_del", 0)
-            ->order("id desc")
-            ->page(1, 10)
-            ->select();
-        $postdata = ["post_num" => $postnum, "posting" => $posting];
         //增加阅读量
         db("articles")
             ->where("id", $id)
             ->setInc("read_num");
-        return ["data" => $data, "next_id" => $next_id, "per_id" => $per_id, "post_data" => $postdata];
-    }
-
-    //评论列表数据
-    public function posting($id,$page)
-    {
-        $posting = db("posting")
-            ->where("data_id", $id)
-            ->where("is_logic_del", 0)
-            ->order("id desc")
-            ->page($page, 10)
-            ->select();
-        return $posting;
+        return ["data" => $data, "next_id" => $next_id, "per_id" => $per_id];
     }
 
     //提交评论

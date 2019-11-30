@@ -68,6 +68,8 @@ Route::group('/',[
     'posting'=>['index/Index/artPostSubmit',['method' => 'post']],
     'whisper'=>['index/Index/whisper',['method' => 'get']],
     'whisper/next'=>['index/Index/whisperNext',['method' => 'post']],
+
+    'message'=>['index/Index/msgList',['method' => 'get|post']],
 ]);
 
 /**

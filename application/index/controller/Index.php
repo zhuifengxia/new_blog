@@ -9,6 +9,7 @@ namespace app\index\controller;
 
 use app\common\model\Articles;
 use app\common\model\Gossips;
+use app\common\model\Posting;
 
 class Index extends Base
 {
@@ -64,8 +65,10 @@ class Index extends Base
     {
         $artModel = new Articles();
         $artdata = $artModel->artDetail($id);
+        $postModel=new Posting();
+        $postdata=$postModel->postList($id);
         $this->assign("artdata", $artdata["data"]);
-        $this->assign("postdata", $artdata["post_data"]);
+        $this->assign("postdata", $postdata);
         $this->assign("artids", ["next_id" => $artdata["next_id"], "per_id" => $artdata["per_id"]]);
         $this->assign('page_num', 1);
         return $this->fetch();
@@ -78,8 +81,9 @@ class Index extends Base
     {
         $artid = input("artid", 0);
         $page = input("page", 1);
-        $artModel = new Articles();
-        $data = $artModel->posting($artid, $page);
+        $postModel = new Posting();
+        $data = $postModel->postList($artid, $page);
+        $data = $data["posting"];
         return json($data);
     }
 
@@ -114,5 +118,21 @@ class Index extends Base
         $gossipsModel = new Gossips();
         $data = $gossipsModel->gossipList($page);
         return json($data);
+    }
+
+    //网站留言列表
+    public function msgList()
+    {
+        $page = input("page", 1);
+        $isajax = input("isajax", 0);
+        $postModel = new Posting();
+        $data = $postModel->postList(0, $page);
+        if ($isajax) {
+            return json($data["posting"]);
+        } else {
+            $this->assign("data", $data);
+            $this->assign('page_num', 3);
+            return $this->fetch();
+        }
     }
 }

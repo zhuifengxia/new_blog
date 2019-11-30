@@ -1,0 +1,162 @@
+{layout name="layouts/index" /}
+<div class="content whisper-content leacots-content">
+    <div class="cont w1000">
+        <div class="whisper-list">
+            <div class="item-box">
+                <div class="review-version">
+                    <div class="form-box">
+                        <img class="banner-img" src="__HOME__/images/liuyan.jpg">
+                        <div class="form">
+                            <form class="layui-form" action="">
+                                <div class="layui-form-item layui-form-text">
+                                    <div class="layui-input-block">
+                                        <textarea name="desc" id="postmsg" placeholder="既然来了，就说几句" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block" style="text-align: right;">
+                                        <button class="layui-btn definite" onclick="sendPosting()">确定</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="volume">
+                        全部留言 <span id="postnum">{$data.post_num}</span>
+                    </div>
+                    <div class="list-cont">
+                        {volist name="data.posting" id="item"}
+                        <div class="cont">
+                            <div class="img">
+                                <img class="headimg" src="__HOME__/headimgs/{$item.user_img?:'default.png'}" alt="">
+                            </div>
+                            <div class="text">
+                                <p class="tit"><span class="name">{$item.nick_name}</span><span class="data">{$item.create_time|date="Y/m/d H:i"}</span>
+                                <p class="ct">{$item.post_content}</p>
+                            </div>
+                        </div>
+                        {/volist}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //发布评论
+    function sendPosting() {
+        var msg=$("#postmsg").val();
+        if(msg==""){
+            layer.msg("请先输入评论内容哦！");
+            return false;
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/posting',
+            data: "artid=0&postmsg=" + msg,
+            success: function (res) {
+                if(res.status==0){
+                    var postnum=$("#postnum").html();
+                    postnum=parseInt(postnum);
+                    $("#postnum").html(postnum+1);
+                    var html = '<div class="cont">\n' +
+                        '                            <div class="img">\n' +
+                        '                                <img class="headimg" src="__HOME__/headimgs/' + (res.data.user_img ? res.data.user_img : "default.png") + '" alt="">\n' +
+                        '                            </div>\n' +
+                        '                            <div class="text">\n' +
+                        '                                <p class="tit"><span class="name">' + res.data.nick_name + '</span><span class="data">' + formatTime(res.data.create_time, "Y/m/d H:i") + '</span></p>\n' +
+                        '                                <p class="ct">' + msg + '</p>\n' +
+                        '                            </div>\n' +
+                        '                        </div>';
+                    $('.list-cont').prepend(html);
+                    $("#postmsg").val("");
+                }else{
+                    layer.msg("操作失败，稍后重试！");
+                }
+            },
+            error: function (xhr, type) {
+                layer.msg("操作失败，稍后重试！");
+            }
+        });
+    }
+    $(function(){
+        // 页数
+        var page = 1;
+        // dropload
+        $('.list-cont').dropload({
+            scrollArea : window,
+            domUp : {
+                domClass   : 'dropload-up',
+                domRefresh : '<div class="dropload-refresh">↓下拉刷新</div>',
+                domUpdate  : '<div class="dropload-update">↑释放更新</div>',
+                domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>'
+            },
+            domDown : {
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+                domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                domNoData  : '<div class="dropload-noData">没有更多数据了</div>'
+            },
+            loadDownFn : function(me){
+                page++;
+                $.ajax({
+                    type: 'POST',
+                    url: '/message',
+                    data:"isajax=1&page="+page,
+                    dataType:"json",
+                    success: function(res){
+                        var html='';
+                        if(res.length>0){
+                            $.each(res,function (index,item) {
+                                html += ' <div class="cont">\n' +
+                                    '                            <div class="img">\n' +
+                                    '                                <img class="headimg" src="__HOME__/headimgs/'+(item.user_img ? item.user_img : "default.png")+'" alt="">\n' +
+                                    '                            </div>\n' +
+                                    '                            <div class="text">\n' +
+                                    '                                <p class="tit"><span class="name">'+item.nick_name+'</span><span class="data">'+formatTime(item.create_time,"Y/m/d H:i")+'</span>\n' +
+                                    '                                <p class="ct">'+item.post_content+'</p>\n' +
+                                    '                            </div>\n' +
+                                    '                        </div>';
+                            })
+                        }else{
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            // 插入数据到页面，放到最后面
+                            $('.list-cont').append(html);
+                            // 每次数据插入，必须重置
+                            me.resetload();
+                        },1000);
+                    },
+                    error: function(xhr, type){
+                        alert('Ajax error!');
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            },
+            threshold : 50
+        });
+        b();
+        $('#gotop').click(function(){
+            $(document).scrollTop(0);
+        });
+        function b(){
+            h = $(window).height();
+            t = $(document).scrollTop();
+            if(t > h){
+                $('#gotop').show();
+            }else{
+                $('#gotop').hide();
+            }
+        }
+        $(window).scroll(function(e){
+            b();
+        });
+    });
+</script>
+

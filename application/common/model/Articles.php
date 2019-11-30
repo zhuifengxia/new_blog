@@ -18,26 +18,20 @@ class Articles extends Base
         $status = [0 => '原创', 1 => '转载', 2 => '翻译'];
         return ['val' => $value, 'text' => $status[$value]];
     }
-    public function __construct($data = [])
+    public function __construct($data = ["id"=>0,"article_title"=>"","article_img"=>"","type_id"=>0,"article_type"=>0,"is_publish"=>1,"is_top"=>0,"article_digest"=>"","article_msg"=>"","article_tag"=>""])
     {
-        $data=[
-            'id'=>0,
-            'article_title'=>'',
-            'type_id'=>0,
-            'read_num'=>0,
-            'is_publish'=>1,
-            'is_top'=>0,
-            'article_type'=>0,
-            'article_msg'=>'',
-            'article_digest'=>'',
-            'article_tag'=>'',
-            'article_img'=>'',
-            'create_time'=>0,
-            'update_time'=>0,
-            'publish_time'=>0,
-            'publish_time'=>0,
-        ];
         parent::__construct($data);
+    }
+
+    public function artData($data)
+    {
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]['type_name'] = db("articletype")
+                ->field("type_name")
+                ->where("id", $data[$i]['type_id'])
+                ->value("type_name");
+        }
+        return $data;
     }
 
     //获取数据列表

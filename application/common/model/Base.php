@@ -21,7 +21,7 @@ class Base extends Model
      */
     public function dataList($className,$where=[],$paginate=0,$page=1,$order="ID desc")
     {
-        $data = $className::where('IsDel', 0)
+        $data = $className::where('is_logic_del', 0)
             ->where($where)
             ->order($order);
         if ($paginate == 1) {
@@ -38,7 +38,7 @@ class Base extends Model
     //查询数据id集合
     public function dataIDs($className,$fieldName,$where=[])
     {
-        $data = $className::where('IsDel', 0)
+        $data = $className::where('is_logic_del', 0)
             ->where($where)
             ->column($fieldName);
         return $data;
@@ -47,7 +47,7 @@ class Base extends Model
     //数据总数
     public function dataCount($className,$where=[])
     {
-        $data = $className::where('IsDel', 0)
+        $data = $className::where('is_logic_del', 0)
             ->where($where)
             ->count();
         return $data;
@@ -56,7 +56,7 @@ class Base extends Model
     //数据和
     public function dataSum($className,$fieldName,$where=[])
     {
-        $data = $className::where('IsDel', 0)
+        $data = $className::where('is_logic_del', 0)
             ->where($where)
             ->sum($fieldName);
         return $data;
@@ -65,7 +65,7 @@ class Base extends Model
     //详情数据
     public function oneDetail($className,$where)
     {
-        $data = $className::where('IsDel',0)
+        $data = $className::where('is_logic_del',0)
             ->where($where)
             ->find();
         return $data;

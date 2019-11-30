@@ -7,7 +7,7 @@
  * Copyright: momo
  */
 namespace app\admin\controller;
-use app\common\model\ArticleType as TypeModel;
+use app\common\model\Articletype as TypeModel;
 use app\common\model\Articles as ArtModel;
 use MoCommon\Support\UploadFiles;
 
@@ -19,7 +19,8 @@ class Articles extends Base
     public function artList()
     {
         $artModel = new ArtModel();
-        $articles = $artModel->artList([]);
+        $articles = $artModel->dataList(ArtModel::class, [],1);
+        $articles = $artModel->artData($articles);
         $this->assign('articles', $articles);
         return $this->fetch('articles');
     }
@@ -56,6 +57,9 @@ class Articles extends Base
         $is_top = input('is_top', 0);
         $is_publish = input('is_publish', 1);
         $article_img = $_FILES['article_img'];
+        if(empty($article_img)){
+            $article_img=input("article_img","");
+        }
         $insert = $_POST;
         $insert['is_top']=$is_top;
         $insert['is_publish']=$is_publish;

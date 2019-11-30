@@ -43,7 +43,10 @@
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">文章缩略图</label>
-                            <span class="fileinput-button layui-btn">
+                            <div class="layui-input-block">
+                                <input type="text" name="article_img" value="{$details.article_img}" class="layui-input" style="width:35%"/>
+                            </div>
+                        <span class="fileinput-button layui-btn">
                         <span>上传</span>
                         <input type="file" name="article_img" id="article_img" onchange="readfile()"/>
                         </span>
@@ -66,9 +69,9 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">文章类型</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="article_type" value="0" title="原创" {$details.article_type==0?"checked":""}>
-                                <input type="radio" name="article_type" value="1" title="转载" {$details.article_type==1?"checked":""}>
-                                <input type="radio" name="article_type" value="2" title="翻译" {$details.article_type==2?"checked":""}>
+                                <input type="radio" name="article_type" value="0" title="原创" {$details.article_type.val==0?"checked":""}>
+                                <input type="radio" name="article_type" value="1" title="转载" {$details.article_type.val==1?"checked":""}>
+                                <input type="radio" name="article_type" value="2" title="翻译" {$details.article_type.val==2?"checked":""}>
                             </div>
                         </div>
 

@@ -9,7 +9,7 @@
 namespace app\common\model;
 
 
-class ArticleType extends Base
+class Articletype extends Base
 {
     public function __construct($data = ['id'=>0,'type_name'=>'','fid'=>0,'is_show'=>0,'is_logic_del'=>0])
     {

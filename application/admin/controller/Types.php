@@ -7,7 +7,7 @@
  * Copyright: momo
  */
 namespace app\admin\controller;
-use app\common\model\ArticleType as TypeModel;
+use app\common\model\Articletype as TypeModel;
 class Types extends Base
 {
     /**

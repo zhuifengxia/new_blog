@@ -25,6 +25,7 @@ class Index extends Controller
             //获取最新的十条微语
             $wish = db('gossips')
                 ->field('id,data_msg')
+                ->where("data_type",0)
                 ->order('id desc')
                 ->limit(10)
                 ->select();

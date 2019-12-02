@@ -15,6 +15,8 @@ class Index extends Controller
     public function index()
     {
         $page = input('page', 1);
+        $banner=[];
+        $wish=[];
         if ($page == 1) {
             //获取banner数据
             $banner = db('articles')

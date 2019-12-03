@@ -90,6 +90,7 @@ Route::group('api',[
     'login'=>['api/Index/login',['method' => 'post']],
     'article'=>['api/Index/artDetail',['method' => 'post']],
     'dolike'=>['api/Index/artLike',['method' => 'post']],
+    'comment'=>['api/Index/writeComm',['method' => 'post']],
 ]);
 
 

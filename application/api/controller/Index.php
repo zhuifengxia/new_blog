@@ -213,4 +213,35 @@ class Index extends Controller
             ->count();
         return json(['status' => $result, "num" => $likenum]);
     }
+    //文章评论
+    public function writeComm()
+    {
+        $id = input("artid");
+        $userid = input("userid");
+        $commentmsg = input("commentmsg");
+        $iscomment = db("posting")
+            ->where("post_content", $commentmsg)
+            ->where("user_id", $userid)
+            ->where("data_id", $id)
+            ->find();
+        if (empty($iscomment)) {
+            //获取昵称，头像
+            $user = db("users")
+                ->where("id", $userid)
+                ->find();
+            $data = [
+                "post_content" => $commentmsg,
+                "data_id" => $id,
+                "user_id" => $userid,
+                "post_ip" => Helper::getIp(),
+                "nick_name" => $user["user_name"],
+                "user_img" => $user["user_img"],
+                "create_time" => time(),
+                "update_time" => time()
+            ];
+            db("posting")
+                ->insert($data);
+        }
+        return json(["status" => 0]);
+    }
 }

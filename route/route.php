@@ -89,6 +89,7 @@ Route::group('api',[
     'index'=>['api/Index/index',['method' => 'get']],
     'login'=>['api/Index/login',['method' => 'post']],
     'article'=>['api/Index/artDetail',['method' => 'post']],
+    'dolike'=>['api/Index/artLike',['method' => 'post']],
 ]);
 
 

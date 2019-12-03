@@ -8,7 +8,10 @@
 
 namespace app\api\controller;
 
+use EasyWeChat\Factory;
+use MoCommon\Support\Helper;
 use think\Controller;
+use think\facade\Cache;
 
 class Index extends Controller
 {
@@ -54,5 +57,49 @@ class Index extends Controller
                 ->count();
         }
         return json(['banner' => $banner, 'wish' => $wish, 'artlist' => $article, 'page' => $page + 1]);
+    }
+
+    //登录
+    public function login()
+    {
+        $code = input('code');
+        $config = config('wechat.mini_program.default');
+        $app = Factory::miniProgram($config);
+        $session = $app->auth->session($code);
+        $return_data = [];
+        $status = -1;
+        if (!isset($session['session_key'])) {
+            $message = '小程序session_key获取错误';
+        } else {
+            //将openid保存到数据库中
+            $member = db("users")->where(["open_id" => $session['openid']])
+                ->find();
+            $data = [
+                'nick_name' => '',
+                'head_url' => '',
+                'open_id' => $session['openid'],
+                'create_time' => time()
+            ];
+            if (empty($member['open_id'])) {
+                //没有此用户新增
+                $uid = db("users")->insertGetId($data);
+                $member = db("users")->where(["user_id" => $uid])
+                    ->find();
+            }
+
+            $member['session_key'] = $session['session_key'];
+            // 给用户生成token
+            $sign = Helper::gentoken($member['id']);
+
+            //存入redis
+            $options = config('app.converse');
+            $redis = Cache::init($options);
+            $redis->set($sign, json_encode($member), $options['expire']);
+            $return_data['token'] = $sign;
+            $return_data['user_info'] = $member;
+            $status = 0;
+            $message = "success";
+        }
+        return json(["data" => $return_data, "status" => $status, "msg" => $message]);
     }
 }

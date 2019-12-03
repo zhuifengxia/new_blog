@@ -175,4 +175,38 @@ class Index extends Controller
         }
         return json(["artdetial" => $article, "commentlst" => $commentlst, "page" => $page + 1]);
     }
+
+    //文章点赞/收藏
+    public function artLike()
+    {
+        $id = input("artid");
+        $userid = input("userid");
+        $opertype = input("opertype", 0);
+        $islike = db("likes")
+            ->where("data_id", $id)
+            ->where("user_id", $userid)
+            ->where("data_type", $opertype)
+            ->find();
+        if ($islike) {
+            //已经点过了
+            $result = 0;
+        } else {
+            $insertdata = array(
+                "data_id" => $id,
+                "client_ip" => Helper::getIp(),
+                "create_time" => time(),
+                "data_type" => $opertype,
+                "user_id" => $userid
+            );
+            db("likes")
+                ->insert($insertdata);
+            $result = 1;
+        }
+        $likenum = db("likes")
+            ->where("is_logic_del", 0)
+            ->where("data_type", $opertype)
+            ->where("data_id", $id)
+            ->count();
+        return json(['status' => $result, "num" => $likenum]);
+    }
 }

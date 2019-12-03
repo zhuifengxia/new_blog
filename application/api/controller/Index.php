@@ -77,8 +77,8 @@ class Index extends Controller
             $member = db("users")->where(["open_id" => $session['openid']])
                 ->find();
             $data = [
-                'nick_name' => '',
-                'head_url' => '',
+                'user_name' => '',
+                'user_img' => '',
                 'open_id' => $session['openid'],
                 'create_time' => time()
             ];

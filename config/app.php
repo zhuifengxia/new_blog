@@ -153,4 +153,8 @@ return [
         'pass'       => 'fdettcst',
         'expire'       => '0',
     ],
+    //网站配置
+    'web_config'=>[
+        'web_url'           => 'http://liuxiaomo.cn',//TODO 网站域名上线后需更换正式
+    ],
 ];

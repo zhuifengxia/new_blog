@@ -164,11 +164,9 @@ class Index extends Controller
             ->page(1, 10)
             ->select();
         for ($i = 0; $i < count($commentlst); $i++) {
-
-             if(!strstr($commentlst[$i]['user_img'], 'http'))
-             {
-                 $commentlst[$i]['user_img']="/static/home/headimgs/".$commentlst[$i]['user_img'];
-             }
+            if (!strstr($commentlst[$i]['user_img'], 'http')) {
+                $commentlst[$i]['user_img'] = config("app.web_config.web_url") . "/static/home/headimgs/" . $commentlst[$i]['user_img'];
+            }
             $commentlst[$i]['create_time'] = date('Y-m-d H:i', $commentlst[$i]['create_time']);
         }
         $article['commentlst'] = $commentlst;

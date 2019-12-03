@@ -88,6 +88,7 @@ Route::group('api',[
     //首页
     'index'=>['api/Index/index',['method' => 'get']],
     'login'=>['api/Index/login',['method' => 'post']],
+    'article'=>['api/Index/artDetail',['method' => 'post']],
 ]);
 
 

@@ -54,6 +54,7 @@ class Index extends Controller
             //获取文章点赞总数
             $article[$i]['like_num']=db("likes")
                 ->where("is_logic_del",0)
+                ->where("data_type",0)
                 ->where("data_id",$article[$i]["id"])
                 ->count();
         }
@@ -117,5 +118,44 @@ class Index extends Controller
             $message = "success";
         }
         return json(["data" => $return_data, "status" => $status, "msg" => $message]);
+    }
+
+    //文章详情
+    public function artDetail()
+    {
+        $id = input("artid");
+        $userid = input("userid");
+        $article = db("articles")
+            ->where("id", $id)
+            ->find();
+        $article['update_time'] = date('Y-m-d H:i', $article['update_time']);
+        //获取文章评论总数
+        $article['comment_num'] = db("posting")
+            ->where("is_logic_del", 0)
+            ->where("data_id", $article["id"])
+            ->count();
+        //获取文章点赞总数
+        $article['like_num'] = db("likes")
+            ->where("is_logic_del", 0)
+            ->where("data_type", 0)
+            ->where("data_id", $article["id"])
+            ->count();
+        //当前用户是否点赞
+        $islike = db("likes")
+            ->where("is_logic_del", 0)
+            ->where("data_type", 0)
+            ->where("data_id", $article["id"])
+            ->where("user_id", $userid)
+            ->find();
+        $article["is_like"] = $islike ? 1 : 0;
+        //当前用户是否收藏
+        $iscollect = db("likes")
+            ->where("is_logic_del", 0)
+            ->where("data_type", 1)
+            ->where("data_id", $article["id"])
+            ->where("user_id", $userid)
+            ->find();
+        $article["is_collect"] = $iscollect ? 1 : 0;
+        return json($article);
     }
 }

@@ -42,6 +42,16 @@ class Index extends Controller
             ->select();
         for ($i = 0; $i < count($article); $i++) {
             $article[$i]['update_time'] = date('Y-m-d H:i', $article[$i]['update_time']);
+            //获取文章评论总数
+            $article[$i]['comment_num']=db("posting")
+                ->where("is_logic_del",0)
+                ->where("data_id",$article[$i]["id"])
+                ->count();
+            //获取文章点赞总数
+            $article[$i]['like_num']=db("likes")
+                ->where("is_logic_del",0)
+                ->where("data_id",$article[$i]["id"])
+                ->count();
         }
         return json(['banner' => $banner, 'wish' => $wish, 'artlist' => $article, 'page' => $page + 1]);
     }

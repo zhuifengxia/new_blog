@@ -128,6 +128,10 @@ class Index extends Controller
         $userid = input("userid");
         $article = [];
         if ($page == 1) {
+            //增加阅读量
+            db("articles")
+                ->where("id", $id)
+                ->setInc("read_num");
             $article = db("articles")
                 ->where("id", $id)
                 ->find();
@@ -173,10 +177,6 @@ class Index extends Controller
             }
             $commentlst[$i]['create_time'] = date('Y-m-d H:i', $commentlst[$i]['create_time']);
         }
-        //增加阅读量
-        db("articles")
-            ->where("id", $id)
-            ->setInc("read_num");
         return json(["artdetial" => $article, "commentlst" => $commentlst, "page" => $page + 1]);
     }
 

@@ -165,7 +165,7 @@ class Index extends Controller
             ->where("data_id", $id)
             ->where("is_logic_del", 0)
             ->order("id desc")
-            ->page($page, 10)
+            ->page($page, 1)
             ->select();
         for ($i = 0; $i < count($commentlst); $i++) {
             if (!strstr($commentlst[$i]['user_img'], 'http')) {

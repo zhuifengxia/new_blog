@@ -156,6 +156,14 @@ class Index extends Controller
             ->where("user_id", $userid)
             ->find();
         $article["is_collect"] = $iscollect ? 1 : 0;
+        //获取前十条评论数据
+        $commentlst=db("posting")
+            ->where("data_id",$id)
+            ->where("is_logic_del",0)
+            ->order("id desc")
+            ->page(1,10)
+            ->select();
+        $article['commentlst'] = $commentlst;
         return json($article);
     }
 }

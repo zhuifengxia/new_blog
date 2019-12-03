@@ -63,7 +63,7 @@ class Index extends Controller
     //登录
     public function login()
     {
-        Log::error("ldf:".$_POST);
+        Log::error("ldf:".json_encode($_POST));
         $code = input('code');
         $config = config('wechat.mini_program.default');
         $app = Factory::miniProgram($config);

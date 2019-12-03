@@ -112,7 +112,7 @@ class Index extends Controller
             $redis = Cache::init($options);
             $redis->set($sign, json_encode($member), $options['expire']);
             $return_data['token'] = $sign;
-            $return_data['user_info'] = $member;
+            $return_data['userInfo'] = $member;
             $status = 0;
             $message = "success";
         }

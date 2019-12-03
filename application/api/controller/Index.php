@@ -224,7 +224,7 @@ class Index extends Controller
             ->where("user_id", $userid)
             ->where("data_id", $id)
             ->find();
-        if (empty($iscomment)) {
+        if (!$iscomment) {
             //获取昵称，头像
             $user = db("users")
                 ->where("id", $userid)

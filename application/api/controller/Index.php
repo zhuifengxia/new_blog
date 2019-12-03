@@ -64,6 +64,11 @@ class Index extends Controller
     public function login()
     {
         Log::error("ldf:".json_encode($_POST));
+        $username = input('username');
+        $userimg = input('userimg');
+        $usergender = input('usergender');
+        $userpro = input('userpro');
+        $usercity = input('usercity');
         $code = input('code');
         $config = config('wechat.mini_program.default');
         $app = Factory::miniProgram($config);
@@ -77,15 +82,18 @@ class Index extends Controller
             $member = db("users")->where(["open_id" => $session['openid']])
                 ->find();
             $data = [
-                'user_name' => '',
-                'user_img' => '',
+                'user_name' => $username,
+                'user_img' => $userimg,
+                'user_gender' => $usergender,
+                'user_prov' => $userpro,
+                'user_city' => $usercity,
                 'open_id' => $session['openid'],
                 'create_time' => time()
             ];
             if (empty($member['open_id'])) {
                 //没有此用户新增
                 $uid = db("users")->insertGetId($data);
-                $member = db("users")->where(["user_id" => $uid])
+                $member = db("users")->where(["id" => $uid])
                     ->find();
             }
 

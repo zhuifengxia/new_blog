@@ -87,16 +87,20 @@ class Index extends Controller
                 'user_gender' => $usergender,
                 'user_prov' => $userpro,
                 'user_city' => $usercity,
-                'open_id' => $session['openid'],
-                'create_time' => time()
+                'open_id' => $session['openid']
             ];
             if (empty($member['open_id'])) {
+                $data["create_time"]=time();
+                $data["update_time"]=time();
                 //没有此用户新增
                 $uid = db("users")->insertGetId($data);
-                $member = db("users")->where(["id" => $uid])
-                    ->find();
+            }else{
+                $data["update_time"]=time();
+                db("users")->where(["id"=>$member['id']])
+                    ->update($data);
             }
-
+            $member = db("users")->where(["id" => $uid])
+                ->find();
             $member['session_key'] = $session['session_key'];
             // 给用户生成token
             $sign = Helper::gentoken($member['id']);

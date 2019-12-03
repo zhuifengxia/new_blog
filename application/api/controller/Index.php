@@ -173,6 +173,6 @@ class Index extends Controller
             }
             $commentlst[$i]['create_time'] = date('Y-m-d H:i', $commentlst[$i]['create_time']);
         }
-        return json(["artdetial" => $article, "commentlst" => $commentlst, "page" => $page]);
+        return json(["artdetial" => $article, "commentlst" => $commentlst, "page" => $page + 1]);
     }
 }

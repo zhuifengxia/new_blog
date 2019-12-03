@@ -224,12 +224,12 @@ class Index extends Controller
             ->where("user_id", $userid)
             ->where("data_id", $id)
             ->find();
-        dump($iscomment);exit;
-        if (!$iscomment) {
+        if (empty($iscomment)) {
             //获取昵称，头像
             $user = db("users")
                 ->where("id", $userid)
                 ->find();
+            dump($user);exit;
             $data = [
                 "post_content" => $commentmsg,
                 "data_id" => $id,

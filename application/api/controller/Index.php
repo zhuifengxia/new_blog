@@ -63,7 +63,7 @@ class Index extends Controller
     //登录
     public function login()
     {
-        Log::error("ldf:".json_encode($_POST));
+        Log::error("ldf:" . json_encode($_POST));
         $username = input('username');
         $userimg = input('userimg');
         $usergender = input('usergender');
@@ -87,17 +87,19 @@ class Index extends Controller
                 'user_gender' => $usergender,
                 'user_prov' => $userpro,
                 'user_city' => $usercity,
+                'user_source' => 1,
                 'open_id' => $session['openid']
             ];
             if (empty($member['open_id'])) {
-                $data["create_time"]=time();
-                $data["update_time"]=time();
+                $data["create_time"] = time();
+                $data["update_time"] = time();
                 //没有此用户新增
                 $uid = db("users")->insertGetId($data);
-            }else{
-                $data["update_time"]=time();
-                db("users")->where(["id"=>$member['id']])
+            } else {
+                $data["update_time"] = time();
+                db("users")->where(["id" => $member['id']])
                     ->update($data);
+                $uid = $member['id'];
             }
             $member = db("users")->where(["id" => $uid])
                 ->find();

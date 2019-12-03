@@ -105,7 +105,7 @@ class Index extends Controller
                 ->find();
             $member['session_key'] = $session['session_key'];
             // 给用户生成token
-            $sign = Helper::gentoken($member['id']);
+            $sign = Helper::get_token($member['id']);
 
             //存入redis
             $options = config('app.converse');

@@ -124,44 +124,48 @@ class Index extends Controller
     public function artDetail()
     {
         $id = input("artid");
+        $page = input("page", 1);
         $userid = input("userid");
-        $article = db("articles")
-            ->where("id", $id)
-            ->find();
-        $article['create_time'] = date('Y-m-d H:i', $article['create_time']);
-        //获取文章评论总数
-        $article['comment_num'] = db("posting")
-            ->where("is_logic_del", 0)
-            ->where("data_id", $article["id"])
-            ->count();
-        //获取文章点赞总数
-        $article['like_num'] = db("likes")
-            ->where("is_logic_del", 0)
-            ->where("data_type", 0)
-            ->where("data_id", $article["id"])
-            ->count();
-        //当前用户是否点赞
-        $islike = db("likes")
-            ->where("is_logic_del", 0)
-            ->where("data_type", 0)
-            ->where("data_id", $article["id"])
-            ->where("user_id", $userid)
-            ->find();
-        $article["is_like"] = $islike ? 1 : 0;
-        //当前用户是否收藏
-        $iscollect = db("likes")
-            ->where("is_logic_del", 0)
-            ->where("data_type", 1)
-            ->where("data_id", $article["id"])
-            ->where("user_id", $userid)
-            ->find();
-        $article["is_collect"] = $iscollect ? 1 : 0;
+        $article = [];
+        if ($page == 1) {
+            $article = db("articles")
+                ->where("id", $id)
+                ->find();
+            $article['create_time'] = date('Y-m-d H:i', $article['create_time']);
+            //获取文章评论总数
+            $article['comment_num'] = db("posting")
+                ->where("is_logic_del", 0)
+                ->where("data_id", $article["id"])
+                ->count();
+            //获取文章点赞总数
+            $article['like_num'] = db("likes")
+                ->where("is_logic_del", 0)
+                ->where("data_type", 0)
+                ->where("data_id", $article["id"])
+                ->count();
+            //当前用户是否点赞
+            $islike = db("likes")
+                ->where("is_logic_del", 0)
+                ->where("data_type", 0)
+                ->where("data_id", $article["id"])
+                ->where("user_id", $userid)
+                ->find();
+            $article["is_like"] = $islike ? 1 : 0;
+            //当前用户是否收藏
+            $iscollect = db("likes")
+                ->where("is_logic_del", 0)
+                ->where("data_type", 1)
+                ->where("data_id", $article["id"])
+                ->where("user_id", $userid)
+                ->find();
+            $article["is_collect"] = $iscollect ? 1 : 0;
+        }
         //获取前十条评论数据
         $commentlst = db("posting")
             ->where("data_id", $id)
             ->where("is_logic_del", 0)
             ->order("id desc")
-            ->page(1, 10)
+            ->page($page, 10)
             ->select();
         for ($i = 0; $i < count($commentlst); $i++) {
             if (!strstr($commentlst[$i]['user_img'], 'http')) {
@@ -169,7 +173,6 @@ class Index extends Controller
             }
             $commentlst[$i]['create_time'] = date('Y-m-d H:i', $commentlst[$i]['create_time']);
         }
-        $article['commentlst'] = $commentlst;
-        return json($article);
+        return json(["artdetial" => $article, "commentlst" => $commentlst, "page" => $page]);
     }
 }

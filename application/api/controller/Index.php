@@ -157,12 +157,15 @@ class Index extends Controller
             ->find();
         $article["is_collect"] = $iscollect ? 1 : 0;
         //获取前十条评论数据
-        $commentlst=db("posting")
-            ->where("data_id",$id)
-            ->where("is_logic_del",0)
+        $commentlst = db("posting")
+            ->where("data_id", $id)
+            ->where("is_logic_del", 0)
             ->order("id desc")
-            ->page(1,10)
+            ->page(1, 10)
             ->select();
+        for ($i = 0; $i < count($commentlst); $i++) {
+            $commentlst[$i]['create_time'] = date('Y-m-d H:i', $commentlst[$i]['create_time']);
+        }
         $article['commentlst'] = $commentlst;
         return json($article);
     }

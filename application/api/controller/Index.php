@@ -229,7 +229,6 @@ class Index extends Controller
             $user = db("users")
                 ->where("id", $userid)
                 ->find();
-            dump($user);exit;
             $data = [
                 "post_content" => $commentmsg,
                 "data_id" => $id,

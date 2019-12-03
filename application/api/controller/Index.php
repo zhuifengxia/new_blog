@@ -12,6 +12,7 @@ use EasyWeChat\Factory;
 use MoCommon\Support\Helper;
 use think\Controller;
 use think\facade\Cache;
+use think\facade\Log;
 
 class Index extends Controller
 {
@@ -62,6 +63,7 @@ class Index extends Controller
     //登录
     public function login()
     {
+        Log::error("ldf:".$_POST);
         $code = input('code');
         $config = config('wechat.mini_program.default');
         $app = Factory::miniProgram($config);

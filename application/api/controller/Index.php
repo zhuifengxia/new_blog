@@ -244,4 +244,14 @@ class Index extends Controller
         }
         return json(["status" => 0]);
     }
+
+    //获取文章分类列表
+    public function artType()
+    {
+        $types=db("articletype")
+            ->where("is_logic_del", 0)
+            ->where("is_show", 1)
+            ->select();
+        return json($types);
+    }
 }

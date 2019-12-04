@@ -19,9 +19,10 @@ class Index extends Controller
     public function index()
     {
         $page = input('page', 1);
+        $typeid = input('typeid', 0);
         $banner=[];
         $wish=[];
-        if ($page == 1) {
+        if ($page == 1&&$typeid==0) {
             //获取banner数据
             $banner = db('articles')
                 ->field('id,article_title,article_img')
@@ -37,13 +38,25 @@ class Index extends Controller
                 ->select();
         }
 
-        //获取十条文章信息
-        $article = db('articles')
-            ->field('id,article_title,article_img,create_time,read_num')
-            ->where('is_logic_del', 0)
-            ->order('id desc')
-            ->page($page, 10)
-            ->select();
+        if($typeid){
+            //获取十条文章信息
+            $article = db('articles')
+                ->field('id,article_title,article_img,create_time,read_num')
+                ->where('is_logic_del', 0)
+                ->where('type_id', $typeid)
+                ->order('id desc')
+                ->page($page, 10)
+                ->select();
+        }else{
+            //获取十条文章信息
+            $article = db('articles')
+                ->field('id,article_title,article_img,create_time,read_num')
+                ->where('is_logic_del', 0)
+                ->order('id desc')
+                ->page($page, 10)
+                ->select();
+        }
+
         for ($i = 0; $i < count($article); $i++) {
             $article[$i]['create_time'] = date('Y-m-d H:i', $article[$i]['create_time']);
             //获取文章评论总数

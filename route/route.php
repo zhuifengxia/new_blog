@@ -86,7 +86,7 @@ Route::group('/',[
  */
 Route::group('api',[
     //首页
-    'index'=>['api/Index/index',['method' => 'get']],
+    'index'=>['api/Index/index',['method' => 'get|post']],
     'login'=>['api/Index/login',['method' => 'post']],
     'article'=>['api/Index/artDetail',['method' => 'post']],
     'dolike'=>['api/Index/artLike',['method' => 'post']],

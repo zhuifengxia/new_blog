@@ -267,4 +267,40 @@ class Index extends Controller
             ->select();
         return json($types);
     }
+
+
+    //获取我的赞/收藏/留言的文章
+    public function myData($type)
+    {
+        $userid = input("userid");
+        $page = input("page", 1);
+        if ($type != 2) {
+            //0点赞；1收藏
+            //获取文章id集合
+            $artids = db("likes")
+                ->field("data_id")
+                ->where("is_logic_del", 0)
+                ->where("data_type", $type)
+                ->where("user_id", $userid)
+                ->column("data_id");
+        } else {
+            //留言
+            $artids = db("posting")
+                ->field("data_id")
+                ->where("is_logic_del", 0)
+                ->where("data_type", $type)
+                ->where("user_id", $userid)
+                ->where("data_id", "<>", 0)
+                ->column("data_id");
+        }
+        //获取十条文章信息
+        $article = db('articles')
+            ->field('id,article_title,article_img,create_time,read_num')
+            ->where('is_logic_del', 0)
+            ->where("id", "in", $artids)
+            ->order('id desc')
+            ->page($page, 10)
+            ->select();
+        return json(["artlist" => $article, "page" => ($article ? ($page + 1) : $page)]);
+    }
 }

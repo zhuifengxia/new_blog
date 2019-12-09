@@ -92,6 +92,7 @@ Route::group('api',[
     'dolike'=>['api/Index/artLike',['method' => 'post']],
     'comment'=>['api/Index/writeComm',['method' => 'post']],
     'types'=>['api/Index/artType',['method' => 'post']],
+    'mydata/:type'=>['api/Index/myData',['method' => 'post']],
 ]);
 
 

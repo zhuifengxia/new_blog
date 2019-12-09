@@ -50,7 +50,7 @@ class Index extends Controller
         }else{
             //获取十条文章信息
             $article = db('articles')
-                ->field('id,article_title,article_img,create_time,read_num')
+                ->field('id,article_title,article_digest,article_img,create_time,read_num')
                 ->where('is_logic_del', 0)
                 ->order('id desc')
                 ->page($page, 10)

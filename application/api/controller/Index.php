@@ -251,7 +251,7 @@ class Index extends Controller
                 "user_img" => $user["user_img"],
                 "create_time" => time(),
                 "update_time" => time(),
-                "is_logic_del"=>1
+                "is_audit"=>0
             ];
             db("posting")
                 ->insert($data);

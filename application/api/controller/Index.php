@@ -250,7 +250,8 @@ class Index extends Controller
                 "nick_name" => $user["user_name"],
                 "user_img" => $user["user_img"],
                 "create_time" => time(),
-                "update_time" => time()
+                "update_time" => time(),
+                "is_logic_del"=>1
             ];
             db("posting")
                 ->insert($data);

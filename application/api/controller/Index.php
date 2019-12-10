@@ -288,7 +288,6 @@ class Index extends Controller
             $artids = db("posting")
                 ->field("data_id")
                 ->where("is_logic_del", 0)
-                ->where("data_type", $type)
                 ->where("user_id", $userid)
                 ->where("data_id", "<>", 0)
                 ->column("data_id");

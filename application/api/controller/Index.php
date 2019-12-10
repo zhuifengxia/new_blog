@@ -62,6 +62,7 @@ class Index extends Controller
             //获取文章评论总数
             $article[$i]['comment_num']=db("posting")
                 ->where("is_logic_del",0)
+                ->where("is_audit", 1)
                 ->where("data_id",$article[$i]["id"])
                 ->count();
             //获取文章点赞总数
@@ -152,6 +153,7 @@ class Index extends Controller
             //获取文章评论总数
             $article['comment_num'] = db("posting")
                 ->where("is_logic_del", 0)
+                ->where("is_audit", 1)
                 ->where("data_id", $article["id"])
                 ->count();
             //获取文章点赞总数
@@ -180,6 +182,7 @@ class Index extends Controller
         //获取前十条评论数据
         $commentlst = db("posting")
             ->where("data_id", $id)
+            ->where("is_audit", 1)
             ->where("is_logic_del", 0)
             ->order("id desc")
             ->page($page, 10)

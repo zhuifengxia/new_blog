@@ -301,6 +301,9 @@ class Index extends Controller
             ->order('id desc')
             ->page($page, 10)
             ->select();
+        for ($i = 0; $i < count($article); $i++) {
+            $article[$i]['create_time'] = date('Y-m-d H:i', $article[$i]['create_time']);
+        }
         return json(["artlist" => $article, "page" => ($article ? ($page + 1) : $page)]);
     }
 }

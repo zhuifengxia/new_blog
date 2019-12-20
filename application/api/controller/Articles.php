@@ -46,7 +46,7 @@ class Articles extends Controller
         //获取最新的十条微语
         $wish = db('gossips')
             ->field('data_msg')
-            ->where("data_type", 0)
+            ->where("data_type", 2)
             ->order('id desc')
             ->column("data_msg");
         return json(["status" => 0, "msg" => "success", "data" => $wish]);

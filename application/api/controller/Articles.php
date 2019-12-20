@@ -48,7 +48,7 @@ class Articles extends Controller
             ->field('data_msg')
             ->where("data_type", 0)
             ->order('id desc')
-            ->column();
+            ->column("data_msg");
         return json(["status" => 0, "msg" => "success", "data" => $wish]);
     }
 

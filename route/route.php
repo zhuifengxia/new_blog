@@ -93,6 +93,9 @@ Route::group('api',[
     'comment'=>['api/Index/writeComm',['method' => 'post']],
     'types'=>['api/Index/artType',['method' => 'post']],
     'mydata/:type'=>['api/Index/myData',['method' => 'post']],
+    //小程序apiv2
+    'v2/banner'=>['api/Articles/bannerData',['method' => 'get']],
+
 ]);
 
 

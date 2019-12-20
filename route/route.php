@@ -95,6 +95,7 @@ Route::group('api',[
     'mydata/:type'=>['api/Index/myData',['method' => 'post']],
     //小程序apiv2
     'v2/banner'=>['api/Articles/bannerData',['method' => 'get']],
+    'v2/whisper'=>['api/Articles/whisperData',['method' => 'get']],
 
 ]);
 

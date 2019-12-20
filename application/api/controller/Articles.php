@@ -60,6 +60,7 @@ class Articles extends Controller
                 ->where("data_id", $article[$i]["id"])
                 ->count();
         }
+        sleep(1000);
         return json(['status' => 0, 'msg' => 'success', 'data' => $article, 'total' => $total]);
     }
 

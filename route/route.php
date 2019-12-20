@@ -97,7 +97,7 @@ Route::group('api',[
     'v2/banner'=>['api/Articles/bannerData',['method' => 'get']],
     'v2/whisper'=>['api/Articles/whisperData',['method' => 'get']],
     'v2/articles'=>['api/Articles/articleData',['method' => 'get']],
-    'v2/article/detail'=>['api/Articles/articleDetail',['method' => 'get']],
+    'v2/article/detail/:artid'=>['api/Articles/articleDetail',['method' => 'get']],
 
 ]);
 

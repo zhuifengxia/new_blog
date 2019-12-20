@@ -116,6 +116,7 @@ class Articles extends Controller
             ->count();
         //文章tag
         $article["article_tag"] = explode(",", $article["article_tag"]);
+        $article["article_type"]=$article["article_type"]==1?'转载':'原创';
         //获取文章点赞总数
         $article['like_num'] = db("likes")
             ->where("is_logic_del", 0)

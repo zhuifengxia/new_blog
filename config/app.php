@@ -155,6 +155,6 @@ return [
     ],
     //网站配置
     'web_config'=>[
-        'web_url'           => 'http://liuxiaomo.cn',//TODO 网站域名上线后需更换正式
+        'web_url'           => 'https://liuxiaomo.cn',//TODO 网站域名上线后需更换正式
     ],
 ];

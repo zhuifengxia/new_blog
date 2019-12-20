@@ -39,7 +39,7 @@ class Articles extends Controller
                 ->field('id,article_title,article_img,create_time,read_num')
                 ->where('is_logic_del', 0)
                 ->order('id desc')
-                ->page($page, 10)
+                ->page($page, 2)
                 ->select();
             $total = db('articles')
                 ->where('is_logic_del', 0)

@@ -14,11 +14,53 @@ class Articles extends Controller
 {
 
     /**
-     * 首页数据
+     * 文章列表数据
      */
-    public function index()
+    public function articleData()
     {
-
+        $typeid = input("typeid", 0);
+        $page = input("page", 1);
+        if ($typeid) {
+            //获取十条文章信息
+            $article = db('articles')
+                ->field('id,article_title,article_digest,article_img,create_time,read_num')
+                ->where('is_logic_del', 0)
+                ->where('type_id', $typeid)
+                ->order('id desc')
+                ->page($page, 10)
+                ->select();
+            $total = db('articles')
+                ->where('is_logic_del', 0)
+                ->where('type_id', $typeid)
+                ->count();
+        } else {
+            //获取十条文章信息
+            $article = db('articles')
+                ->field('id,article_title,article_img,create_time,read_num')
+                ->where('is_logic_del', 0)
+                ->order('id desc')
+                ->page($page, 10)
+                ->select();
+            $total = db('articles')
+                ->where('is_logic_del', 0)
+                ->count();
+        }
+        for ($i = 0; $i < count($article); $i++) {
+            $article[$i]['create_time'] = date('Y-m-d H:i', $article[$i]['create_time']);
+            //获取文章评论总数
+            $article[$i]['comment_num'] = db("posting")
+                ->where("is_logic_del", 0)
+                ->where("is_audit", 1)
+                ->where("data_id", $article[$i]["id"])
+                ->count();
+            //获取文章点赞总数
+            $article[$i]['like_num'] = db("likes")
+                ->where("is_logic_del", 0)
+                ->where("data_type", 0)
+                ->where("data_id", $article[$i]["id"])
+                ->count();
+        }
+        return json(['status' => 0, 'msg' => 'success', 'data' => $article, 'total' => $total]);
     }
 
     /**

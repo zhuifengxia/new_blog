@@ -8,10 +8,67 @@
 
 namespace app\api\controller;
 
+use EasyWeChat\Factory;
+use MoCommon\Support\Helper;
 use think\Controller;
+use think\facade\Cache;
 
 class Articles extends Controller
 {
+    /**
+     * 微信小程序登陆
+     */
+    public function login()
+    {
+        $code = input('code','');
+        $config = config('wechat.mini_program.default');
+        $app = Factory::miniProgram($config);
+        $session = $app->auth->session($code);
+        $return_data = [];
+        $status = -1;
+        if (!isset($session['session_key'])) {
+            $message = '小程序session_key获取错误';
+        } else {
+            //将openid保存到数据库中
+            $member = db("users")->where(["open_id" => $session['openid']])
+                ->find();
+            $data = [
+                'user_name' => $username,
+                'user_img' => $userimg,
+                'user_gender' => $usergender,
+                'user_prov' => $userpro,
+                'user_city' => $usercity,
+                'user_source' => 1,
+                'open_id' => $session['openid']
+            ];
+            if (empty($member['open_id'])) {
+                $data["create_time"] = time();
+                $data["update_time"] = time();
+                //没有此用户新增
+                $uid = db("users")->insertGetId($data);
+            } else {
+                $data["update_time"] = time();
+                db("users")->where(["id" => $member['id']])
+                    ->update($data);
+                $uid = $member['id'];
+            }
+            $member = db("users")->where(["id" => $uid])
+                ->find();
+            $member['session_key'] = $session['session_key'];
+            // 给用户生成token
+            $sign = Helper::get_token($member['id']);
+
+            //存入redis
+            $options = config('app.converse');
+            $redis = Cache::init($options);
+            $redis->set($sign, json_encode($member), $options['expire']);
+            $return_data['token'] = $sign;
+            $return_data['userInfo'] = $member;
+            $status = 0;
+            $message = "success";
+        }
+        return json(["data" => $return_data, "status" => $status, "msg" => $message]);
+    }
 
     /**
      * 文章列表数据

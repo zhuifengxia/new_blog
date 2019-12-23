@@ -254,8 +254,10 @@ class Articles extends Controller
                 "data_type" => $opertype,
                 "user_id" => $userid
             );
-            db("likes")
-                ->insert($insertdata);
+            if($userid){
+                db("likes")
+                    ->insert($insertdata);
+            }
             $result = 1;
         }
         $likenum = db("likes")

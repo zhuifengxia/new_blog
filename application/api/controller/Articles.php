@@ -33,16 +33,15 @@ class Articles extends Controller
             $message = '小程序session_key获取错误';
         } else {
             $decryptedData = $app->encryptor->decryptData($session['session_key'], $iv, $encryptedData);
-            dump($decryptedData);exit;
             //将openid保存到数据库中
             $member = db("users")->where(["open_id" => $session['openid']])
                 ->find();
             $data = [
-                'user_name' => '',
-                'user_img' => '',
-                'user_gender' => '',
-                'user_prov' => '',
-                'user_city' => '',
+                'user_name' => $decryptedData['nickName'],
+                'user_img' => $decryptedData['avatarUrl'],
+                'user_gender' => $decryptedData['gender'],
+                'user_prov' => $decryptedData['province'],
+                'user_city' => $decryptedData['city'],
                 'user_source' => 1,
                 'open_id' => $session['openid']
             ];

@@ -259,7 +259,7 @@ class Articles extends Controller
             ->where("data_type", $opertype)
             ->where("data_id", $id)
             ->count();
-        return json(["status" => $result, "msg" => "success", "num" => $likenum]);
+        return json(["status" => $result, "is_like" => 1, "msg" => "success", "num" => $likenum]);
     }
 
     //获取用户id

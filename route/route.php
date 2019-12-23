@@ -103,6 +103,7 @@ Route::group('api',[
     'v2/like'=>['api/Articles/likeData',['method' => 'post']],
     'v2/submitComment'=>['api/Articles/writeComm',['method' => 'post']],
     'v2/types'=>['api/Articles/artType',['method' => 'get']],
+    'v2/mydata/:type'=>['api/Articles/myData',['method' => 'get']],
 
 
 ]);

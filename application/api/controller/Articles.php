@@ -309,6 +309,43 @@ class Articles extends Controller
         return json(["status" => 0, "msg" => "success","data"=>$types]);
     }
 
+    //获取我的赞/收藏/留言的文章
+    public function myData($type)
+    {
+        $userid = $this->getUid();
+        $page = input("page", 1);
+        if ($type != 2) {
+            //0点赞；1收藏
+            //获取文章id集合
+            $artids = db("likes")
+                ->field("data_id")
+                ->where("is_logic_del", 0)
+                ->where("data_type", $type)
+                ->where("user_id", $userid)
+                ->column("data_id");
+        } else {
+            //留言
+            $artids = db("posting")
+                ->field("data_id")
+                ->where("is_logic_del", 0)
+                ->where("user_id", $userid)
+                ->where("data_id", "<>", 0)
+                ->column("data_id");
+        }
+        //获取十条文章信息
+        $article = db('articles')
+            ->field('id,article_title,article_img,create_time,read_num')
+            ->where('is_logic_del', 0)
+            ->where("id", "in", $artids)
+            ->order('id desc')
+            ->page($page, 10)
+            ->select();
+        for ($i = 0; $i < count($article); $i++) {
+            $article[$i]['create_time'] = date('Y-m-d H:i', $article[$i]['create_time']);
+        }
+        return json(["data" => $article, "status" => 0,"msg"=>"success"]);
+    }
+
 
     //获取用户id
     protected function getUid()

@@ -32,7 +32,7 @@ class Articles extends Controller
         if (!isset($session['session_key'])) {
             $message = '小程序session_key获取错误';
         } else {
-            $decryptedData = $app->encryptor->decryptData($session, $iv, $encryptedData);
+            $decryptedData = $app->encryptor->decryptData($session['session_key'], $iv, $encryptedData);
             dump($decryptedData);exit;
             //将openid保存到数据库中
             $member = db("users")->where(["open_id" => $session['openid']])

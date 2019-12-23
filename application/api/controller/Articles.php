@@ -343,7 +343,7 @@ class Articles extends Controller
         for ($i = 0; $i < count($article); $i++) {
             $article[$i]['create_time'] = date('Y-m-d H:i', $article[$i]['create_time']);
         }
-        return json(["data" => $article, "status" => 0,"msg"=>"success"]);
+        return json(["data" => $article, "status" => 0, "msg" => "success", "total" => count($artids)]);
     }
 
 

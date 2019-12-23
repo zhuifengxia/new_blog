@@ -207,4 +207,57 @@ class Articles extends Controller
         return json(["status"=>0,"msg"=>"success","data"=>$commentlst]);
     }
 
+    /**
+     * 用户点赞
+     * @param $artid 文章id
+     */
+    public function likeData()
+    {
+        $id = input("artid");
+        $userid = $this->getUid();
+        $opertype = input("opertype", 0);
+        $islike = db("likes")
+            ->where("data_id", $id)
+            ->where("user_id", $userid)
+            ->where("data_type", $opertype)
+            ->find();
+        if ($islike) {
+            //已经点过了
+            $result = 0;
+        } else {
+            $insertdata = array(
+                "data_id" => $id,
+                "client_ip" => Helper::getIp(),
+                "create_time" => time(),
+                "data_type" => $opertype,
+                "user_id" => $userid
+            );
+            db("likes")
+                ->insert($insertdata);
+            $result = 1;
+        }
+        $likenum = db("likes")
+            ->where("is_logic_del", 0)
+            ->where("data_type", $opertype)
+            ->where("data_id", $id)
+            ->count();
+        return json(["status" => $result, "msg" => "success", "num" => $likenum]);
+    }
+
+    //获取用户id
+    protected function getUid()
+    {
+        $options = config('app.converse');
+        $redis = Cache::init($options);
+        $userid = 0;
+        if (($sign = input('sign')) && ($json_info = $redis->get($sign))) {
+            $userid = json_decode($json_info, true)['id'];
+        }
+        if (($sign = Cookie::get('sign')) && ($json_info = $redis->get($sign))) {
+            $userid = json_decode($json_info, true)['id'];
+        }
+        return $userid;
+    }
+
+
 }

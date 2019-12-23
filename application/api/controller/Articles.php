@@ -21,6 +21,9 @@ class Articles extends Controller
     public function login()
     {
         $code = input('code','');
+        $encryptedData = input('encryptedData');
+        //微信user_info 返回的初始向量 iv
+        $iv = input('iv');
         $config = config('wechat.mini_program.default');
         $app = Factory::miniProgram($config);
         $session = $app->auth->session($code);
@@ -29,6 +32,8 @@ class Articles extends Controller
         if (!isset($session['session_key'])) {
             $message = '小程序session_key获取错误';
         } else {
+            $decryptedData = $app->encryptor->decryptData($session, $iv, $encryptedData);
+            dump($decryptedData);exit;
             //将openid保存到数据库中
             $member = db("users")->where(["open_id" => $session['openid']])
                 ->find();
@@ -261,6 +266,40 @@ class Articles extends Controller
             ->count();
         return json(["status" => $result, "is_like" => 1, "msg" => "success", "num" => $likenum]);
     }
+
+    //文章评论
+    public function writeComm()
+    {
+        $id = input("artid");
+        $userid = $this->getUid();
+        $content = input("content", "");
+        $iscomment = db("posting")
+            ->where("post_content", $content)
+            ->where("user_id", $userid)
+            ->where("data_id", $id)
+            ->find();
+        if (empty($iscomment)) {
+            //获取昵称，头像
+            $user = db("users")
+                ->where("id", $userid)
+                ->find();
+            $data = [
+                "post_content" => $content,
+                "data_id" => $id,
+                "user_id" => $userid,
+                "post_ip" => Helper::getIp(),
+                "nick_name" => $user["user_name"],
+                "user_img" => $user["user_img"],
+                "create_time" => time(),
+                "update_time" => time(),
+                "is_audit" => 0
+            ];
+            db("posting")
+                ->insert($data);
+        }
+        return json(["status" => 0, "msg" => "success"]);
+    }
+
 
     //获取用户id
     protected function getUid()

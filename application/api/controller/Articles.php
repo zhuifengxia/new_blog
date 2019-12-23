@@ -180,6 +180,24 @@ class Articles extends Controller
             ->where("data_type", 0)
             ->where("data_id", $article["id"])
             ->count();
+        $userid=$this->getUid();
+        //当前用户是否点赞
+        $islike = db("likes")
+            ->where("is_logic_del", 0)
+            ->where("data_type", 0)
+            ->where("data_id", $article["id"])
+            ->where("user_id", $userid)
+            ->find();
+        $article["is_like"] = $islike ? 1 : 0;
+        //当前用户是否收藏
+        $iscollect = db("likes")
+            ->where("is_logic_del", 0)
+            ->where("data_type", 1)
+            ->where("data_id", $article["id"])
+            ->where("user_id", $userid)
+            ->find();
+        $article["is_collect"] = $iscollect ? 1 : 0;
+
         return json(["status" => 0, "msg" => "success", "data" => $article]);
     }
 

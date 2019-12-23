@@ -99,6 +99,7 @@ Route::group('api',[
     'v2/articles'=>['api/Articles/articleData',['method' => 'get']],
     'v2/article/detail/:artid'=>['api/Articles/articleDetail',['method' => 'get']],
     'v2/article/comments/:artid'=>['api/Articles/commentData',['method' => 'get']],
+    'v2/login'=>['api/Articles/login',['method' => 'post']],
 
 ]);
 

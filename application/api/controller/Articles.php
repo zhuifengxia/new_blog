@@ -33,11 +33,11 @@ class Articles extends Controller
             $member = db("users")->where(["open_id" => $session['openid']])
                 ->find();
             $data = [
-                'user_name' => $username,
-                'user_img' => $userimg,
-                'user_gender' => $usergender,
-                'user_prov' => $userpro,
-                'user_city' => $usercity,
+                'user_name' => '',
+                'user_img' => '',
+                'user_gender' => '',
+                'user_prov' => '',
+                'user_city' => '',
                 'user_source' => 1,
                 'open_id' => $session['openid']
             ];

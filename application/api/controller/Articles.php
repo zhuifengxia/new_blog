@@ -340,7 +340,7 @@ class Articles extends Controller
             ->where('is_logic_del', 0)
             ->where("id", "in", $artids)
             ->order('id desc')
-            ->page($page, 1)
+            ->page($page, 10)
             ->select();
         for ($i = 0; $i < count($article); $i++) {
             $article[$i]['create_time'] = date('Y-m-d H:i', $article[$i]['create_time']);

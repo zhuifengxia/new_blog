@@ -250,10 +250,9 @@ class Articles extends Controller
         $options = config('app.converse');
         $redis = Cache::init($options);
         $userid = 0;
-        if (($sign = input('sign')) && ($json_info = $redis->get($sign))) {
-            $userid = json_decode($json_info, true)['id'];
-        }
-        if (($sign = Cookie::get('sign')) && ($json_info = $redis->get($sign))) {
+        $sign = input('sign','');
+        $json_info = $redis->get($sign);
+        if ($sign && $json_info) {
             $userid = json_decode($json_info, true)['id'];
         }
         return $userid;

@@ -100,7 +100,7 @@ class Articles extends Controller
                 ->field('id,article_title,article_img,create_time,read_num')
                 ->where('is_logic_del', 0)
                 ->order('id desc')
-                ->page($page, 2)
+                ->page($page, 10)
                 ->select();
             $total = db('articles')
                 ->where('is_logic_del', 0)
@@ -297,6 +297,16 @@ class Articles extends Controller
                 ->insert($data);
         }
         return json(["status" => 0, "msg" => "success"]);
+    }
+
+    //获取文章分类列表
+    public function artType()
+    {
+        $types=db("articletype")
+            ->where("is_logic_del", 0)
+            ->where("is_show", 1)
+            ->select();
+        return json(["status" => 0, "msg" => "success","data"=>$types]);
     }
 
 

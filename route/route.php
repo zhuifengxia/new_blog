@@ -102,6 +102,7 @@ Route::group('api',[
     'v2/login'=>['api/Articles/login',['method' => 'post']],
     'v2/like'=>['api/Articles/likeData',['method' => 'post']],
     'v2/submitComment'=>['api/Articles/writeComm',['method' => 'post']],
+    'v2/types'=>['api/Articles/artType',['method' => 'get']],
 
 
 ]);

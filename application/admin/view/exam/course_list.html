@@ -1,0 +1,56 @@
+{extend name="layouts/main" /}
+{block name="main"}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <a class="layui-btn" href="/admin/articles/add"><i class="layui-icon"></i>添加课程</a>
+                </div>
+                <div class="layui-card-body layui-table-body layui-table-main">
+                    <table class="layui-table layui-form">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>课程名称</th>
+                            <th>试卷数量</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="courses" id="item"}
+                        <tr>
+                            <td>{$item.id}</td>
+                            <td>{$item.type_name}</td>
+                            <td>{$item.test_num}</td>
+                            <td>{$item.create_time|date='Y-m-d H:i'}</td>
+                            <td>
+                                <a href="/admin/articles/add/{$item.id}"><i class="iconfont" title="编辑">&#xe69e;</i></a>&nbsp;&nbsp;
+                                <a  href="javascript:delConfirm('/admin/articles/delete/{$item.id}')"><i class="iconfont" style="color: red" title="删除">&#xe69d;</i></a>
+                            </td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                    {empty name="courses"}
+                    暂无数据
+                    {/empty}
+                    <div class="page">{$page_msg|raw}</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function delConfirm(jumpurl){
+        layer.confirm(
+            '确定要删除此数据么?',
+            function (){
+                window.location.href = jumpurl;
+            }
+        );
+    }
+</script>
+{/block}

@@ -59,6 +59,9 @@ Route::group('admin',[
     'posting/list/[:typeid]'   => ['admin/Posting/postList', ['method' => 'get']],
     'posting/delete/:id' => ['admin/Posting/delPost', ['method' => 'get']],
 
+    //题库管理
+    'course/list'   => ['admin/Exam/courseList', ['method' => 'get']],
+
 ]);
 
 /**

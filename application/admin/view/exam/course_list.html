@@ -5,15 +5,20 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    <a class="layui-btn" href="/admin/articles/add"><i class="layui-icon"></i>添加课程</a>
+                    <a class="layui-btn" href="/admin/course/add/{$type_fid}"><i class="layui-icon"></i>{$type_fid==0?"添加课程":"添加试卷"}</a>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-table layui-form">
                         <thead>
                         <tr>
                             <th>ID</th>
+                            {if $type_fid==0}
                             <th>课程名称</th>
                             <th>试卷数量</th>
+                            {else /}
+                            <th>试卷名称</th>
+                            <th>题目数量</th>
+                            {/if}
                             <th>创建时间</th>
                             <th>操作</th>
                         </tr>
@@ -26,8 +31,13 @@
                             <td>{$item.test_num}</td>
                             <td>{$item.create_time|date='Y-m-d H:i'}</td>
                             <td>
-                                <a href="/admin/articles/add/{$item.id}"><i class="iconfont" title="编辑">&#xe69e;</i></a>&nbsp;&nbsp;
-                                <a  href="javascript:delConfirm('/admin/articles/delete/{$item.id}')"><i class="iconfont" style="color: red" title="删除">&#xe69d;</i></a>
+                                {if $type_fid==0}
+                                <a href="/admin/course/list/{$item.id}"><i class="iconfont" title="试卷列表">&#xe699;</i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                {else /}
+                                <a href="/admin/topic/list/{$item.type_fid}/{$item.id}"><i class="iconfont" title="题目列表">&#xe699;</i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                {/if}
+                                <a href="/admin/course/add/{$item.type_fid}/{$item.id}"><i class="iconfont" title="编辑">&#xe69e;</i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a  href="javascript:delConfirm('/admin/course/delete/{$item.id}')"><i class="iconfont" style="color: red" title="删除">&#xe69d;</i></a>
                             </td>
                         </tr>
                         {/volist}

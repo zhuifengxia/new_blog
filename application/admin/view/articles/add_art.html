@@ -61,7 +61,7 @@
                             <div class="layui-inline layui-show-xs-block">
                                 <select name="type_id">
                                     {volist name="types" id="item"}
-                                    <option value="{$item.id}" {$details.type_id==$item.id?"checked":""}>{$item.type_name}</option>
+                                    <option value="{$item.id}" {$details.type_id==$item.id?"selected":""}>{$item.type_name}</option>
                                     {/volist}
                                 </select>
                             </div>

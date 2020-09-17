@@ -10,3 +10,23 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+
+//题目类型
+if(!function_exists("topicType")) {
+    function topicType($typeid)
+    {
+        $msg = "单选题";
+        switch ($typeid) {
+            case 1:
+                $msg = "多选题";
+                break;
+            case 2:
+                $msg = "填空题";
+                break;
+            case 3:
+                $msg = "问答题";
+                break;
+        }
+        return $msg;
+    }
+}

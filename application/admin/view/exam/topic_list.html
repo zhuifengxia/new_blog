@@ -23,9 +23,10 @@
                         {volist name="data" id="item"}
                         <tr>
                             <td>{$item.id}</td>
-                            <td>{$item.topic_title}</td>
-                            <td>{$item.topic_type}</td>
+                            <td>{$item.topic_title|raw}</td>
+                            <td>{$item.topic_type|topicType}</td>
                             <td>{$item.topic_parsing}</td>
+                            <td>{$item.update_time|date="Y-m-d H:i"}</td>
                             <td>
                                 <a href="/admin/topic/add/{$item.course_id}/{$item.type_id}/{$item.id}"><i class="iconfont" title="编辑">&#xe69e;</i></a>&nbsp;&nbsp;
                                 <a  href="javascript:delConfirm('/admin/topic/delete/{$item.id}')"><i class="iconfont" style="color: red" title="删除">&#xe69d;</i></a>

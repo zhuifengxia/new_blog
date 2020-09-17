@@ -61,11 +61,14 @@ Route::group('admin',[
 
     //题库管理
     'course/list/[:id]'   => ['admin/Exam/courseList', ['method' => 'get']],
+    'course/child/:id'   => ['admin/Exam/childCourse', ['method' => 'post']],
     'course/add/[:typefid]/[:id]'   => ['admin/Exam/addCourse', ['method' => 'get']],
     'course/doAdd' => ['admin/Exam/doAddCourse', ['method' => 'post']],
     'course/delete/:id' => ['admin/Exam/delCourse', ['method' => 'get']],
-    'topic/list/:courseid/:testid'   => ['admin/Exam/topicList', ['method' => 'get']],
+    'topic/list/[:courseid]/[:testid]'   => ['admin/Exam/topicList', ['method' => 'get']],
     'topic/add/[:courseid]/[:testid]/[:id]'   => ['admin/Exam/addTopic', ['method' => 'get']],
+    'topic/doAdd' => ['admin/Exam/doAddTopic', ['method' => 'post']],
+    'topic/delete/:id' => ['admin/Exam/delTopic', ['method' => 'get']],
 ]);
 
 /**

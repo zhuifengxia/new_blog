@@ -134,15 +134,18 @@ class Exam extends Base
         if ($id) {
             $detail = $baseModel->oneDetail($this->dbconfig, "topics", ['id' => $id]);
             //获取选项列表
-            $options = $baseModel->dataList($this->dbconfig, "options", "topic_id=$id",0,"1","id asc");
+            $options = $baseModel->dataList($this->dbconfig, "options", "topic_id=$id", 0, "1", "id asc");
             $detail["options"] = $options;
         }
         //获取课程列表信息
-        $course=$baseModel->dataList($this->dbconfig, "type", "type_fid=0");
+        $course = $baseModel->dataList($this->dbconfig, "type", "type_fid=0");
         //所选课程的试卷列表
-        $test_list=$baseModel->dataList($this->dbconfig, "type", $testid?"type_fid=$testid":"type_fid={$course[0]['id']}");
-        $this->assign("course_list",$course);
-        $this->assign("test_list",$test_list);
+        if (empty($testid)) {
+            $testid = $course[0]['id'];
+        }
+        $test_list = $baseModel->dataList($this->dbconfig, "type", $testid ? "type_fid=$testid" : "type_fid=$testid");
+        $this->assign("course_list", $course);
+        $this->assign("test_list", $test_list);
         $this->assign("courseid", $courseid);
         $this->assign("testid", $testid);
         $this->assign("data", $detail);

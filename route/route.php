@@ -90,7 +90,9 @@ Route::group('/',[
     'album'=>['index/Index/albumList',['method' => 'get|post']],
     'about'=>['index/Index/about',['method' => 'get|post']],
 
+    'user/login'=>['index/Exam/userLogin',['method' => 'post']],
     'exam'=>['index/Exam/index',['method' => 'get|post']],
+    'exam/setRecord'=>['index/Exam/setRecord',['method' => 'post']],
     'exam/test/:courseid/:testid'=>['index/Exam/testList',['method' => 'get|post']],
 ]);
 

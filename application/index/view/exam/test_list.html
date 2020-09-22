@@ -79,18 +79,38 @@
     let form;
     layui.use(['form'],
         function () {
+         var islogin="{$Think.session.web_index_user.user_name}";
+         if(islogin==""){
+             $(":radio").attr("disabled","disabled");
+             layer.open({
+                 title: "温馨提示"
+                 ,content: "请先登录"
+             });
+         }
             form = layui.form;
             form.on('radio(option)', function(data){
                 var topicid=$(data.elem).attr("data-topicid");
                 var is_right=$(data.elem).attr("data-right");
                 $("#parsing_"+topicid).show();
                 $("input[name='option"+topicid+"']").attr("disabled","disabled");
+                var user_right=0;
                 if(is_right!=1){
                     $(data.othis[0]).css("color","red");
                     $(data.othis[0]).find("i").css("color","red");
                 }else{
+                    user_right=1;
                     $(data.othis[0]).css("color","green");
                 }
+
+                //答题记录保存到数据库
+                $.ajax({
+                    type: "post",
+                    url: "/exam/setRecord",
+                    data: "topic_id="+topicid+"&user_right="+user_right,
+                    success: function (res) {
+
+                    }
+                });
             });
         });
 </script>

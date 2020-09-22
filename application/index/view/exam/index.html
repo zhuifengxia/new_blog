@@ -1,99 +1,36 @@
 {layout name="layouts/index" /}
 <style>
-    .layui-row p{
-        margin-bottom:30px;
+    .course-list{
+        display: flex;
+        flex-direction: column;
+    }
+    .curse-title{
+        font-weight: bold;
         font-size: 16px;
+        height: 40px;
+        line-height: 40px;
+        margin-top: 20px;
+    }
+    .test-list{
+        padding-bottom: 10px;
+        padding-left: 20px;
+        border-bottom: 1px solid #f2f2f2;
+    }
+    .test-list a{
+        padding: 10px;
     }
 </style>
-<div class="about-content">
+<div class="about-content" style="background-color: white;">
     <div class="w1000">
-        <div class="item info">
-            <div class="title">
-                <h3>我的介绍</h3>
+        <div class="course-list">
+            {volist name="course_list" id="item"}
+            <div class="curse-title">{$item.type_name}</div>
+            <div class="test-list">
+                {volist name="item.child" id="child"}
+                <a href="/exam/test/{$item.id}/{$child.id}">{$child.type_name}</a>
+                {/volist}
             </div>
-            <div class="cont">
-                <img src="__HOME__/userimg.jpg">
-                <div class="per-info">
-                    <p>
-                        <span class="name">刘小莫</span><br/>
-                        <span class="age">25岁（不管你信不信我就是25）</span><br/>
-                        <span class="Career">PHP软件工程师</span><br/>
-                        <span class="interest">爱好旅游,看书</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="item tool">
-            <div class="title">
-                <h3>我的技能</h3>
-            </div>
-            <div class="layui-fluid">
-                <div class="layui-row">
-                    <div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
-                        <div class="cont-box">
-                            <img src="__HOME__/images/php.png">
-                            <p>90%</p>
-                        </div>
-                    </div>
-                    <div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
-                        <div class="cont-box">
-                            <img src="__HOME__/images/mysql.png">
-                            <p>90%</p>
-                        </div>
-                    </div>
-                    <div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
-                        <div class="cont-box">
-                            <img src="__HOME__/images/nginx.png">
-                            <p>75%</p>
-                        </div>
-                    </div>
-                    <div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
-                        <div class="cont-box">
-                            <img src="__HOME__/images/linux.png">
-                            <p>49%</p>
-                        </div>
-                    </div>
-                    <div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
-                        <div class="cont-box">
-                            <img src="__HOME__/images/git.png">
-                            <p>80%</p>
-                        </div>
-                    </div>
-                    <div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
-                        <div class="cont-box">
-                            <img src="__HOME__/images/html.png">
-                            <p>80%</p>
-                        </div>
-                    </div>
-                    <div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
-                        <div class="cont-box">
-                            <img src="__HOME__/images/axure.png">
-                            <p>40%</p>
-                        </div>
-                    </div>
-                    <div class="layui-col-xs6 layui-col-sm3 layui-col-md3">
-                        <div class="cont-box">
-                            <img src="__HOME__/images/ps.png">
-                            <p>30%</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="item contact">
-            <div class="title">
-                <h3>联系方式</h3>
-            </div>
-            <div class="cont">
-                <div style="float: left;text-align: center">
-                    <img src="__HOME__/images/qrcode_mo.jpg" style="float: none">
-                    <p class="WeChat">这个公众号记录了一些生活琐事<br/>期待你的关注哦</p>
-                </div>
-                <div style="text-align: center">
-                    <img src="__HOME__/images/qrcode_gh.jpg" style="float: none">
-                    <p class="WeChat">希望看一些技术类文章的<br/>可以关注这个公众号哦</p>
-                </div>
-            </div>
+            {/volist}
         </div>
     </div>
 </div>

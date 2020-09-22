@@ -1,0 +1,96 @@
+{layout name="layouts/index" /}
+<style>
+    .test-list{
+        display: flex;
+        flex-direction: column;
+    }
+    .test-title{
+        font-weight: bold;
+        font-size: 16px;
+        height: 40px;
+        line-height: 40px;
+        margin-top: 20px;
+    }
+    .test-title span{
+        background-color: #dedede;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        padding: 5px 10px;
+    }
+    .option-list{
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 10px;
+    }
+    .option-item{
+        display: flex;
+        align-items: center;
+    }
+    .topic-item{
+        border-bottom: 1px solid #f2f2f2;
+        padding-bottom: 10px;
+    }
+
+    .right-msg{
+        background-color: #f2f2f2;
+        padding: 10px;
+        border-radius: 5px;
+        display: none;
+    }
+    .right-msg span{
+        color: green;
+        font-weight: bold;
+    }
+    .right-msg div{
+        margin-top: 10px;
+    }
+</style>
+<div class="about-content" style="background-color: white;">
+    <div class="w1000">
+        <div>当前位置：<a href="/exam">{$nav.course_name}</a>>{$nav.topic_name}</div>
+        <div class="test-list layui-form">
+            {volist name="topics" id="item"}
+            <div class="topic-item">
+                <div class="test-title"><span>{$item.topic_type|topicType}</span>{$item.topic_num}、{$item.topic_title|raw}</div>
+                <div class="option-list">
+                    {volist name="item.options" id="option" key="k"}
+                    <div class="option-item">
+                        <input type="radio" lay-filter="option" name="option{$item.id}" data-topicid="{$item.id}" data-right="{$option.is_right}" value="{$option.id}" title="{$k|optionMsg}、{$option.option_name|raw}">
+                    </div>
+                    {/volist}
+                </div>
+                <div class="right-msg" id="parsing_{$item.id}">
+                    <span>正确答案：{$item.right_answer}</span>
+                    <div>解析：{$item.topic_parsing|raw}</div>
+                </div>
+            </div>
+            {/volist}
+
+            {empty name="topics"}
+            暂无数据
+            {/empty}
+            <div class="page">{$page_msg|raw}</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let form;
+    layui.use(['form'],
+        function () {
+            form = layui.form;
+            form.on('radio(option)', function(data){
+                var topicid=$(data.elem).attr("data-topicid");
+                var is_right=$(data.elem).attr("data-right");
+                $("#parsing_"+topicid).show();
+                $("input[name='option"+topicid+"']").attr("disabled","disabled");
+                if(is_right!=1){
+                    $(data.othis[0]).css("color","red");
+                    $(data.othis[0]).find("i").css("color","red");
+                }else{
+                    $(data.othis[0]).css("color","green");
+                }
+            });
+        });
+</script>

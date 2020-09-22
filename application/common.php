@@ -30,3 +30,29 @@ if(!function_exists("topicType")) {
         return $msg;
     }
 }
+
+//题目类型
+if(!function_exists("optionMsg")) {
+    function optionMsg($optionid)
+    {
+        $msg = "A";
+        switch ($optionid) {
+            case 1:
+                $msg = "A";
+                break;
+            case 2:
+                $msg = "B";
+                break;
+            case 3:
+                $msg = "C";
+                break;
+            case 4:
+                $msg = "D";
+                break;
+            case 4:
+                $msg = "E";
+                break;
+        }
+        return $msg;
+    }
+}

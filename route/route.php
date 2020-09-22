@@ -89,6 +89,9 @@ Route::group('/',[
 
     'album'=>['index/Index/albumList',['method' => 'get|post']],
     'about'=>['index/Index/about',['method' => 'get|post']],
+
+    'exam'=>['index/Exam/index',['method' => 'get|post']],
+    'exam/test/:courseid/:testid'=>['index/Exam/testList',['method' => 'get|post']],
 ]);
 
 /**

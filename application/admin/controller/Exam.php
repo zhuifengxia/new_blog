@@ -155,49 +155,59 @@ class Exam extends Base
      */
     public function doAddTopic()
     {
-        $id=input("id",0);
-        $courseid=input("course_id",0);
-        $testid=input("type_id",0);
-        $topic_title=input("topic_title","");
-        $topic_type=input("topic_type","");
-        $option_name=input("option_name","");
-        $topic_parsing=input("topic_parsing","");
+        $id = input("id", 0);
+        $courseid = input("course_id", 0);
+        $testid = input("type_id", 0);
+        $topic_title = input("topic_title", "");
+        $topic_type = input("topic_type", "");
+        $option_name = input("option_name", "");
+        $topic_parsing = input("topic_parsing", "");
         $baseModel = new ExamBase();
         $where = "topic_title='$topic_title' and type_id=$testid and course_id=$courseid";
         if ($id) {
             $where .= " and id!=$id";
         }
         $data = $baseModel->oneDetail($this->dbconfig, "topics", $where);
-        if($data){
+        if ($data) {
             $this->error("该题目已经存在，请重新输入");
-        }else{
-            $insertdata=[
-                "topic_title"=>$topic_title,
-                "course_id"=>$courseid,
-                "type_id"=>$testid,
-                "topic_type"=>$topic_type,
-                "topic_parsing"=>$topic_parsing
+        } else {
+            $insertdata = [
+                "topic_title" => $topic_title,
+                "course_id" => $courseid,
+                "type_id" => $testid,
+                "topic_type" => $topic_type,
+                "topic_parsing" => $topic_parsing
             ];
             if ($id) {
                 //编辑
-                $baseModel->updateOne($this->dbconfig, "topics",$insertdata, ["id" => $id]);
+                $baseModel->updateOne($this->dbconfig, "topics", $insertdata, ["id" => $id]);
             } else {
                 //新增
-                $id=$baseModel->addOne($this->dbconfig, "topics", $insertdata);
+                $topic_num = $baseModel->dataValue($this->dbconfig, "topics", "max(topic_num)as topic_num", "type_id=$testid and course_id=$courseid");
+                $topic_num = $topic_num + 1;
+                $insertdata["topic_num"] = $topic_num;
+                $id = $baseModel->addOne($this->dbconfig, "topics", $insertdata);
             }
             //更新选项信息
-            $baseModel->deleteOne($this->dbconfig,"options","topic_id=$id");
-            for ($i=0;$i<count($option_name);$i++){
-                if($option_name[$i]){
-                    $is_right_data=input($i."is_right","0");
-                    $insertdata=[
-                        "option_name"=>$option_name[$i],
-                        "is_right"=>$is_right_data,
-                        "topic_id"=>$id,
+            $baseModel->deleteOne($this->dbconfig, "options", "topic_id=$id");
+            $right_str = "";
+            $right_arr = ["A", "B", "C", "D", "E"];
+            for ($i = 0; $i < count($option_name); $i++) {
+                if ($option_name[$i]) {
+                    $is_right_data = input($i . "is_right", "0");
+                    $insertdata = [
+                        "option_name" => $option_name[$i],
+                        "is_right" => $is_right_data,
+                        "topic_id" => $id,
                     ];
                     $baseModel->addOne($this->dbconfig, "options", $insertdata);
+                    if ($is_right_data) {
+                        $right_str .= $right_arr[$i];
+                    }
                 }
             }
+            //将正确答案信息更新到题目表
+            $baseModel->updateOne($this->dbconfig, "topics", ["right_answer" => $right_str], ["id" => $id]);
             $this->success("操作成功", "/admin/topic/list/$courseid/$testid");
         }
     }

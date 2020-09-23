@@ -39,11 +39,12 @@
         function () {
             form = layui.form;
         });
+    var web_global_login_index;
     function showLogin(type){
         var title=type==1?"注册":"登录";
-        $("#web_global_login_btn").html(title);
+        $("#web_global_login_btn").val(title);
         $("#web_global_login_type").val(type);
-        layer.open({
+        web_global_login_index = layer.open({
             type: 1,
             title:title,
             area: ["800px", "500px"],
@@ -65,13 +66,13 @@
             success: function (res) {
                 layer.msg(res.msg);
                 if (res.code==0) {
-                    return true;
+                    layer.close(web_global_login_index);
+                    window.location.reload();
                 }else{
                     return false;
                 }
             }
         });
-       return false;
     }
 </script>
 <div id="web-login-global-div" style="display: none;margin:0 auto;">
@@ -91,7 +92,7 @@
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <input type="hidden" id="web_global_login_type"/>
-                <button class="layui-btn" onclick="return web_global_login()" id="web_global_login_btn">登录</button>
+                <input type="button" class="layui-btn" onclick="web_global_login()" id="web_global_login_btn" value="登录"/>
             </div>
         </div>
     </form>

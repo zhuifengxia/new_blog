@@ -124,6 +124,18 @@ Route::group('api',[
 ]);
 
 
+/**
+ * 记账小程序相关
+ */
+Route::group('api',[
+    //首页
+    'tally/index'=>['api/Tallybook/index',['method' => 'get|post']],
+
+
+
+
+]);
+
 return [
 
 ];

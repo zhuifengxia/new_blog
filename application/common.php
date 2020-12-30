@@ -56,3 +56,19 @@ if(!function_exists("optionMsg")) {
         return $msg;
     }
 }
+
+//接口统一回复
+if (!function_exists('respondApi')) {
+    function respondApi($data=[],$status='',$msg='')
+    {
+        $status = $status ?: \MoCommon\Support\Codes::ACTION_SUC;
+        $msg = $msg ?: \MoCommon\Support\Codes::get(\MoCommon\Support\Codes::ACTION_SUC);
+        $arr = [
+            'statusCode' => $status,
+            'msg' => $msg,
+            'data' => $data
+        ];
+
+        return json($arr);
+    }
+}

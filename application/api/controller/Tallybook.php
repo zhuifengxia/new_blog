@@ -21,12 +21,23 @@ class Tallybook extends Controller
     private $dbconfig="db_tally";
     public function index()
     {
-        $page=input("page",1);
+        $page = input("page", 1);
+        $typeid = input("typeid", 0);
         $userid = $this->getUid();
         //获取当前月份的账单明细
         $baseModel = new ExamBase();
-        $data=$baseModel->dataList($this->dbconfig,"details",[],1,$page,"record_date desc");
-        return respondApi($data);
+        $data = $baseModel->dataList($this->dbconfig, "details", [], 1, $page, "record_date desc");
+        $types = [];
+        if (empty($typeid)) {
+            $income_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 0]);
+            $pay_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 1]);
+            $types = ["income_type" => $income_types, "pay_type" => $pay_types];
+        }
+        $res = [
+            "details" => $data,
+            "types" => $types
+        ];
+        return respondApi($res);
     }
 
     /**
@@ -35,7 +46,12 @@ class Tallybook extends Controller
     public function wxLogin()
     {
         $code = input('code');
-        $config = config('wechat.mini_program.default');
+        $config = [
+            'app_id' => 'wxd9ec25fd88069a76',
+            'secret' => '79f25933063eb0e032b6de334a15d1e1',
+            'token' => '',
+            'aes_key' => '',
+        ];
         $app = Factory::miniProgram($config);
         $session = $app->auth->session($code);
         $return_data = [];
@@ -43,21 +59,17 @@ class Tallybook extends Controller
         if (!isset($session['session_key'])) {
             $message = '小程序session_key获取错误';
         } else {
-            $web_city = $this->getCity();
-            $db_config = $web_city["city_config"];
             $baseModel = new ExamBase();
-
-            $member = $baseModel->oneDetail($db_config, "members", ["user_openid" => $session['openid']]);
+            $member = $baseModel->oneDetail($this->dbconfig, "members", ["user_openid" => $session['openid']]);
             if (empty($member)) {
                 //没有账号
                 $insertdata = [
-                    "user_no" => timeOrder(),
-                    "nick_name" => timeOrder(),
-                    "user_pwd" => md5("123456"),
+                    "user_phone" => "",
+                    "nick_name" => "",
                     "user_openid" => $session['openid']
                 ];
-                $userid = $baseModel->addOne($db_config, "members", $insertdata);
-                $member = $baseModel->oneDetail($db_config, "members", ["id" => $userid]);
+                $userid = $baseModel->addOne($this->dbconfig, "members", $insertdata);
+                $member = $baseModel->oneDetail($this->dbconfig, "members", ["id" => $userid]);
             }
 
             if ($member) {
@@ -65,9 +77,6 @@ class Tallybook extends Controller
                     $member["user_phone"] = "";
                 }
                 $member['session_key'] = $session['session_key'];
-                //查看用户是否是vip
-                $uservip = $baseModel->isVip($db_config, $member["id"]);
-                $member["user_vip"] = $uservip;
                 // 给用户生成token
                 $sign = Helper::get_token($member['id']);
                 //存入redis

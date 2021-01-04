@@ -116,12 +116,7 @@ class Tallybook extends Controller
     public function wxLogin()
     {
         $code = input('code');
-        $config = [
-            'app_id' => 'wxd9ec25fd88069a76',
-            'secret' => '79f25933063eb0e032b6de334a15d1e1',
-            'token' => '',
-            'aes_key' => '',
-        ];
+        $config = config('wechat.mini_program.tally');
         $app = Factory::miniProgram($config);
         $session = $app->auth->session($code);
         $return_data = [];

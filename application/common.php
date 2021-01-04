@@ -72,3 +72,25 @@ if (!function_exists('respondApi')) {
         return json($arr);
     }
 }
+
+
+//转换为日期
+if(!function_exists("transDate")) {
+    function transDate($time)
+    {
+        $time = strtotime($time);
+        $nowdate = strtotime(date("Y-m-d"));
+        if ($time == $nowdate) {
+            return "今天";
+        } else if ($time == ($nowdate - 86400)) {
+            return "昨天";
+        } else if ($time < $nowdate && $time >= ($nowdate - 86400 * 6)) {
+            $weekarray = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+            $xingqi = date("w", $time);
+            return $weekarray[$xingqi];
+        } else {
+            return "";
+        }
+
+    }
+}

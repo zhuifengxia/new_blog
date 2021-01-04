@@ -23,10 +23,48 @@ class Tallybook extends Controller
     {
         $page = input("page", 1);
         $typeid = input("typeid", 0);
-        $userid = $this->getUid();
+        $date = input("date", "");
+        $date = $date ?: date("Y-m");
+        //$userid = $this->getUid();
         //获取当前月份的账单明细
         $baseModel = new ExamBase();
-        $data = $baseModel->dataList($this->dbconfig, "details", [], 1, $page, "record_date desc");
+        $where = "record_date like '$date%' and is_logic_del=0";
+
+        if ($typeid) {
+            $where .= " and type_id=$typeid";
+        }
+        $paywhere = " and money_type=1";
+        $incomewhere = " and money_type=0";
+        //获取总支出
+        $pay_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
+        //获取总收入
+        $incom_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere);
+        $dateList = db("details", $this->dbconfig)
+            ->field("record_date")
+            ->where($where)
+            ->order("record_date desc")
+            ->distinct("record_date")
+            ->select();
+        $result = [];
+        foreach ($dateList as $item) {
+            $where = "record_date='{$item["record_date"]}'";
+            if ($typeid) {
+                $where .= " and type_id=$typeid";
+            }
+            //获得当天的支出
+            $pay = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
+            //获得当天收入
+            $income = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere);
+            $data = $baseModel->dataList($this->dbconfig, "details", $where, 0, $page, "record_date desc");
+            $one = [
+                "date" => date("m月d日", strtotime($item["record_date"])),
+                "date_msg" => transDate($item["record_date"]),
+                "pay_count" => number_format($pay, 2),
+                "income_count" => number_format($income, 2),
+                "details" => $data
+            ];
+            $result[] = $one;
+        }
         $types = [];
         if (empty($typeid)) {
             $income_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 0]);
@@ -34,10 +72,42 @@ class Tallybook extends Controller
             $types = ["income_type" => $income_types, "pay_type" => $pay_types];
         }
         $res = [
-            "details" => $data,
-            "types" => $types
+            "details" => $result ?: null,
+            "types" => $types,
+            "income_count" => $incom_count,
+            "pay_count" => $pay_count
         ];
         return respondApi($res);
+    }
+
+    /**
+     * 记账
+     */
+    public function createData()
+    {
+        $userid = $this->getUid(0);
+        $typeid = input("typeid", 0);
+        $number = input("number", 0);
+        $remark = input("remark", "");
+        $date = input("date", "");
+        if ($number) {
+            $baseModel = new ExamBase();
+            //获取类型的收支类型
+            $money_type = $baseModel->dataValue($this->dbconfig, "type", "type_type", "id=$typeid");
+            $type_name = $baseModel->dataValue($this->dbconfig, "type", "type_name", "id=$typeid");
+            $insert = [
+                "type_id" => $typeid,
+                "money_num" => $number,
+                "account_id" => 1,
+                "user_id" => $userid,
+                "record_date" => $date,
+                "data_remark" => $remark,
+                "money_type" => $money_type,
+                "type_name" => $type_name
+            ];
+            $baseModel->addOne($this->dbconfig, "details", $insert);
+        }
+        return respondApi();
     }
 
     /**

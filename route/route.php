@@ -130,6 +130,7 @@ Route::group('api',[
 Route::group('api',[
     //首页
     'tally/index'=>['api/Tallybook/index',['method' => 'get|post']],
+    'tally/type'=>['api/Tallybook/typeList',['method' => 'get|post']],
     'tally/login'=>['api/Tallybook/wxLogin',['method' => 'get|post']],
     'tally/create'=>['api/Tallybook/createData',['method' => 'post']],
 

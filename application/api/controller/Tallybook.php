@@ -85,6 +85,20 @@ class Tallybook extends Controller
         return respondApi($res);
     }
 
+    public function typeList()
+    {
+        $baseModel = new ExamBase();
+        $income_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 0]);
+        $pay_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 1]);
+        $types = ["income_type" => $income_types, "pay_type" => $pay_types];
+        $date_scope = monthData();
+        $res = [
+            "types" => $types,
+            "date_scope" => $date_scope
+        ];
+        return respondApi($res);
+    }
+
     /**
      * 记账
      */

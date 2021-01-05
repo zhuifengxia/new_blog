@@ -79,12 +79,13 @@ class ExamBase extends Model
     }
 
     //获取某个数据值
-    public function dataValue($dbname,$tablename,$fieldName,$where=[])
+    public function dataValue($dbname,$tablename,$fieldName,$where=[],$order="id desc")
     {
         $data = db($tablename, $dbname)
             ->where("is_logic_del", 0)
             ->field($fieldName)
             ->where($where)
+            ->order($order)
             ->value($fieldName);
         return $data;
     }

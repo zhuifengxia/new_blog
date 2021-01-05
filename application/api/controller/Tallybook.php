@@ -144,6 +144,20 @@ class Tallybook extends Controller
                 if (empty($member["user_phone"])) {
                     $member["user_phone"] = "";
                 }
+                //获取账户总余额
+                //收入-支出
+                //获得所有支出
+                $pay = $baseModel->dataSum($this->dbconfig, "details", "money_num", "money_type=1");
+                //获得所有收入
+                $income = $baseModel->dataSum($this->dbconfig, "details", "money_num", "money_type=0");
+                $income_count = $income - $pay;
+                $member["income_count"] = $income_count;
+                //获取记录笔数（只计算当前登录人的数据）
+                $create_count = $baseModel->dataCount($this->dbconfig, "details", "user_id={$member['id']}");
+                $member["create_count"] = $create_count;
+                //查看当前用户记录多少天了，获得第一笔的时间
+                $first_date = $baseModel->dataValue($this->dbconfig, "details", "create_time", "user_id={$member['id']}", "id asc");
+                $member["create_day"] = ceil((strtotime(date("Y-m-d")) - strtotime($first_date)) / 86400);
                 $member['session_key'] = $session['session_key'];
                 // 给用户生成token
                 $sign = Helper::get_token($member['id']);

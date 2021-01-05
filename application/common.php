@@ -117,8 +117,8 @@ if(!function_exists("monthData")) {
             $item = ["key" => $key, "value" => $val, "msg" => $msg];
             $month[] = $item;
         }
-        $year = ["year" => $pre_year, "month" => $month];
-        $date_scope[] = $year;
+        $data = ["year" => $pre_year, "month" => $month];
+        $date_scope[] = $data;
 
         $month = [];
         for ($i = 1; $i <= $now_month; $i++) {
@@ -132,10 +132,8 @@ if(!function_exists("monthData")) {
             $item = ["key" => $key, "value" => $val, "msg" => $msg];
             $month[] = $item;
         }
-        $year = ["year" => $year, "month" => $month];
-        $date_scope[] = $year;
-
-
+        $data = ["year" => $year, "month" => $month];
+        $date_scope[] = $data;
         return $date_scope;
     }
 }

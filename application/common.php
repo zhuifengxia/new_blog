@@ -106,6 +106,21 @@ if(!function_exists("monthData")) {
         $pre_year = $year - 1;
         $month = [];
         $month_msg = ["0", "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+        for ($i = 6; $i <= 12; $i++) {
+            $key = $pre_year . "-" . $i;
+            $msg = $pre_year . "年" . $i . "月";
+            $val = $month_msg[$i];
+            if ($i < 10) {
+                $key = $pre_year . "-0" . $i;
+                $msg = $pre_year . "年0" . $i . "月";
+            }
+            $item = ["key" => $key, "value" => $val, "msg" => $msg];
+            $month[] = $item;
+        }
+        $year = ["year" => $pre_year, "month" => $month];
+        $date_scope[] = $year;
+
+        $month = [];
         for ($i = 1; $i <= $now_month; $i++) {
             $key = $year . "-" . $i;
             $msg = $year . "年" . $i . "月";
@@ -120,20 +135,7 @@ if(!function_exists("monthData")) {
         $year = ["year" => $year, "month" => $month];
         $date_scope[] = $year;
 
-        $month = [];
-        for ($i = 6; $i <= 12; $i++) {
-            $key = $pre_year . "-" . $i;
-            $msg = $pre_year . "年" . $i . "月";
-            $val = $month_msg[$i];
-            if ($i < 10) {
-                $key = $pre_year . "-0" . $i;
-                $msg = $pre_year . "年0" . $i . "月";
-            }
-            $item = ["key" => $key, "value" => $val, "msg" => $msg];
-            $month[] = $item;
-        }
-        $year = ["year" => $pre_year, "month" => $month];
-        $date_scope[] = $year;
+
         return $date_scope;
     }
 }

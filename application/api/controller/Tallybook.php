@@ -157,7 +157,11 @@ class Tallybook extends Controller
                 $member["create_count"] = $create_count;
                 //查看当前用户记录多少天了，获得第一笔的时间
                 $first_date = $baseModel->dataValue($this->dbconfig, "details", "create_time", "user_id={$member['id']}", "id asc");
-                $member["create_day"] = ceil((strtotime(date("Y-m-d")) - strtotime($first_date)) / 86400);
+                if ($first_date) {
+                    $member["create_day"] = ceil((strtotime(date("Y-m-d")) - strtotime($first_date)) / 86400);
+                } else {
+                    $member["create_day"] = 0;
+                }
                 $member['session_key'] = $session['session_key'];
                 // 给用户生成token
                 $sign = Helper::get_token($member['id']);

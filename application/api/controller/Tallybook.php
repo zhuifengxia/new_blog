@@ -74,11 +74,13 @@ class Tallybook extends Controller
             $pay_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 1]);
             $types = ["income_type" => $income_types, "pay_type" => $pay_types];
         }
+        $date_scope=monthData();
         $res = [
             "details" => $result ?: null,
             "types" => $types,
             "income_count" => $incom_count,
-            "pay_count" => $pay_count
+            "pay_count" => $pay_count,
+            "date_scope"=>$date_scope
         ];
         return respondApi($res);
     }

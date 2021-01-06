@@ -184,6 +184,34 @@ class Tallybook extends Controller
         }
         return respondApi($return_data, $status, $message);
     }
+
+    /**
+     * 获取所有数据
+     */
+    public function getAllData()
+    {
+        $userid = $this->getUid(0);
+        $baseModel = new ExamBase();
+        //获取账户总余额
+        //收入-支出
+        //获得所有支出
+        $pay = $baseModel->dataSum($this->dbconfig, "details", "money_num", "money_type=1");
+        //获得所有收入
+        $income = $baseModel->dataSum($this->dbconfig, "details", "money_num", "money_type=0");
+        $income_count = $income - $pay;
+        $result["income_count"] = $income_count;
+        //获取记录笔数（只计算当前登录人的数据）
+        $create_count = $baseModel->dataCount($this->dbconfig, "details", "user_id=$userid");
+        $result["create_count"] = $create_count;
+        //查看当前用户记录多少天了，获得第一笔的时间
+        $first_date = $baseModel->dataValue($this->dbconfig, "details", "create_time", "user_id=$userid", "id asc");
+        if ($first_date) {
+            $result["create_day"] = ceil((strtotime(date("Y-m-d")) - strtotime($first_date)) / 86400);
+        } else {
+            $result["create_day"] = 0;
+        }
+        return respondApi($result);
+    }
     /**
      * 获取用户id
      * @return int 用户id

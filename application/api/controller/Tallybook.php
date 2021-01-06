@@ -25,7 +25,7 @@ class Tallybook extends Controller
         $typeid = input("typeid", 0);
         $date = input("date", "");
         $date = $date ?: date("Y-m");
-        //$userid = $this->getUid();
+        $userid = $this->getUid();
         //获取当前月份的账单明细
         $baseModel = new ExamBase();
         $where = "record_date like '$date%' and is_logic_del=0";

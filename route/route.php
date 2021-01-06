@@ -133,7 +133,7 @@ Route::group('api',[
     'tally/type'=>['api/Tallybook/typeList',['method' => 'get|post']],
     'tally/login'=>['api/Tallybook/wxLogin',['method' => 'get|post']],
     'tally/create'=>['api/Tallybook/createData',['method' => 'post']],
-    'tally/user'=>['api/Tallybook/getAllData',['method' => 'get']],
+    'tally/user'=>['api/Tallybook/getAllData',['method' => 'get|post']],
 
 
 

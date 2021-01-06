@@ -134,6 +134,7 @@ Route::group('api',[
     'tally/login'=>['api/Tallybook/wxLogin',['method' => 'get|post']],
     'tally/create'=>['api/Tallybook/createData',['method' => 'post']],
     'tally/user'=>['api/Tallybook/getAllData',['method' => 'get|post']],
+    'tally/delete'=>['api/Tallybook/deleteData',['method' => 'post']],
 
 
 

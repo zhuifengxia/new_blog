@@ -212,6 +212,18 @@ class Tallybook extends Controller
         }
         return respondApi($result);
     }
+
+    /**
+     * 删除数据
+     */
+    public function deleteData()
+    {
+        $id = input("id", 0);
+        $userid = $this->getUid(0);
+        $baseModel = new ExamBase();
+        $baseModel->updateOne($this->dbconfig, "details", ["is_logic_del" => 1], "id=$id");
+        return respondApi();
+    }
     /**
      * 获取用户id
      * @return int 用户id

@@ -206,7 +206,7 @@ class Tallybook extends Controller
         //查看当前用户记录多少天了，获得第一笔的时间
         $first_date = $baseModel->dataValue($this->dbconfig, "details", "create_time", "user_id=$userid", "id asc");
         if ($first_date) {
-            $result["create_day"] = ceil((strtotime(date("Y-m-d")) - strtotime($first_date)) / 86400);
+            $result["create_day"] = ceil((strtotime(date("Y-m-d")) - $first_date) / 86400);
         } else {
             $result["create_day"] = 0;
         }

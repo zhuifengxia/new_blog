@@ -58,6 +58,7 @@ class Tallybook extends Controller
             $data = $baseModel->dataList($this->dbconfig, "details", $where, 0, $page, "record_date desc");
             for ($i = 0; $i < count($data); $i++) {
                 $data[$i]["time"] = date("H:i", $data[$i]["create_time"]);
+                $data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$data[$i]["type_id"]}");
             }
             $one = [
                 "date" => date("m月d日", strtotime($item["record_date"])),

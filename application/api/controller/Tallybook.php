@@ -122,6 +122,59 @@ class Tallybook extends Controller
     }
 
     /**
+     * 统计页面数据
+     */
+    public function statisticData()
+    {
+        $date = input("date", "");
+        $date = $date ?: date("Y-m");
+        $userid = $this->getUid();
+        //获取当月总支出和总收入
+        $baseModel = new ExamBase();
+        $where = "record_date like '$date%' and is_logic_del=0";
+        $paywhere = " and money_type=1";
+        $incomewhere = " and money_type=0";
+        //获取总支出
+        $pay_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
+        //获取总收入
+        $incom_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere);
+        //获取当月每个类型的总支出和总收入
+        $pay_data = db("details", $this->dbconfig)
+            ->field("sum(money_num) as money_num,type_id,type_name")
+            ->where($where . $paywhere)
+            ->group("type_id")
+            ->order("money_num desc")
+            ->select();
+        for ($i = 0; $i < count($pay_data); $i++) {
+            $pay_data[$i]["percent"] = round($pay_data[$i]["money_num"] / $pay_count, 2);
+            $pay_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$pay_data[$i]["type_id"]}");
+        }
+        $income_data = db("details", $this->dbconfig)
+            ->field("sum(money_num) as money_num,type_id,type_name")
+            ->where($where . $incomewhere)
+            ->group("type_id")
+            ->order("money_num desc")
+            ->select();
+        for ($i = 0; $i < count($income_data); $i++) {
+            $income_data[$i]["percent"] = round($income_data[$i]["money_num"] / $incom_count, 2);
+            $income_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$income_data[$i]["type_id"]}");
+        }
+        //当月支出top5
+        $top_pay=[];
+        $data = $baseModel->dataList($this->dbconfig, "details", $where . $paywhere, 1, 1, "money_num desc",5);
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]["time"] = date("m月d日", strtotime($data[$i]["record_date"])) . " " . date("H:i", $data[$i]["create_time"]);
+            $data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$data[$i]["type_id"]}");
+        }
+        $return = [
+            "pay_data" => $pay_data,
+            "income_data" => $income_data,
+            "top_pay" => $top_pay
+        ];
+        return respondApi($return);
+    }
+
+    /**
      * 微信登录
      */
     public function wxLogin()

@@ -140,7 +140,7 @@ class Tallybook extends Controller
         $incom_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere);
         //获取当月每个类型的总支出和总收入
         $pay_data = db("details", $this->dbconfig)
-            ->field("sum(money_num) as money_num,type_id,type_name")
+            ->field("sum(money_num) as money_num,type_id,type_name,money_type")
             ->where($where . $paywhere)
             ->group("type_id")
             ->order("money_num desc")
@@ -150,7 +150,7 @@ class Tallybook extends Controller
             $pay_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$pay_data[$i]["type_id"]}");
         }
         $income_data = db("details", $this->dbconfig)
-            ->field("sum(money_num) as money_num,type_id,type_name")
+            ->field("sum(money_num) as money_num,type_id,type_name,money_type")
             ->where($where . $incomewhere)
             ->group("type_id")
             ->order("money_num desc")

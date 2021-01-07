@@ -167,9 +167,9 @@ class Tallybook extends Controller
             $data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$data[$i]["type_id"]}");
         }
         $return = [
-            "pay_data" => $pay_data,
-            "income_data" => $income_data,
-            "top_pay" => $top_pay,
+            "pay_data" => $pay_data ?: null,
+            "income_data" => $income_data ?: null,
+            "top_pay" => $top_pay ?: null,
             "pay_count" => $pay_count,
             "incom_count" => $incom_count
 

@@ -156,12 +156,12 @@ class Tallybook extends Controller
             ->order("money_num desc")
             ->select();
         for ($i = 0; $i < count($income_data); $i++) {
-            $income_data[$i]["percent"] = round($income_data[$i]["money_num"] / $incom_count, 2);
+            $income_data[$i]["percent"] = round($income_data[$i]["money_num"] / $incom_count, 2) * 100;
             $income_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$income_data[$i]["type_id"]}");
         }
         //当月支出top5
-        $top_pay=[];
-        $data = $baseModel->dataList($this->dbconfig, "details", $where . $paywhere, 1, 1, "money_num desc",5);
+        $top_pay = [];
+        $data = $baseModel->dataList($this->dbconfig, "details", $where . $paywhere, 1, 1, "money_num desc", 5);
         for ($i = 0; $i < count($data); $i++) {
             $data[$i]["time"] = date("m月d日", strtotime($data[$i]["record_date"])) . " " . date("H:i", $data[$i]["create_time"]);
             $data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$data[$i]["type_id"]}");

@@ -146,7 +146,7 @@ class Tallybook extends Controller
             ->order("money_num desc")
             ->select();
         for ($i = 0; $i < count($pay_data); $i++) {
-            $pay_data[$i]["percent"] = round($pay_data[$i]["money_num"] / $pay_count, 2);
+            $pay_data[$i]["percent"] = round($pay_data[$i]["money_num"] / $pay_count, 2) * 100;
             $pay_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$pay_data[$i]["type_id"]}");
         }
         $income_data = db("details", $this->dbconfig)

@@ -171,8 +171,8 @@ class Tallybook extends Controller
             "pay_data" => $pay_data ?: null,
             "income_data" => $income_data ?: null,
             "top_pay" => $top_pay ?: null,
-            "pay_count" => $pay_count,
-            "incom_count" => $incom_count,
+            "pay_count" => $pay_count ?: "0.00",
+            "incom_count" => $incom_count ?: "0.00",
             "date_scope" => $date_scope
 
         ];

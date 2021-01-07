@@ -169,7 +169,10 @@ class Tallybook extends Controller
         $return = [
             "pay_data" => $pay_data,
             "income_data" => $income_data,
-            "top_pay" => $top_pay
+            "top_pay" => $top_pay,
+            "pay_count" => $pay_count,
+            "incom_count" => $incom_count
+
         ];
         return respondApi($return);
     }

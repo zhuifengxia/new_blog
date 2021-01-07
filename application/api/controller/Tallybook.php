@@ -166,12 +166,14 @@ class Tallybook extends Controller
             $data[$i]["time"] = date("m月d日", strtotime($data[$i]["record_date"])) . " " . date("H:i", $data[$i]["create_time"]);
             $data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$data[$i]["type_id"]}");
         }
+        $date_scope = monthData();
         $return = [
             "pay_data" => $pay_data ?: null,
             "income_data" => $income_data ?: null,
             "top_pay" => $top_pay ?: null,
             "pay_count" => $pay_count,
-            "incom_count" => $incom_count
+            "incom_count" => $incom_count,
+            "date_scope" => $date_scope
 
         ];
         return respondApi($return);

@@ -179,6 +179,20 @@ class Tallybook extends Controller
     }
 
     /**
+     * 详情信息
+     */
+    public function tallyDetail()
+    {
+        $id = input("id", 0);
+        $userid = $this->getUid();
+        $baseModel = new ExamBase();
+        $data = $baseModel->oneDetail($this->dbconfig, "details", "id=$id");
+        $data["time"] = date("H:i", $data["create_time"]);
+        $data["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$data["type_id"]}");
+        return respondApi($data);
+    }
+
+    /**
      * 微信登录
      */
     public function wxLogin()

@@ -160,11 +160,10 @@ class Tallybook extends Controller
             $income_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$income_data[$i]["type_id"]}");
         }
         //当月支出top5
-        $top_pay = [];
-        $data = $baseModel->dataList($this->dbconfig, "details", $where . $paywhere, 1, 1, "money_num desc", 5);
-        for ($i = 0; $i < count($data); $i++) {
-            $data[$i]["time"] = date("m月d日", strtotime($data[$i]["record_date"])) . " " . date("H:i", $data[$i]["create_time"]);
-            $data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$data[$i]["type_id"]}");
+        $top_pay = $baseModel->dataList($this->dbconfig, "details", $where . $paywhere, 1, 1, "money_num desc", 5);
+        for ($i = 0; $i < count($top_pay); $i++) {
+            $top_pay[$i]["time"] = date("m月d日", strtotime($top_pay[$i]["record_date"])) . " " . date("H:i", $top_pay[$i]["create_time"]);
+            $top_pay[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$top_pay[$i]["type_id"]}");
         }
         $date_scope = monthData();
         $return = [

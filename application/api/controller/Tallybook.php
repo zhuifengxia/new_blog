@@ -97,6 +97,7 @@ class Tallybook extends Controller
     public function createData()
     {
         $userid = $this->getUid(0);
+        $id = input("id", 0);
         $typeid = input("typeid", 0);
         $number = input("number", 0);
         $remark = input("remark", "");
@@ -116,7 +117,12 @@ class Tallybook extends Controller
                 "money_type" => $money_type,
                 "type_name" => $type_name
             ];
-            $baseModel->addOne($this->dbconfig, "details", $insert);
+            if ($id) {
+                //编辑
+                $baseModel->updateOne($this->dbconfig, "details", $insert, "id=$id");
+            } else {
+                $baseModel->addOne($this->dbconfig, "details", $insert);
+            }
         }
         return respondApi();
     }

@@ -80,8 +80,8 @@ class Tallybook extends Controller
     public function typeList()
     {
         $baseModel = new ExamBase();
-        $income_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 0]);
-        $pay_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 1]);
+        $income_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 0], "0", 1, "type_sort asc");
+        $pay_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 1], "0", 1, "type_sort asc");
         $types = ["income_type" => $income_types, "pay_type" => $pay_types];
         $date_scope = monthData();
         $res = [

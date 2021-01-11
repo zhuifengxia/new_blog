@@ -152,7 +152,8 @@ class Tallybook extends Controller
             ->order("money_num desc")
             ->select();
         for ($i = 0; $i < count($pay_data); $i++) {
-            $pay_data[$i]["percent"] = round($pay_data[$i]["money_num"] / $pay_count, 2) * 100;
+            $percent = round($pay_data[$i]["money_num"] / $pay_count, 2);
+            $pay_data[$i]["percent"] = $percent * 100 . "";
             $pay_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$pay_data[$i]["type_id"]}");
         }
         $income_data = db("details", $this->dbconfig)
@@ -162,7 +163,8 @@ class Tallybook extends Controller
             ->order("money_num desc")
             ->select();
         for ($i = 0; $i < count($income_data); $i++) {
-            $income_data[$i]["percent"] = round($income_data[$i]["money_num"] / $incom_count, 2) * 100;
+            $percent = round($income_data[$i]["money_num"] / $incom_count, 2);
+            $income_data[$i]["percent"] = $percent * 100 . "";
             $income_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$income_data[$i]["type_id"]}");
         }
         //当月支出top5

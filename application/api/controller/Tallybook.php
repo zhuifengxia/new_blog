@@ -55,7 +55,7 @@ class Tallybook extends Controller
             $pay = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
             //获得当天收入
             $income = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere);
-            $data = $baseModel->dataList($this->dbconfig, "details", $where, 0, $page, "record_date desc");
+            $data = $baseModel->dataList($this->dbconfig, "details", $where, 0, $page, "create_time desc");
             for ($i = 0; $i < count($data); $i++) {
                 $data[$i]["time"] = date("H:i", $data[$i]["create_time"]);
                 $data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$data[$i]["type_id"]}");

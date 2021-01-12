@@ -111,7 +111,6 @@ class Tallybook extends Controller
                 "type_id" => $typeid,
                 "money_num" => $number,
                 "account_id" => 1,
-                "user_id" => $userid,
                 "record_date" => $date,
                 "data_remark" => $remark,
                 "money_type" => $money_type,
@@ -121,6 +120,7 @@ class Tallybook extends Controller
                 //编辑
                 $baseModel->updateOne($this->dbconfig, "details", $insert, "id=$id");
             } else {
+                $insert["user_id"] = $userid;
                 $baseModel->addOne($this->dbconfig, "details", $insert);
             }
         }

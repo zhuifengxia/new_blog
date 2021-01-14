@@ -219,7 +219,7 @@ class Tallybook extends Controller
         $result = [
             "sum_data" => $sum_data,
             "detail_data" => $detail_data,
-            "title_data" => trim($date_msg[1], "0") . $type_name . "共" . ($datatype ? "支出" : "收入")
+            "title_data" => trim($date_msg[1], "0") . "月" . $type_name . "共" . ($datatype ? "支出" : "收入")
         ];
         return respondApi($result);
     }

@@ -137,6 +137,7 @@ Route::group('api',[
     'tally/delete'=>['api/Tallybook/deleteData',['method' => 'post']],
     'tally/statistic'=>['api/Tallybook/statisticData',['method' => 'post']],
     'tally/detail'=>['api/Tallybook/tallyDetail',['method' => 'post']],
+    'tally/typeData'=>['api/Tallybook/typeData',['method' => 'post']],
 
 
 

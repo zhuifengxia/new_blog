@@ -181,9 +181,47 @@ class Tallybook extends Controller
             "pay_count" => $pay_count ?: "0.00",
             "incom_count" => $incom_count ?: "0.00",
             "date_scope" => $date_scope
-
         ];
         return respondApi($return);
+    }
+
+    //统计页面点击分类查看数据
+    public function typeData()
+    {
+        $typeid = input("typeid", "");
+        $datatype = input("datatype", 0);//收入；1支出数据
+        $showtype = input("showtype", 0);//0按金额排序；1支时间排序
+        $date = input("date", "");
+        $date = $date ?: date("Y-m");
+        $userid = $this->getUid();
+        //获取当月总支出和总收入
+        $baseModel = new ExamBase();
+        $where = "record_date like '$date%' and type_id=$typeid and is_logic_del=0";
+        $type_name = $baseModel->dataValue($this->dbconfig, "type", "type_name", "id=$typeid");
+        if ($datatype) {
+            $addwhere = " and money_type=1";
+        } else {
+            $addwhere = " and money_type=0";
+        }
+        $ordertype = "money_num desc";
+        if ($showtype) {
+            $ordertype = "record_date desc";
+        }
+        //获取总收入/总支出
+        $sum_data = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $addwhere);
+        //获取明细
+        $detail_data = $baseModel->dataList($this->dbconfig, "details", $where . $addwhere, 0, 1, $ordertype);
+        for ($i = 0; $i < count($detail_data); $i++) {
+            $detail_data[$i]["time"] = date("m月d日", strtotime($detail_data[$i]["record_date"])) . " " . date("H:i", $detail_data[$i]["create_time"]);
+            $detail_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$detail_data[$i]["type_id"]}");
+        }
+        $date_msg = explode("-", $date);
+        $result = [
+            "sum_data" => $sum_data,
+            "detail_data" => $detail_data,
+            "title_data" => trim($date_msg[1], "0") . $type_name . "共" . ($datatype ? "支出" : "收入")
+        ];
+        return respondApi($result);
     }
 
     /**

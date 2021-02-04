@@ -25,11 +25,13 @@ class Posting extends Base
             $postnum = db("posting")
                 ->where("data_id", $id)
                 ->where("is_logic_del", 0)
+                ->where("is_audit", 1)
                 ->count();
         }
         $posting = db("posting")
             ->where("data_id", $id)
             ->where("is_logic_del", 0)
+            ->where("is_audit", 1)
             ->order("id desc")
             ->page($page, 10)
             ->select();

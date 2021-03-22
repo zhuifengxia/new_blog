@@ -332,6 +332,30 @@ class Tallybook extends Controller
     }
 
     /**
+     * 房贷信息自动录入；
+     */
+    public function insertData()
+    {
+        $nowmonth=date("Y-m");
+        $baseModel = new ExamBase();
+        $isdata = $baseModel->oneDetail($this->dbconfig, "details", "type_id=20 and record_date like '$nowmonth%'");
+        if (empty($isdata)) {
+            $insert = [
+                "type_id" => 20,
+                "money_num" => 2411.36,
+                "account_id" => 1,
+                "record_date" => date("Y-m-d"),
+                "data_remark" => "",
+                "money_type" => 1,
+                "type_name" => "房贷"
+            ];
+            $baseModel->addOne($this->dbconfig, "details", $insert);
+        }
+
+        return respondApi();
+    }
+
+    /**
      * 删除数据
      */
     public function deleteData()

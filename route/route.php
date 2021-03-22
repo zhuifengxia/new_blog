@@ -138,6 +138,7 @@ Route::group('api',[
     'tally/statistic'=>['api/Tallybook/statisticData',['method' => 'post']],
     'tally/detail'=>['api/Tallybook/tallyDetail',['method' => 'post']],
     'tally/typeData'=>['api/Tallybook/typeData',['method' => 'post']],
+    'tally/autoData'=>['api/Tallybook/insertData',['method' => 'get|post']],
 
 
 

@@ -347,6 +347,7 @@ class Tallybook extends Controller
                 "record_date" => date("Y-m-d"),
                 "data_remark" => "",
                 "money_type" => 1,
+                "user_id" => 1,
                 "type_name" => "房贷"
             ];
             $baseModel->addOne($this->dbconfig, "details", $insert);

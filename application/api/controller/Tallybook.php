@@ -317,7 +317,7 @@ class Tallybook extends Controller
         //获得所有收入
         $income = $baseModel->dataSum($this->dbconfig, "details", "money_num", "money_type=0");
         $income_count = $income - $pay;
-        $result["income_count"] = $income_count;
+        $result["income_count"] = round($income_count, 2);
         //获取记录笔数（只计算当前登录人的数据）
         $create_count = $baseModel->dataCount($this->dbconfig, "details", "user_id=$userid");
         $result["create_count"] = $create_count;
@@ -329,6 +329,55 @@ class Tallybook extends Controller
             $result["create_day"] = 0;
         }
         return respondApi($result);
+    }
+
+    /**
+     * 年度统计
+     */
+    public function yearBill()
+    {
+        //每年元旦即可查看上一年度账单信息，
+        $date = date("Y")-1;
+        $userid = $this->getUid();
+        //获取当月总支出和总收入
+        $baseModel = new ExamBase();
+        $where = "record_date like '$date%' and is_logic_del=0";
+        $paywhere = " and money_type=1";
+        $incomewhere = " and money_type=0";
+        //获取当年总支出
+        $pay_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
+        //获取当年总收入
+        $incom_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere);
+        //获取当月每个类型的总支出和总收入
+        $pay_data = db("details", $this->dbconfig)
+            ->field("sum(money_num) as money_num,type_id,type_name,money_type")
+            ->where($where . $paywhere)
+            ->group("type_id")
+            ->order("money_num desc")
+            ->select();
+        for ($i = 0; $i < count($pay_data); $i++) {
+            $percent = round($pay_data[$i]["money_num"] / $pay_count, 2);
+            $pay_data[$i]["percent"] = $percent * 100 . "";
+            $pay_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$pay_data[$i]["type_id"]}");
+        }
+        $income_data = db("details", $this->dbconfig)
+            ->field("sum(money_num) as money_num,type_id,type_name,money_type")
+            ->where($where . $incomewhere)
+            ->group("type_id")
+            ->order("money_num desc")
+            ->select();
+        for ($i = 0; $i < count($income_data); $i++) {
+            $percent = round($income_data[$i]["money_num"] / $incom_count, 2);
+            $income_data[$i]["percent"] = $percent * 100 . "";
+            $income_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$income_data[$i]["type_id"]}");
+        }
+        $return = [
+            "pay_data" => $pay_data ?: null,
+            "income_data" => $income_data ?: null,
+            "pay_count" => $pay_count ?: "0.00",
+            "incom_count" => $incom_count ?: "0.00"
+        ];
+        return respondApi($return);
     }
 
     /**

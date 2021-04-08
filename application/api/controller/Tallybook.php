@@ -174,13 +174,21 @@ class Tallybook extends Controller
             $top_pay[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$top_pay[$i]["type_id"]}");
         }
         $date_scope = monthData();
+        //查看当前是否是元旦以及之后10天
+        $now_month = date("m");
+        $now_day = date("d");
+        $is_show_yearbill = 0;
+        if ($now_month == "01" && $now_day <= 10) {
+            $is_show_yearbill = 1;//1.1~1.10可以查看年度账单
+        }
         $return = [
             "pay_data" => $pay_data ?: null,
             "income_data" => $income_data ?: null,
             "top_pay" => $top_pay ?: null,
             "pay_count" => $pay_count ?: "0.00",
             "incom_count" => $incom_count ?: "0.00",
-            "date_scope" => $date_scope
+            "date_scope" => $date_scope,
+            "is_show_yearbill" => $is_show_yearbill
         ];
         return respondApi($return);
     }

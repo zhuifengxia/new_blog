@@ -60,6 +60,7 @@ class Articles extends Base
         if(empty($article_img)){
             $article_img=input("article_img1","");
         }
+        unset($_POST["article_img1"]);
         $insert = $_POST;
         $insert['is_top']=$is_top;
         $insert['is_publish']=$is_publish;

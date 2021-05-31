@@ -344,8 +344,12 @@ class Tallybook extends Controller
      */
     public function yearBill()
     {
-        //每年元旦即可查看上一年度账单信息，
-        $date = date("Y") - 1;
+        $date = input('year',"");
+        if(empty($date)){
+            //每年元旦即可查看上一年度账单信息，
+            $date = date("Y") - 1;
+        }
+
         $userid = $this->getUid();
         //获取当月总支出和总收入
         $baseModel = new ExamBase();

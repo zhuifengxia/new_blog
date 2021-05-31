@@ -344,8 +344,8 @@ class Tallybook extends Controller
      */
     public function yearBill()
     {
-        $date = input('year',"");
-        if(empty($date)){
+        $date = input('year', "");
+        if (empty($date)) {
             //每年元旦即可查看上一年度账单信息，
             $date = date("Y") - 1;
         }
@@ -376,12 +376,22 @@ class Tallybook extends Controller
             $pay_data[$i]["percent"] = $percent * 100 . "";
             $pay_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$pay_data[$i]["type_id"]}");
         }
+        $income_data = [];
+        //获取每月收入
+        for ($i = 1; $i <= 12; $i++) {
+            $month = $i;
+            if ($i < 10) {
+                $month = "0" . $i;
+            }
+            $income_data[] = $baseModel->dataSum($this->dbconfig, "details", "money_num", "record_date like '$date-$month%' and money_type=0");
+        }
         $return = [
             "pay_num" => $pay_num,
             "pay_data" => $pay_data ?: null,
             "pay_count" => $pay_count ?: "0.00",
             "income_num" => $incom_num,
-            "income_count" => $incom_count ?: "0.00"
+            "income_count" => $incom_count ?: "0.00",
+            "income_data" => $income_data
         ];
         return respondApi($return);
     }

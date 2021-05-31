@@ -360,6 +360,8 @@ class Tallybook extends Controller
         $pay_num = $baseModel->dataCount($this->dbconfig, "details", $where . $paywhere);
         //获取当年总支出
         $pay_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
+        //当年收入笔数
+        $incom_num = $baseModel->dataCount($this->dbconfig, "details", $where . $incomewhere);
         //获取当年总收入
         $incom_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere);
         //获取每个类型的总支出
@@ -378,7 +380,8 @@ class Tallybook extends Controller
             "pay_num" => $pay_num,
             "pay_data" => $pay_data ?: null,
             "pay_count" => $pay_count ?: "0.00",
-            "incom_count" => $incom_count ?: "0.00"
+            "income_num" => $incom_num,
+            "income_count" => $incom_count ?: "0.00"
         ];
         return respondApi($return);
     }

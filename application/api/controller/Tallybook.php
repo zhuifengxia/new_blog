@@ -439,6 +439,7 @@ class Tallybook extends Controller
      */
     public function checkList()
     {
+        $userid = $this->getUid(0);
         $date = input("date", "");
         $monthtype = input("monthtype", 0);//0当前日期的数据；1传过来日期的上个月数据；2传过来日期的下个月数据
         $typeid = input("typeid", 1);
@@ -452,7 +453,7 @@ class Tallybook extends Controller
         }
         $baseModel = new ExamBase();
         //获取查询月份的打卡情况
-        $where = "check_in_date like '$date%' and type_id=$typeid";
+        $where = "check_in_date like '$date%' and type_id=$typeid and user_id=$userid";
         $data = $baseModel->dataList($this->dbconfig, "checkin", $where);
         $result_data = [];
         //获取查询日期有多少天
@@ -476,17 +477,38 @@ class Tallybook extends Controller
 
         $date_arr = explode("-", $date);
         //获取打卡分类
-        $type_data = $baseModel->dataList($this->dbconfig, "check_type");
+        $type_data = $baseModel->dataList($this->dbconfig, "check_type","user_id=$userid or user_id=0");
         //获取当前打卡分类累计打开
-        $check_count=$baseModel->dataCount($this->dbconfig,"checkin","type_id=$typeid");
+        $check_count = $baseModel->dataCount($this->dbconfig, "checkin", "type_id=$typeid");
         $return = [
             "days" => $result_data,
             "first_week" => date("w", strtotime("$date-01")),
             "date" => ["year" => $date_arr[0], "month" => ltrim($date_arr[1], "0"), "date" => $date],
-            "type_data"=>$type_data,
-            "check_count"=>$check_count
+            "type_data" => $type_data,
+            "check_count" => $check_count
         ];
         return respondApi($return);
+    }
+
+    /**
+     * 用户打卡
+     */
+    public function checkIn()
+    {
+        $userid = $this->getUid(0);
+        $date = input("date", "");
+        if (empty($date)) {
+            $date = date("Y-m-d");
+        }
+        $typeid = input("typeid", 1);
+        $insert = [
+            "user_id" => $userid,
+            "type_id" => $typeid,
+            "check_in_date" => $date
+        ];
+        $baseModel = new ExamBase();
+        $baseModel->addOne($this->dbconfig, "checkin", $insert);
+        return respondApi();
     }
 
     /**

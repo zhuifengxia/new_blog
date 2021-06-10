@@ -433,6 +433,62 @@ class Tallybook extends Controller
         $baseModel->updateOne($this->dbconfig, "details", ["is_logic_del" => 1], "id=$id");
         return respondApi();
     }
+
+    /**
+     * 打卡数据
+     */
+    public function checkList()
+    {
+        $date = input("date", "");
+        $monthtype = input("monthtype", 0);//0当前日期的数据；1传过来日期的上个月数据；2传过来日期的下个月数据
+        $typeid = input("typeid", 1);
+        if (empty($date)) {
+            $date = date("Y-m");
+        }
+        if ($monthtype == 1) {
+            $date = date("Y-m", strtotime("last month", strtotime($date)));
+        } else if ($monthtype == 2) {
+            $date = date("Y-m", strtotime('next month', strtotime($date)));
+        }
+        $baseModel = new ExamBase();
+        //获取查询月份的打卡情况
+        $where = "check_in_date like '$date%' and type_id=$typeid";
+        $data = $baseModel->dataList($this->dbconfig, "checkin", $where);
+        $result_data = [];
+        //获取查询日期有多少天
+        $days = date("t", strtotime($date));
+        for ($i = 1; $i <= $days; $i++) {
+            $itemday = $i;
+            if ($i < 10) {
+                $itemday = "0" . $i;
+            }
+            $ischeck = 0;
+            foreach ($data as $item) {
+                if ($item["check_in_date"] == $date . "-" . $itemday) {
+                    $ischeck = 1;
+                }
+            }
+            $result_data[] = array(
+                "day" => $i,
+                "ischeck" => $ischeck
+            );
+        }
+
+        $date_arr = explode("-", $date);
+        //获取打卡分类
+        $type_data = $baseModel->dataList($this->dbconfig, "check_type");
+        //获取当前打卡分类累计打开
+        $check_count=$baseModel->dataCount($this->dbconfig,"checkin","type_id=$typeid");
+        $return = [
+            "days" => $result_data,
+            "first_week" => date("w", strtotime("$date-01")),
+            "date" => ["year" => $date_arr[0], "month" => ltrim($date_arr[1], "0"), "date" => $date],
+            "type_data"=>$type_data,
+            "check_count"=>$check_count
+        ];
+        return respondApi($return);
+    }
+
     /**
      * 获取用户id
      * @return int 用户id

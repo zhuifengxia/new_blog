@@ -482,7 +482,7 @@ class Tallybook extends Controller
 
         $date_arr = explode("-", $date);
         //获取当前打卡分类累计打卡
-        $check_count = $baseModel->dataCount($this->dbconfig, "checkin", "type_id=$typeid");
+        $check_count = $baseModel->dataCount($this->dbconfig, "checkin", "user_id=$userid and type_id=$typeid");
         $typename = $baseModel->dataValue($this->dbconfig, "check_type", "type_name", "id=$typeid");
         //查询连续天数
         $sql = "SELECT

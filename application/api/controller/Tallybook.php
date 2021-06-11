@@ -484,6 +484,36 @@ class Tallybook extends Controller
         //获取当前打卡分类累计打卡
         $check_count = $baseModel->dataCount($this->dbconfig, "checkin", "type_id=$typeid");
         $typename = $baseModel->dataValue($this->dbconfig, "check_type", "type_name", "id=$typeid");
+        //查询连续天数
+        $sql="SELECT
+    count( 1 )  as days
+FROM
+    (
+    SELECT
+        date_sub( a.check_in_date, INTERVAL 1 DAY ) signDate,
+        ( @i := DATE_ADD( @i, INTERVAL - 1 DAY ) ) today 
+    FROM
+        ( SELECT check_in_date FROM tally_checkin where user_id=$userid and type_id=$typeid ORDER BY check_in_date DESC ) a
+        INNER JOIN (
+        SELECT
+            @i := max( check_in_date ) AS signMax 
+        FROM
+            tally_checkin 
+        WHERE
+            user_id=$userid and type_id=$typeid
+            AND (
+                TO_DAYS( check_in_date ) = TO_DAYS(
+                curdate()) 
+                OR TO_DAYS( check_in_date ) = TO_DAYS( DATE_ADD( curdate(), INTERVAL - 1 DAY ) ) 
+            ) 
+        ) b 
+    WHERE
+        b.signMax IS NOT NULL 
+        AND TO_DAYS(
+        DATE_ADD( @i, INTERVAL - 1 DAY )) = TO_DAYS( date_sub( a.check_in_date, INTERVAL 1 DAY ) ) 
+    ) c";
+        $continuous_count=db('',$this->dbconfig)->query($sql);
+        var_dump($continuous_count);exit;
         $return = [
             "days" => $result_data,
             "first_week" => date("w", strtotime("$date-01")),

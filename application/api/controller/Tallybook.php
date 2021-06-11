@@ -520,7 +520,7 @@ FROM
             "date" => ["year" => $date_arr[0], "month" => ltrim($date_arr[1], "0"), "date" => $date],
             "type_data" => $type_data,
             "check_count" => $check_count,
-            "continuous_count" => $check_count,
+            "continuous_count" => $continuous_count,
             "sel_type" => ["id" => $typeid, "type_name" => $typename]
         ];
         return respondApi($return);

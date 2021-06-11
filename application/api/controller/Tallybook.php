@@ -477,15 +477,16 @@ class Tallybook extends Controller
 
         $date_arr = explode("-", $date);
         //获取打卡分类
-        $type_data = $baseModel->dataList($this->dbconfig, "check_type","user_id=$userid or user_id=0");
-        //获取当前打卡分类累计打开
+        $type_data = $baseModel->dataList($this->dbconfig, "check_type", "user_id=$userid or user_id=0");
+        //获取当前打卡分类累计打卡
         $check_count = $baseModel->dataCount($this->dbconfig, "checkin", "type_id=$typeid");
         $return = [
             "days" => $result_data,
             "first_week" => date("w", strtotime("$date-01")),
             "date" => ["year" => $date_arr[0], "month" => ltrim($date_arr[1], "0"), "date" => $date],
             "type_data" => $type_data,
-            "check_count" => $check_count
+            "check_count" => $check_count,
+            "continuous_count" => $check_count
         ];
         return respondApi($return);
     }

@@ -485,7 +485,7 @@ class Tallybook extends Controller
         $check_count = $baseModel->dataCount($this->dbconfig, "checkin", "type_id=$typeid");
         $typename = $baseModel->dataValue($this->dbconfig, "check_type", "type_name", "id=$typeid");
         //查询连续天数
-        $sql="SELECT
+        $sql = "SELECT
     count( 1 )  as days
 FROM
     (
@@ -512,8 +512,8 @@ FROM
         AND TO_DAYS(
         DATE_ADD( @i, INTERVAL - 1 DAY )) = TO_DAYS( date_sub( a.check_in_date, INTERVAL 1 DAY ) ) 
     ) c";
-        $continuous_count=db('',$this->dbconfig)->query($sql);
-        var_dump($continuous_count);exit;
+        $continuous_count = db('', $this->dbconfig)->query($sql);
+        $continuous_count = $continuous_count["days"];
         $return = [
             "days" => $result_data,
             "first_week" => date("w", strtotime("$date-01")),

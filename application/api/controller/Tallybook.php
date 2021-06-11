@@ -536,6 +536,12 @@ FROM
         if (empty($date)) {
             $date = date("Y-m-d");
         }
+        if($date>date("Y-m-d")){
+            //未来时间不能打卡
+            $status = Codes::ACTION_FAL;
+            $message = "未来时间不能打卡";
+            return respondApi("",$status,$message);
+        }
         $typeid = input("typeid", 1);
         $insert = [
             "user_id" => $userid,

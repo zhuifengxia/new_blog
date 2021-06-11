@@ -533,23 +533,28 @@ FROM
     {
         $userid = $this->getUid(0);
         $date = input("date", "");
+        $typeid = input("typeid", 1);
         if (empty($date)) {
             $date = date("Y-m-d");
         }
-        if($date>date("Y-m-d")){
+        if ($date > date("Y-m-d")) {
             //未来时间不能打卡
             $status = Codes::ACTION_FAL;
             $message = "未来时间不能打卡";
-            return respondApi("",$status,$message);
+            return respondApi("", $status, $message);
         }
-        $typeid = input("typeid", 1);
-        $insert = [
-            "user_id" => $userid,
-            "type_id" => $typeid,
-            "check_in_date" => $date
-        ];
         $baseModel = new ExamBase();
-        $baseModel->addOne($this->dbconfig, "checkin", $insert);
+        //查询是否已经打卡
+        $isdata = $baseModel->oneDetail($this->dbconfig, "checkin", "user_id=$userid and type_id=$typeid and check_in_date='$date'");
+        if (empty($isdata)) {
+            $insert = [
+                "user_id" => $userid,
+                "type_id" => $typeid,
+                "check_in_date" => $date
+            ];
+
+            $baseModel->addOne($this->dbconfig, "checkin", $insert);
+        }
         return respondApi();
     }
 

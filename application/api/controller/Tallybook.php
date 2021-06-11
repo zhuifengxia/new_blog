@@ -513,7 +513,7 @@ FROM
         DATE_ADD( @i, INTERVAL - 1 DAY )) = TO_DAYS( date_sub( a.check_in_date, INTERVAL 1 DAY ) ) 
     ) c";
         $continuous_count = db('', $this->dbconfig)->query($sql);
-        $continuous_count = $continuous_count["days"];
+        $continuous_count = $continuous_count[0]["days"];
         $return = [
             "days" => $result_data,
             "first_week" => date("w", strtotime("$date-01")),

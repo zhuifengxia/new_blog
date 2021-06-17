@@ -469,14 +469,19 @@ class Tallybook extends Controller
                 $itemday = "0" . $i;
             }
             $ischeck = 0;
+            $isnow = 0;
             foreach ($data as $item) {
                 if ($item["check_in_date"] == $date . "-" . $itemday) {
                     $ischeck = 1;
                 }
+                if ($date . "-" . $itemday == date("Y-m-d")) {
+                    $isnow = 1;
+                }
             }
             $result_data[] = array(
                 "day" => $i,
-                "ischeck" => $ischeck
+                "ischeck" => $ischeck,
+                "isnow" => $isnow
             );
         }
 

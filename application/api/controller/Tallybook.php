@@ -411,7 +411,7 @@ class Tallybook extends Controller
                 "money_num" => 2411.36,
                 "account_id" => 1,
                 "record_date" => date("Y-m-d"),
-                "data_remark" => "",
+                "data_remark" => "房贷自动添加",
                 "money_type" => 1,
                 "user_id" => 1,
                 "type_name" => "房贷"

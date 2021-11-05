@@ -87,7 +87,7 @@ class Articles extends Controller
                 ->field('id,article_title,article_digest,article_img,create_time,read_num')
                 ->where('is_logic_del', 0)
                 ->where('type_id', $typeid)
-                ->order('id desc')
+                ->order('is_top desc,id desc')
                 ->page($page, 10)
                 ->select();
             $total = db('articles')

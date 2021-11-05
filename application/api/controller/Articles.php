@@ -181,14 +181,14 @@ class Articles extends Controller
             ->count();
         //文章tag
         $article["article_tag"] = explode(",", $article["article_tag"]);
-        $article["article_type"]=$article["article_type"]==1?'转载':'原创';
+        $article["article_type"] = $article["article_type"] == 1 ? '转载' : '原创';
         //获取文章点赞总数
         $article['like_num'] = db("likes")
             ->where("is_logic_del", 0)
             ->where("data_type", 0)
             ->where("data_id", $article["id"])
             ->count();
-        $userid=$this->getUid();
+        $userid = $this->getUid();
         //当前用户是否点赞
         $islike = db("likes")
             ->where("is_logic_del", 0)
@@ -206,6 +206,7 @@ class Articles extends Controller
             ->find();
         $article["is_collect"] = $iscollect ? 1 : 0;
 
+        $article["article_msg"] = str_replace('src="/ueditor', 'src="' . config("app.web_config.web_url") . '/ueditor', $article["article_msg"]);
         return respondApi($article);
     }
 

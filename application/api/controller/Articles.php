@@ -121,7 +121,11 @@ class Articles extends Controller
                 ->where("data_id", $article[$i]["id"])
                 ->count();
         }
-        return json(['status' => 0, 'msg' => 'success', 'data' => $article, 'total' => $total]);
+        $return=[
+            "data"=>$article,
+            "total"=>$total
+        ];
+        return respondApi($return);
     }
 
     /**
@@ -202,7 +206,7 @@ class Articles extends Controller
             ->find();
         $article["is_collect"] = $iscollect ? 1 : 0;
 
-        return json(["status" => 0, "msg" => "success", "data" => $article]);
+        return respondApi($article);
     }
 
     /**

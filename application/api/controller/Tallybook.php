@@ -23,6 +23,7 @@ class Tallybook extends Controller
     {
         $page = input("page", 1);
         $typeid = input("typeid", 0);
+        $onlydata = input("onlydata", 0);
         $date = input("date", "");
         $date = $date ?: date("Y-m");
         $userid = $this->getUid();
@@ -35,6 +36,10 @@ class Tallybook extends Controller
         }
         $paywhere = " and money_type=1";
         $incomewhere = " and money_type=0";
+        if($onlydata){
+            //只查询自己
+            $where.=" and user_id=$userid";
+        }
         //获取总支出
         $pay_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
         //获取总收入

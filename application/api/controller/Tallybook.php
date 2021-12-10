@@ -56,6 +56,10 @@ class Tallybook extends Controller
             if ($typeid) {
                 $where .= " and type_id=$typeid";
             }
+            if($onlydata){
+                //只查询自己
+                $where.=" and user_id=$userid";
+            }
             //获得当天的支出
             $pay = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
             //获得当天收入

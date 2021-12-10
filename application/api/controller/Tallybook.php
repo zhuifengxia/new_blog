@@ -142,8 +142,13 @@ class Tallybook extends Controller
         $incomewhere = " and money_type=0";
         //获取总支出
         $pay_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
+        //获取当前用户的总支出
+        $user_pay_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere . " and user_id=$userid");
+
         //获取总收入
         $incom_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere);
+        //获取当前用户的总收入
+        $user_incom_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere . " and user_id=$userid");
         //获取当月每个类型的总支出和总收入
         $pay_data = db("details", $this->dbconfig)
             ->field("sum(money_num) as money_num,type_id,type_name,money_type")
@@ -187,6 +192,8 @@ class Tallybook extends Controller
             "top_pay" => $top_pay ?: null,
             "pay_count" => $pay_count ?: "0.00",
             "incom_count" => $incom_count ?: "0.00",
+            "user_pay_count" => $user_pay_count ?: "0.00",
+            "user_incom_count" => $user_incom_count ?: "0.00",
             "date_scope" => $date_scope,
             "is_show_yearbill" => $is_show_yearbill
         ];

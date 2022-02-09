@@ -156,5 +156,6 @@ return [
     //网站配置
     'web_config'=>[
         'web_url'           => 'https://liuxiaomo.cn',//TODO 网站域名上线后需更换正式
+        'money_sum'         =>2304.81
     ],
 ];

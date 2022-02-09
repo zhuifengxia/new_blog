@@ -424,7 +424,7 @@ class Tallybook extends Controller
         if (empty($isdata)) {
             $insert = [
                 "type_id" => 20,
-                "money_num" => 2411.36,
+                "money_num" => config("app.web_config.money_sum"),
                 "account_id" => 1,
                 "record_date" => date("Y-m-d"),
                 "data_remark" => "房贷自动添加",

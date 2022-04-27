@@ -144,6 +144,10 @@ Route::group('api',[
     'tally/checkList'=>['api/Tallybook/checkList',['method' => 'get|post']],
     'tally/checkIn'=>['api/Tallybook/checkIn',['method' => 'get|post']],
 
+    //儿子身高记录
+    'tally/recordList'=>['api/Tallybook/recordList',['method' => 'get|post']],
+    'tally/recordSave'=>['api/Tallybook/recordSave',['method' => 'get|post']],
+
 
 
 

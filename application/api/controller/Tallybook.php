@@ -580,6 +580,48 @@ FROM
     }
 
     /**
+     * 获取最新的10条身高记录
+     */
+    public function recordList()
+    {
+        $baseModel = new ExamBase();
+        $data = $baseModel->dataList($this->dbconfig, "height_records", "",0,1,"data_time desc");
+        return respondApi($data);
+    }
+
+    /**
+     * 身高记录数据保存
+     */
+    public function recordSave()
+    {
+        $date = input("date", "");
+        $height = input("height", "");
+        $weight = input("weight", "");
+        if(empty($height)||empty($weight)){
+            $status = Codes::ACTION_FAL;
+            $message = "身高或体重不能空";
+            return respondApi("", $status, $message);
+        }
+        if (empty($date)) {
+            $date = date("Y-m-d");
+        }
+        $date_time = strtotime($date);
+        $baseModel = new ExamBase();
+
+        $isdata = $baseModel->oneDetail($this->dbconfig, "height_records", "height_data='$height' and weight_data='$weight' and data_date='$date'");
+        if (empty($isdata)) {
+            $insert = [
+                "height_data" => $height,
+                "weight_data" => $weight,
+                "data_time" => $date_time,
+                "data_date" => $date,
+            ];
+            $baseModel->addOne($this->dbconfig, "height_records", $insert);
+        }
+        return respondApi();
+    }
+
+    /**
      * 获取用户id
      * @return int 用户id
      */

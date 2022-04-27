@@ -585,8 +585,22 @@ FROM
     public function recordList()
     {
         $baseModel = new ExamBase();
-        $data = $baseModel->dataList($this->dbconfig, "height_records", "",0,1,"data_time desc");
-        return respondApi($data);
+        $data = $baseModel->dataList($this->dbconfig, "height_records", "", 1, 1, "data_time desc");
+        $xdata = [];
+        $height_data = [];
+        $weight_data = [];
+        foreach ($data as $item) {
+            $xdata[] = $item["data_date"];
+            $height_data[] = $item["height_data"];
+            $weight_data[] = $item["weight_data"];
+        }
+        $result = [
+            "xdata" => $xdata,
+            "height_data" => $height_data,
+            "weight_data" => $weight_data,
+
+        ];
+        return respondApi($result);
     }
 
     /**

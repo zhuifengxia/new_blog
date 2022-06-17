@@ -91,7 +91,8 @@ class Tallybook extends Controller
         $baseModel = new ExamBase();
         $income_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 0], "0", 1, "type_sort asc");
         $pay_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 1], "0", 1, "type_sort asc");
-        $types = ["income_type" => $income_types, "pay_type" => $pay_types];
+        $child_pay_types = $baseModel->dataList($this->dbconfig, "type", ["type_type" => 2], "0", 1, "type_sort asc");
+        $types = ["income_type" => $income_types, "pay_type" => $pay_types, "child_pay_type" => $child_pay_types];
         $date_scope = monthData();
         $res = [
             "types" => $types,
@@ -122,7 +123,7 @@ class Tallybook extends Controller
                 "account_id" => 1,
                 "record_date" => $date,
                 "data_remark" => $remark,
-                "money_type" => $money_type,
+                "money_type" => ($money_type == 0 ? 0 : 1),
                 "type_name" => $type_name
             ];
             if ($id) {

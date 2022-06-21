@@ -196,6 +196,9 @@ class Tallybook extends Controller
         if ($now_month == "01" && $now_day <= 10) {
             $is_show_yearbill = 1;//1.1~1.10可以查看年度账单
         }
+        if ($userid == 1){
+            $is_show_yearbill = 1;
+        }
         $return = [
             "pay_data" => $pay_data ?: null,
             "income_data" => $income_data ?: null,

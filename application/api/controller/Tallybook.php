@@ -370,6 +370,15 @@ class Tallybook extends Controller
             $date = date("Y") - 1;
         }
 
+        //查看当前是否是元旦以及之后10天
+        $now_month = date("m");
+        $now_day = date("d");
+        if ($now_month == "01" && $now_day <= 20) {
+            //1.1~1.10查看年度账单去年
+        }else{
+            //当年
+            $date = date("Y");
+        }
         $userid = $this->getUid();
         //获取当月总支出和总收入
         $baseModel = new ExamBase();

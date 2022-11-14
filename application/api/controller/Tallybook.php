@@ -262,7 +262,9 @@ class Tallybook extends Controller
         $baseModel = new ExamBase();
         $data = $baseModel->oneDetail($this->dbconfig, "details", "id=$id");
         $data["time"] = date("H:i", $data["create_time"]);
-        $data["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$data["type_id"]}");
+        $typeData=$baseModel->oneDetail($this->dbconfig, "type", "id={$data["type_id"]}");
+        $data["type_icon"] =$typeData["type_icon"];
+        $data["money_type"]=$typeData["type_type"];
         return respondApi($data);
     }
 

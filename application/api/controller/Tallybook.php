@@ -676,6 +676,17 @@ FROM
     }
 
     /**
+     * 古诗词列表
+     */
+    public function poetryList()
+    {
+        $page = input("page", 1);
+        $baseModel = new ExamBase();
+        $data = $baseModel->dataList("", "poetry", "1=1", 0, $page, "id desc");
+        return respondApi($data);
+    }
+
+    /**
      * 获取用户id
      * @return int 用户id
      */

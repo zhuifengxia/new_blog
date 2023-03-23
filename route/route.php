@@ -149,6 +149,9 @@ Route::group('api',[
     'tally/recordList'=>['api/Tallybook/recordList',['method' => 'get|post']],
     'tally/recordSave'=>['api/Tallybook/recordSave',['method' => 'get|post']],
 
+    //古诗
+    'tally/poetryList'=>['api/Tallybook/poetryList',['method' => 'get|post']],
+
 
 
 

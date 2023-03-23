@@ -16,7 +16,7 @@ class Poetry extends Base
     public function poetryList()
     {
         $poetryModel = new PoetryModel();
-        $poetrys=$poetryModel->dataList(PoetryModel::class);
+        $poetrys=$poetryModel->dataList(PoetryModel::class,[],1);
         $this->assign('poetrys', $poetrys);
         return $this->fetch('poetrys');
     }

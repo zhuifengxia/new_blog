@@ -683,7 +683,8 @@ FROM
         $page = input("page", 1);
         $baseModel = new ExamBase();
         $data = $baseModel->dataList("", "poetry", "1=1", 0, $page, "id desc");
-        return respondApi($data);
+        $poetry_count = $baseModel->dataSum("", "poetry", "id");
+        return respondApi(["data"=>$data,"total"=>$poetry_count]);
     }
 
     /**

@@ -1,0 +1,61 @@
+{extend name="layouts/main" /}
+{block name="main"}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <a class="layui-btn" href="/admin/poetry/add"><i class="layui-icon"></i>添加古诗</a>
+                </div>
+                <div class="layui-card-body layui-table-body layui-table-main">
+                    <table class="layui-table layui-form">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>标题</th>
+                            <th>年代</th>
+                            <th>作者</th>
+                            <th>内容</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="poetrys" id="item"}
+                        <tr>
+                            <td>{$item.id}</td>
+                            <td>{$item.poetry_title}</td>
+                            <td>{$item.poetry_age}</td>
+                            <td>{$item.poetry_author}</td>
+                            <td>{$item.poetry_content}</td>
+                            <td>
+                                <a href="/admin/poetry/add/{$item.id}"><i class="iconfont" title="编辑">&#xe69e;</i></a>&nbsp;&nbsp;
+                                <a  href="javascript:delConfirm('/admin/poetry/delete/{$item.id}')"><i class="iconfont" style="color: red" title="删除">&#xe69d;</i></a>
+                            </td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                    {empty name="poetrys"}
+                    暂无数据
+                    {/empty}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use('layer', function(){
+        var layer = layui.layer;
+    });
+
+    function delConfirm(jumpurl){
+        layer.confirm(
+            '确定要删除此数据么?',
+            function (){
+                window.location.href = jumpurl;
+            }
+        );
+    }
+</script>
+{/block}

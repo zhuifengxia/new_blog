@@ -1,0 +1,63 @@
+{extend name="layouts/main" /}
+{block name="main"}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <a>{$details.id?"编辑":"添加"}古诗</a>
+                </div>
+                <div class="layui-card-body layui-table-body layui-table-main">
+                    <form action="/admin/poetry/doAdd" method="POST" class="layui-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">古诗标题</label>
+                            <input type="hidden" name="id" value="{$details.id}"/>
+                            <div class="layui-input-inline">
+                                <input type="text" name="poetry_title" value="{$details.poetry_title}" class="layui-input"
+                                       placeholder="请输入古诗标题">
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">年代</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="poetry_age" value="{$details.poetry_age}" class="layui-input"
+                                       placeholder="请输入古诗年代">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">作者</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="poetry_author" value="{$details.poetry_author}" class="layui-input"
+                                       placeholder="请输入古诗作者">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">内容</label>
+                            <div class="layui-input-inline">
+                                <textarea name="poetry_content" style="width: 250px;height:200px;" class="layui-textarea" placeholder="请输入古诗内容">{$details.poetry_content}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+    });
+</script>
+{/block}

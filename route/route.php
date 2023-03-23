@@ -59,6 +59,14 @@ Route::group('admin',[
     'posting/list/[:typeid]'   => ['admin/Posting/postList', ['method' => 'get']],
     'posting/delete/:id' => ['admin/Posting/delPost', ['method' => 'get']],
 
+
+    //古诗管理
+    'poetry/list'   => ['admin/Poetry/poetryList', ['method' => 'get']],
+    'poetry/add/[:id]' => ['admin/Poetry/addPoetry', ['method' => 'get']],
+    'poetry/doAdd' => ['admin/Poetry/doAddPoetry', ['method' => 'post']],
+    'poetry/delete/:id' => ['admin/Poetry/delPoetry', ['method' => 'get']],
+
+
     //题库管理
     'course/list/[:id]'   => ['admin/Exam/courseList', ['method' => 'get']],
     'course/child/:id'   => ['admin/Exam/childCourse', ['method' => 'post']],

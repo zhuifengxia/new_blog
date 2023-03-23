@@ -45,9 +45,9 @@ class Poetry extends Base
         $poetryModel = new PoetryModel();
         //是否存在
         $id = input('id', 0);
-        $poetry_title = input('poetry_title', '');
+        $poetry_content = input('poetry_content', '');
         $where = [
-            ['poetry_title', '=', $poetry_title],
+            ['poetry_content', '=', $poetry_content],
         ];
         if ($id) {
             $where[] = ['id', '<>', $id];

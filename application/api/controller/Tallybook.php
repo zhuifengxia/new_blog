@@ -689,7 +689,7 @@ FROM
         }
         $baseModel = new ExamBase();
         $data = $baseModel->dataList("", "poetry", $where, 0, $page, "id desc");
-        $poetry_count = $baseModel->dataCount("", "poetry", "id");
+        $poetry_count = $baseModel->dataCount("", "poetry");
         return respondApi(["data" => $data, "total" => $poetry_count]);
     }
 

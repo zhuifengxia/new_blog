@@ -682,9 +682,13 @@ FROM
     public function poetryList()
     {
         $page = input("page", 1);
-        $is_learn = input("is_learn", 0);
+        $is_learn = input("is_learn", -1);
+        $where = "1=1";
+        if ($is_learn >= 0) {
+            $where = "is_learn=$is_learn";
+        }
         $baseModel = new ExamBase();
-        $data = $baseModel->dataList("", "poetry", "is_learn=$is_learn", 0, $page, "id desc");
+        $data = $baseModel->dataList("", "poetry", $where, 0, $page, "id desc");
         $poetry_count = $baseModel->dataSum("", "poetry", "id");
         return respondApi(["data" => $data, "total" => $poetry_count]);
     }

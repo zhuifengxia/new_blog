@@ -11,7 +11,7 @@ namespace app\common\model;
 
 class Poetry extends Base
 {
-    public function __construct($data = ['id'=>0,'poetry_age'=>'','poetry_title'=>'','poetry_author'=>'','poetry_content'=>'','bk_color'=>'','font_color'=>'','is_logic_del'=>0])
+    public function __construct($data = ['id' => 0, 'poetry_age' => '', 'poetry_title' => '', 'poetry_author' => '', 'poetry_content' => '', 'bk_color' => '', 'font_color' => '', 'is_learn' => 0, 'is_logic_del' => 0])
     {
         parent::__construct($data);
     }

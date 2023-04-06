@@ -13,7 +13,8 @@
                             <label class="layui-form-label">古诗标题</label>
                             <input type="hidden" name="id" value="{$details.id}"/>
                             <div class="layui-input-inline">
-                                <input type="text" name="poetry_title" value="{$details.poetry_title}" class="layui-input"
+                                <input type="text" name="poetry_title" value="{$details.poetry_title}"
+                                       class="layui-input"
                                        placeholder="请输入古诗标题">
                             </div>
                         </div>
@@ -30,7 +31,8 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">作者</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="poetry_author" value="{$details.poetry_author}" class="layui-input"
+                                <input type="text" name="poetry_author" value="{$details.poetry_author}"
+                                       class="layui-input"
                                        placeholder="请输入古诗作者">
                             </div>
                         </div>
@@ -38,7 +40,9 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">内容</label>
                             <div class="layui-input-inline">
-                                <textarea name="poetry_content" style="width: 250px;height:200px;" class="layui-textarea" placeholder="请输入古诗内容">{$details.poetry_content}</textarea>
+                                <textarea name="poetry_content" style="width: 250px;height:200px;"
+                                          class="layui-textarea"
+                                          placeholder="请输入古诗内容">{$details.poetry_content}</textarea>
                             </div>
                         </div>
 
@@ -57,7 +61,11 @@
                                        placeholder="请输入字体颜色">
                             </div>
                         </div>
-
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否学习</label>
+                            <input type="checkbox" value="1" name="is_learn" lay-text="已学|未学"
+                                   {$details.is_learn==1?"checked":""} lay-skin="switch">
+                        </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
                                 <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
@@ -72,7 +80,7 @@
     </div>
 </div>
 <script>
-    layui.use('form', function(){
+    layui.use('form', function () {
         var form = layui.form;
     });
 </script>

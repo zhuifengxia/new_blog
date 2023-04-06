@@ -16,6 +16,7 @@
                             <th>年代</th>
                             <th>作者</th>
                             <th>内容</th>
+                            <th>是否学习</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -27,9 +28,13 @@
                             <td>{$item.poetry_age}</td>
                             <td>{$item.poetry_author}</td>
                             <td>{$item.poetry_content}</td>
+                            <td style="{$item.is_learn==1?'color:green':'color:red'}">{$item.is_learn==1?"已学习":"未学习"}
+                            </td>
                             <td>
                                 <a href="/admin/poetry/add/{$item.id}"><i class="iconfont" title="编辑">&#xe69e;</i></a>&nbsp;&nbsp;
-                                <a  href="javascript:delConfirm('/admin/poetry/delete/{$item.id}')"><i class="iconfont" style="color: red" title="删除">&#xe69d;</i></a>
+                                <a href="javascript:delConfirm('/admin/poetry/delete/{$item.id}')"><i class="iconfont"
+                                                                                                      style="color: red"
+                                                                                                      title="删除">&#xe69d;</i></a>
                             </td>
                         </tr>
                         {/volist}
@@ -46,14 +51,14 @@
     </div>
 </div>
 <script>
-    layui.use('layer', function(){
+    layui.use('layer', function () {
         var layer = layui.layer;
     });
 
-    function delConfirm(jumpurl){
+    function delConfirm(jumpurl) {
         layer.confirm(
             '确定要删除此数据么?',
-            function (){
+            function () {
                 window.location.href = jumpurl;
             }
         );

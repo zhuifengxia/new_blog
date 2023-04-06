@@ -693,6 +693,16 @@ FROM
         return respondApi(["data" => $data, "total" => $poetry_count]);
     }
 
+    public function poetryLearn()
+    {
+        $id = input("id", 0);
+        if (!empty($id)) {
+            $baseModel = new ExamBase();
+            $baseModel->updateOne("", "poetry", ["is_learn" => 1], "id=$id");
+        }
+        return respondApi();
+    }
+
     /**
      * 获取用户id
      * @return int 用户id

@@ -688,7 +688,7 @@ FROM
             $where = "is_learn=$is_learn";
         }
         $baseModel = new ExamBase();
-        $data = $baseModel->dataList("", "poetry", $where, 0, $page, "id desc,is_learn asc");
+        $data = $baseModel->dataList("", "poetry", $where, 0, $page, "is_learn asc");
         $poetry_count = $baseModel->dataCount("", "poetry", $where);
         return respondApi(["data" => $data, "total" => $poetry_count]);
     }

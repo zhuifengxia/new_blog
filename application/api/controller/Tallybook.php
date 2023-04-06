@@ -18,7 +18,8 @@ use think\facade\Cache;
 
 class Tallybook extends Controller
 {
-    private $dbconfig="db_tally";
+    private $dbconfig = "db_tally";
+
     public function index()
     {
         $page = input("page", 1);
@@ -36,9 +37,9 @@ class Tallybook extends Controller
         }
         $paywhere = " and money_type=1";
         $incomewhere = " and money_type=0";
-        if($onlydata){
+        if ($onlydata) {
             //只查询自己
-            $where.=" and user_id=$userid";
+            $where .= " and user_id=$userid";
         }
         //获取总支出
         $pay_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
@@ -56,9 +57,9 @@ class Tallybook extends Controller
             if ($typeid) {
                 $where .= " and type_id=$typeid";
             }
-            if($onlydata){
+            if ($onlydata) {
                 //只查询自己
-                $where.=" and user_id=$userid";
+                $where .= " and user_id=$userid";
             }
             //获得当天的支出
             $pay = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
@@ -196,7 +197,7 @@ class Tallybook extends Controller
         if ($now_month == "01" && $now_day <= 10) {
             $is_show_yearbill = 1;//1.1~1.10可以查看年度账单
         }
-        if ($userid == 1){
+        if ($userid == 1) {
             $is_show_yearbill = 1;
         }
         $return = [
@@ -262,9 +263,9 @@ class Tallybook extends Controller
         $baseModel = new ExamBase();
         $data = $baseModel->oneDetail($this->dbconfig, "details", "id=$id");
         $data["time"] = date("H:i", $data["create_time"]);
-        $typeData=$baseModel->oneDetail($this->dbconfig, "type", "id={$data["type_id"]}");
-        $data["type_icon"] =$typeData["type_icon"];
-        $data["money_type"]=$typeData["type_type"];
+        $typeData = $baseModel->oneDetail($this->dbconfig, "type", "id={$data["type_id"]}");
+        $data["type_icon"] = $typeData["type_icon"];
+        $data["money_type"] = $typeData["type_type"];
         return respondApi($data);
     }
 
@@ -377,7 +378,7 @@ class Tallybook extends Controller
         $now_day = date("d");
         if ($now_month == "01" && $now_day <= 20) {
             //1.1~1.10查看年度账单去年
-        }else{
+        } else {
             //当年
             $date = date("Y");
         }
@@ -433,7 +434,7 @@ class Tallybook extends Controller
      */
     public function insertData()
     {
-        $nowmonth=date("Y-m");
+        $nowmonth = date("Y-m");
         $baseModel = new ExamBase();
         $isdata = $baseModel->oneDetail($this->dbconfig, "details", "type_id=20 and record_date like '$nowmonth%'");
         if (empty($isdata)) {
@@ -458,7 +459,7 @@ class Tallybook extends Controller
      */
     public function insertData2()
     {
-        $nowmonth=date("Y-m");
+        $nowmonth = date("Y-m");
         $baseModel = new ExamBase();
         $isdata = $baseModel->oneDetail($this->dbconfig, "details", "type_id=25 and record_date like '$nowmonth%'");
         if (empty($isdata)) {
@@ -651,7 +652,7 @@ FROM
         $date = input("date", "");
         $height = input("height", "");
         $weight = input("weight", "");
-        if(empty($height)||empty($weight)){
+        if (empty($height) || empty($weight)) {
             $status = Codes::ACTION_FAL;
             $message = "身高或体重不能空";
             return respondApi("", $status, $message);
@@ -681,17 +682,18 @@ FROM
     public function poetryList()
     {
         $page = input("page", 1);
+        $is_learn = input("is_learn", 0);
         $baseModel = new ExamBase();
-        $data = $baseModel->dataList("", "poetry", "1=1", 0, $page, "id desc");
+        $data = $baseModel->dataList("", "poetry", "is_learn=$is_learn", 0, $page, "id desc");
         $poetry_count = $baseModel->dataSum("", "poetry", "id");
-        return respondApi(["data"=>$data,"total"=>$poetry_count]);
+        return respondApi(["data" => $data, "total" => $poetry_count]);
     }
 
     /**
      * 获取用户id
      * @return int 用户id
      */
-    protected function getUid($datatype=0)
+    protected function getUid($datatype = 0)
     {
         $options = config('app.converse');
         $redis = Cache::init($options);

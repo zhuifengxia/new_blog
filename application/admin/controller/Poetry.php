@@ -16,11 +16,17 @@ class Poetry extends Base
     /**
      * 古诗词列表
      */
-    public function poetryList()
+    public function poetryList($is_learn = 0)
     {
         $poetryModel = new PoetryModel();
-        $poetrys = $poetryModel->dataList(PoetryModel::class, [], 1);
+        $where = [];
+        if (!empty($is_learn)) {
+            $is_learn = $is_learn == 1 ? 1 : 0;
+            $where = ["is_learn" => $is_learn];
+        }
+        $poetrys = $poetryModel->dataList(PoetryModel::class, $where, 1);
         $this->assign('poetrys', $poetrys);
+        $this->assign('is_learn', $is_learn);
         return $this->fetch('poetrys');
     }
 

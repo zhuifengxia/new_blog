@@ -4,8 +4,15 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
-                <div class="layui-card-header">
+                <div class="layui-card-header" style="display: flex;align-items: center">
                     <a class="layui-btn" href="/admin/poetry/add"><i class="layui-icon"></i>添加古诗</a>
+                    <div class="layui-card-header">
+                        <select class="layui-select" onchange="window.location.href=this.options[selectedIndex].value">
+                            <option value="/admin/poetry/list/0" {$is_learn==0?"selected":""}>全部</option>
+                            <option value="/admin/poetry/list/1" {$is_learn==1?"selected":""}>已学习</option>
+                            <option value="/admin/poetry/list/2" {$is_learn==2?"selected":""}>未学习</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-table layui-form">

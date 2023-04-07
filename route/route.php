@@ -60,7 +60,7 @@ Route::group('admin', [
 
 
     //古诗管理
-    'poetry/list' => ['admin/Poetry/poetryList', ['method' => 'get']],
+    'poetry/list/[:is_learn]' => ['admin/Poetry/poetryList', ['method' => 'get']],
     'poetry/add/[:id]' => ['admin/Poetry/addPoetry', ['method' => 'get']],
     'poetry/doAdd' => ['admin/Poetry/doAddPoetry', ['method' => 'post']],
     'poetry/delete/:id' => ['admin/Poetry/delPoetry', ['method' => 'get']],

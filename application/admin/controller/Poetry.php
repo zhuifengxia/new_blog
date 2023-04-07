@@ -21,8 +21,8 @@ class Poetry extends Base
         $poetryModel = new PoetryModel();
         $where = [];
         if (!empty($is_learn)) {
-            $is_learn = $is_learn == 1 ? 1 : 0;
-            $where = ["is_learn" => $is_learn];
+            $islearn = $is_learn == 1 ? 1 : 0;
+            $where = ["is_learn" => $islearn];
         }
         $poetrys = $poetryModel->dataList(PoetryModel::class, $where, 1);
         $this->assign('poetrys', $poetrys);

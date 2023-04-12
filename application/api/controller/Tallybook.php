@@ -625,8 +625,8 @@ FROM
      */
     public function recordList()
     {
-        $baseModel = new ExamBase();
-        $data = $baseModel->dataList($this->dbconfig, "height_records", "id in(select id from tally_height_records order by id desc limit 10)", 1, 1, "data_time asc");
+        $sql = "select * from (select * from tally_height_records order by id desc limit 10)as temp order by data_time asc";
+        $data = db('', $this->dbconfig)->query($sql);
         $xdata = [];
         $height_data = [];
         $weight_data = [];

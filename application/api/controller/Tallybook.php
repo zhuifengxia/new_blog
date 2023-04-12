@@ -626,7 +626,7 @@ FROM
     public function recordList()
     {
         $baseModel = new ExamBase();
-        $data = $baseModel->dataList($this->dbconfig, "height_records", "", 1, 1, "data_time asc");
+        $data = $baseModel->dataList($this->dbconfig, "height_records", "", 1, 1, "id desc,data_time asc");
         $xdata = [];
         $height_data = [];
         $weight_data = [];

@@ -480,6 +480,31 @@ class Tallybook extends Controller
     }
 
     /**
+     * 租金信息自动录入；
+     */
+    public function insertData3()
+    {
+        $nowmonth = date("Y-m");
+        $baseModel = new ExamBase();
+        $isdata = $baseModel->oneDetail($this->dbconfig, "details", "type_id=16 and record_date like '$nowmonth%'");
+        if (empty($isdata)) {
+            $insert = [
+                "type_id" => 15,
+                "money_num" => config("app.web_config.car_money_sum"),
+                "account_id" => 1,
+                "record_date" => date("Y-m-d"),
+                "data_remark" => "车位租金自动添加",
+                "money_type" => 1,
+                "user_id" => 1,
+                "type_name" => "交通"
+            ];
+            $baseModel->addOne($this->dbconfig, "details", $insert);
+        }
+
+        return respondApi();
+    }
+
+    /**
      * 删除数据
      */
     public function deleteData()

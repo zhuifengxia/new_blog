@@ -147,6 +147,7 @@ Route::group('api', [
     'tally/typeData' => ['api/Tallybook/typeData', ['method' => 'post']],
     'tally/autoData' => ['api/Tallybook/insertData', ['method' => 'get|post']],
     'tally/autoData2' => ['api/Tallybook/insertData2', ['method' => 'get|post']],
+    'tally/autoData3' => ['api/Tallybook/insertData3', ['method' => 'get|post']],
     'tally/yearBill' => ['api/Tallybook/yearBill', ['method' => 'get|post']],
     //打卡程序
     'tally/checkList' => ['api/Tallybook/checkList', ['method' => 'get|post']],

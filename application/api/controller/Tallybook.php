@@ -489,7 +489,7 @@ class Tallybook extends Controller
         $isdata = $baseModel->oneDetail($this->dbconfig, "details", "type_id=16 and record_date like '$nowmonth%'");
         if (empty($isdata)) {
             $insert = [
-                "type_id" => 15,
+                "type_id" => 16,
                 "money_num" => config("app.web_config.car_money_sum"),
                 "account_id" => 1,
                 "record_date" => date("Y-m-d"),

@@ -486,7 +486,7 @@ class Tallybook extends Controller
     {
         $nowmonth = date("Y-m");
         $baseModel = new ExamBase();
-        $isdata = $baseModel->oneDetail($this->dbconfig, "details", "type_id=16 and record_date like '$nowmonth%'");
+        $isdata = $baseModel->oneDetail($this->dbconfig, "details", "type_id=16 and data_remark='车位租金自动添加' and record_date like '$nowmonth%'");
         if (empty($isdata)) {
             $insert = [
                 "type_id" => 16,

@@ -158,6 +158,6 @@ return [
         'web_url' => 'https://liuxiaomo.cn',//TODO 网站域名上线后需更换正式
         'money_sum' => 2093.93,
         'gjj_money_sum' => 785,
-        'car_money_sum' => 350,
+        'car_money_sum' => 300,
     ],
 ];

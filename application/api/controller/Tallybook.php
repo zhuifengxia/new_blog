@@ -35,8 +35,6 @@ class Tallybook extends Controller
         if ($typeid) {
             $where .= " and type_id=$typeid";
         }
-        $paywhere = " and money_type=1";
-        $incomewhere = " and money_type=0";
         if ($onlydata) {
             //只查询自己
             $where .= " and user_id=$userid";
@@ -98,8 +96,8 @@ class Tallybook extends Controller
         }
         $res = [
             "details" => $result ?: null,
-            "income_count" => $incom_count,
-            "pay_count" => $pay_count,
+            "income_count" => number_format($incom_count, 2),
+            "pay_count" => number_format($pay_count, 2),
         ];
         return respondApi($res);
     }

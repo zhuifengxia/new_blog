@@ -8,6 +8,7 @@
 
 namespace app\common\model;
 
+use think\Db;
 use think\Model;
 
 class ExamBase extends Model
@@ -34,6 +35,7 @@ class ExamBase extends Model
         } else if ($paginate == 2) {
             $data = $data->paginate($num, false, array("query" => $_REQUEST));
         }
+        Db::connect()->close();
         return $data;
     }
 

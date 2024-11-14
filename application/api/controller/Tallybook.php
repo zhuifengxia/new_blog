@@ -41,19 +41,33 @@ class Tallybook extends Controller
             //只查询自己
             $where .= " and user_id=$userid";
         }
-        //获取总支出
-        $pay_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
-        //获取总收入
-        $incom_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere);
+
+        $dataList=$baseModel->dataList($this->dbconfig,"details",$where,0,1,"record_date desc");
+        $pay_count=0;//获取总支出
+        $incom_count=0;//获取总收入
+        $dateList=[];//日期分类集合
+        foreach ($dataList as $item){
+            if($item["money_type"]==1){
+                $pay_count+=$item["money_num"];
+            }else{
+                $incom_count+=$item["money_num"];
+            }
+
+
+            if(!in_array($item["record_date"],$dateList)){
+                $dateList[]=$item["record_date"];
+            }
+        }
+        /*
         $dateList = db("details", $this->dbconfig)
             ->field("record_date")
             ->where($where)
             ->order("record_date desc")
             ->distinct("record_date")
-            ->select();
+            ->select();*/
         $result = [];
         foreach ($dateList as $item) {
-            $where = "record_date='{$item["record_date"]}'";
+            $where = "record_date='{$item}'";
             if ($typeid) {
                 $where .= " and type_id=$typeid";
             }
@@ -61,21 +75,24 @@ class Tallybook extends Controller
                 //只查询自己
                 $where .= " and user_id=$userid";
             }
-            //获得当天的支出
-            $pay = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere);
-            //获得当天收入
-            $income = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere);
-            $data = $baseModel->dataList($this->dbconfig, "details", $where, 0, $page, "create_time desc");
-            for ($i = 0; $i < count($data); $i++) {
-                $data[$i]["time"] = date("H:i", $data[$i]["create_time"]);
-                $data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$data[$i]["type_id"]}");
+            $dataList=$baseModel->dataList($this->dbconfig,"details",$where,0,1,"create_time desc");
+            $pay=0;//获得当天的支出
+            $income=0;//获得当天收入
+            foreach ($dataList as $key=>$oneData){
+                if($oneData["money_type"]==1){
+                    $pay+=$oneData["money_num"];
+                }else{
+                    $income+=$oneData["money_num"];
+                }
+                $dataList[$key]["time"] = date("H:i", $dataList[$key]["create_time"]);
+                $dataList[$key]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$dataList[$key]["type_id"]}");
             }
             $one = [
-                "date" => date("m月d日", strtotime($item["record_date"])),
-                "date_msg" => transDate($item["record_date"]),
+                "date" => date("m月d日", strtotime($item)),
+                "date_msg" => transDate($item),
                 "pay_count" => number_format($pay, 2),
                 "income_count" => number_format($income, 2),
-                "details" => $data
+                "details" => $dataList
             ];
             $result[] = $one;
         }

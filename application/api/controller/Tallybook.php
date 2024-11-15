@@ -96,8 +96,8 @@ class Tallybook extends Controller
         }
         $res = [
             "details" => $result ?: null,
-            "income_count" => number_format($incom_count, 2),
-            "pay_count" => number_format($pay_count, 2),
+            "income_count" => round($incom_count, 2),
+            "pay_count" => round($pay_count, 2),
         ];
         return respondApi($res);
     }

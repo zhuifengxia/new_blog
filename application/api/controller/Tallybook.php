@@ -46,7 +46,6 @@ class Tallybook extends Controller
         $dateList=[];//日期分类集合
         $pay=0;//获得当天的支出
         $income=0;//获得当天收入
-        $details=[];//每个日期的数据列表
         foreach ($dataList as $item){
             $idDate=0;
             $dateKey=0;
@@ -59,11 +58,11 @@ class Tallybook extends Controller
             }
 
             if(empty($idDate)){
-                $details=[];
+                $idDate=1;
                 $dateList[]=[
                     "date" => date("m月d日", strtotime($item["record_date"])),
                     "date_msg" => transDate($item["record_date"]),
-                    "details" => $details
+                    "details" => []
                 ];
                 $pay=0;
                 $income=0;

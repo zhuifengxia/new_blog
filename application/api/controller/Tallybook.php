@@ -59,6 +59,7 @@ class Tallybook extends Controller
             }
 
             if(empty($idDate)){
+                $details=[];
                 $dateList[]=[
                     "date" => date("m月d日", strtotime($item["record_date"])),
                     "date_msg" => transDate($item["record_date"]),
@@ -66,7 +67,6 @@ class Tallybook extends Controller
                 ];
                 $pay=0;
                 $income=0;
-                $details=[];
             }
             if($item["money_type"]==1){
                 $pay_count+=$item["money_num"];

@@ -48,17 +48,14 @@ class Tallybook extends Controller
         $income=0;//获得当天收入
         foreach ($dataList as $item){
             $idDate=0;
-            $dateKey=0;
             foreach ($dateList as $k=>$de){
                 if($de["date"]==date("m月d日", strtotime($item["record_date"]))){
                     $idDate=1;
-                    $dateKey=$k;
                     break;
                 }
             }
 
             if(empty($idDate)){
-                $idDate=1;
                 $dateList[]=[
                     "date" => date("m月d日", strtotime($item["record_date"])),
                     "date_msg" => transDate($item["record_date"]),
@@ -75,13 +72,15 @@ class Tallybook extends Controller
                 $income+=$item["money_num"];
             }
 
-            if($idDate){
-                $dateList[$dateKey]["pay_count"]=$pay;
-                $dateList[$dateKey]["income_count"]=$income;
-                $item["time"] = date("H:i", $item["create_time"]);
-                $dateList[$dateKey]["details"][]=$item;
+            foreach ($dateList as $k=>$de){
+                if($de["date"]==date("m月d日", strtotime($item["record_date"]))){
+                    $dateList[$k]["pay_count"]=$pay;
+                    $dateList[$k]["income_count"]=$income;
+                    $item["time"] = date("H:i", $item["create_time"]);
+                    $dateList[$k]["details"][]=$item;
+                    break;
+                }
             }
-
         }
         /*
         $dateList = db("details", $this->dbconfig)

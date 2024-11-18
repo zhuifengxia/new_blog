@@ -44,17 +44,35 @@ class Tallybook extends Controller
         $pay_count=0;//获取总支出
         $incom_count=0;//获取总收入
         $dateList=[];//日期分类集合
+        $pay=0;//获得当天的支出
+        $income=0;//获得当天收入
+        $details=[];//每个日期的数据列表
         foreach ($dataList as $item){
+            if(!in_array($item["record_date"],$dateList)){
+                $dateList[]=[
+                    "date" => date("m月d日", strtotime($item["record_date"])),
+                    "date_msg" => transDate($item["record_date"]),
+                    "details" => $details
+                ];
+                $pay=0;
+                $income=0;
+                $details=[];
+            }
             if($item["money_type"]==1){
                 $pay_count+=$item["money_num"];
+                $pay+=$item["money_num"];
             }else{
                 $incom_count+=$item["money_num"];
+                $income+=$item["money_num"];
+            }
+            foreach ($dateList as $key=>$oneData){
+                if($oneData["date"]==date("m月d日", strtotime($item["record_date"]))){
+                    $dateList[$key]["pay_count"]=$pay;
+                    $dateList[$key]["income_count"]=$income;
+                    $dateList[$key]["details"][]=$item;
+                }
             }
 
-
-            if(!in_array($item["record_date"],$dateList)){
-                $dateList[]=$item["record_date"];
-            }
         }
         /*
         $dateList = db("details", $this->dbconfig)
@@ -63,7 +81,7 @@ class Tallybook extends Controller
             ->order("record_date desc")
             ->distinct("record_date")
             ->select();*/
-        $result = [];
+        /*$result = [];
         foreach ($dateList as $item) {
             $where = "record_date='{$item}'";
             if ($typeid) {
@@ -94,9 +112,9 @@ class Tallybook extends Controller
                 "details" => $dataList
             ];
             $result[] = $one;
-        }
+        }*/
         $res = [
-            "details" => $result ?: null,
+            "details" => $dateList ?: null,
             "income_count" => round($incom_count, 2),
             "pay_count" => round($pay_count, 2),
         ];

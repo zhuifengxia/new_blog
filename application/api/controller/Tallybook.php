@@ -83,7 +83,8 @@ class Tallybook extends Controller
                     $income+=$oneData["money_num"];
                 }
                 $dataList[$key]["time"] = date("H:i", $dataList[$key]["create_time"]);
-                $dataList[$key]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$dataList[$key]["type_id"]}");
+                //$dataList[$key]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$dataList[$key]["type_id"]}");
+                $dataList[$key]["type_icon"] = "";
             }
             $one = [
                 "date" => date("m月d日", strtotime($item)),

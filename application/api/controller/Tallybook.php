@@ -69,6 +69,7 @@ class Tallybook extends Controller
                 if($oneData["date"]==date("m月d日", strtotime($item["record_date"]))){
                     $dateList[$key]["pay_count"]=$pay;
                     $dateList[$key]["income_count"]=$income;
+                    $item["time"] = date("H:i", $item["create_time"]);
                     $dateList[$key]["details"][]=$item;
                 }
             }

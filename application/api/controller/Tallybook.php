@@ -48,7 +48,17 @@ class Tallybook extends Controller
         $income=0;//获得当天收入
         $details=[];//每个日期的数据列表
         foreach ($dataList as $item){
-            if(!in_array($item["record_date"],$dateList)){
+            $idDate=0;
+            $dateKey=0;
+            foreach ($dateList as $k=>$de){
+                if($de["date"]==date("m月d日", strtotime($item["record_date"]))){
+                    $idDate=1;
+                    $dateKey=$k;
+                    break;
+                }
+            }
+
+            if(empty($idDate)){
                 $dateList[]=[
                     "date" => date("m月d日", strtotime($item["record_date"])),
                     "date_msg" => transDate($item["record_date"]),
@@ -65,13 +75,12 @@ class Tallybook extends Controller
                 $incom_count+=$item["money_num"];
                 $income+=$item["money_num"];
             }
-            foreach ($dateList as $key=>$oneData){
-                if($oneData["date"]==date("m月d日", strtotime($item["record_date"]))){
-                    $dateList[$key]["pay_count"]=$pay;
-                    $dateList[$key]["income_count"]=$income;
-                    $item["time"] = date("H:i", $item["create_time"]);
-                    $dateList[$key]["details"][]=$item;
-                }
+
+            if($idDate){
+                $dateList[$dateKey]["pay_count"]=$pay;
+                $dateList[$dateKey]["income_count"]=$income;
+                $item["time"] = date("H:i", $item["create_time"]);
+                $dateList[$dateKey]["details"][]=$item;
             }
 
         }

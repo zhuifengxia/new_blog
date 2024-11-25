@@ -74,8 +74,8 @@ class Tallybook extends Controller
 
             foreach ($dateList as $k=>$de){
                 if($de["date"]==date("m月d日", strtotime($item["record_date"]))){
-                    $dateList[$k]["pay_count"]=$pay;
-                    $dateList[$k]["income_count"]=$income;
+                    $dateList[$k]["pay_count"]=round($pay, 2);
+                    $dateList[$k]["income_count"]=round($income, 2);
                     $item["time"] = date("H:i", $item["create_time"]);
                     $dateList[$k]["details"][]=$item;
                     break;

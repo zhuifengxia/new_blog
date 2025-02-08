@@ -414,17 +414,24 @@ class Tallybook extends Controller
         if (empty($date)) {
             //每年元旦即可查看上一年度账单信息，
             $date = date("Y") - 1;
+            //查看当前是否是元旦以及之后10天
+            $now_month = date("m");
+            $now_day = date("d");
+            if ($now_month == "01" && $now_day <= 20) {
+                //1.1~1.10查看年度账单去年
+            } else {
+                //当年
+                $date = date("Y");
+            }
         }
 
-        //查看当前是否是元旦以及之后10天
-        $now_month = date("m");
-        $now_day = date("d");
-        if ($now_month == "01" && $now_day <= 20) {
-            //1.1~1.10查看年度账单去年
-        } else {
-            //当年
-            $date = date("Y");
+
+        $date_list=[];
+        $dateNum=date("Y")-2021;
+        for($i=0;$i<$dateNum;$i++){
+            $date_list[]=2021+$i;
         }
+
         $userid = $this->getUid();
         //获取当月总支出和总收入
         $baseModel = new ExamBase();
@@ -467,7 +474,8 @@ class Tallybook extends Controller
             "income_num" => $incom_num,
             "income_count" => $incom_count ?: "0.00",
             "income_data" => $income_data,
-            "year" => $date
+            "year" => $date,
+            "year_list"=>$date_list
         ];
         return respondApi($return);
     }

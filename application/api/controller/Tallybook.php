@@ -428,7 +428,7 @@ class Tallybook extends Controller
 
         $date_list=[];
         $dateNum=date("Y")-2021;
-        for($i=0;$i<$dateNum;$i++){
+        for($i=0;$i<=$dateNum;$i++){
             $date_list[]=2021+$i;
         }
 

@@ -431,7 +431,7 @@ class Tallybook extends Controller
         for($i=0;$i<=$dateNum;$i++){
             $date_list[]=2021+$i;
         }
-        $date_list=rsort($date_list);
+        rsort($date_list);
 
         $userid = $this->getUid();
         //获取当月总支出和总收入

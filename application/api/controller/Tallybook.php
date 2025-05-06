@@ -472,7 +472,7 @@ class Tallybook extends Controller
             $income_data[] = $oneincome;
             $onepay = $baseModel->dataSum($this->dbconfig, "details", "money_num", "record_date like '$date-$month%' and money_type=1");
             $month_pay_data[] = $onepay;
-            $month_balance_data[] = $oneincome - $onepay;
+            $month_balance_data[] = round($oneincome - $onepay,2);
         }
         $return = [
             "pay_num" => $pay_num,//支出数量

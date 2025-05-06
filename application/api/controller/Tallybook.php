@@ -426,10 +426,10 @@ class Tallybook extends Controller
         }
 
 
-        $date_list=[];
-        $dateNum=date("Y")-2021;
-        for($i=0;$i<=$dateNum;$i++){
-            $date_list[]=2021+$i;
+        $date_list = [];
+        $dateNum = date("Y") - 2021;
+        for ($i = 0; $i <= $dateNum; $i++) {
+            $date_list[] = 2021 + $i;
         }
         rsort($date_list);
 
@@ -460,23 +460,31 @@ class Tallybook extends Controller
             $pay_data[$i]["type_icon"] = $baseModel->dataValue($this->dbconfig, "type", "type_icon", "id={$pay_data[$i]["type_id"]}");
         }
         $income_data = [];
+        $month_pay_data = [];
+        $month_balance_data = [];
         //获取每月收入
         for ($i = 1; $i <= 12; $i++) {
             $month = $i;
             if ($i < 10) {
                 $month = "0" . $i;
             }
-            $income_data[] = $baseModel->dataSum($this->dbconfig, "details", "money_num", "record_date like '$date-$month%' and money_type=0");
+            $oneincome = $baseModel->dataSum($this->dbconfig, "details", "money_num", "record_date like '$date-$month%' and money_type=0");
+            $income_data[] = $oneincome;
+            $onepay = $baseModel->dataSum($this->dbconfig, "details", "money_num", "record_date like '$date-$month%' and money_type=1");
+            $month_pay_data[] = $onepay;
+            $month_balance_data[] = $oneincome - $onepay;
         }
         $return = [
-            "pay_num" => $pay_num,
-            "pay_data" => $pay_data ?: null,
-            "pay_count" => $pay_count ?: "0.00",
-            "income_num" => $incom_num,
-            "income_count" => $incom_count ?: "0.00",
-            "income_data" => $income_data,
+            "pay_num" => $pay_num,//支出数量
+            "pay_data" => $pay_data ?: null,//每种类型的支出
+            "pay_count" => $pay_count ?: "0.00",//当年总支出
+            "income_num" => $incom_num,//收入数量（计了几次）
+            "income_count" => $incom_count ?: "0.00", //当年总收入
+            "income_data" => $income_data,//每月收入数据
+            "month_pay_data" => $month_pay_data,//每月支出数据
+            "month_balance_data" => $month_balance_data,//每月结余数据
             "year" => $date,
-            "year_list"=>$date_list
+            "year_list" => $date_list
         ];
         return respondApi($return);
     }

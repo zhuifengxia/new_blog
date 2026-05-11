@@ -243,6 +243,9 @@ class Tallybook extends Controller
         if ($userid == 1) {
             $is_show_yearbill = 1;
         }
+        //获取网店收支统计
+        $store_pay_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $paywhere." and type_id=26");
+        $store_income_count = $baseModel->dataSum($this->dbconfig, "details", "money_num", $where . $incomewhere." and type_id=26");
         $return = [
             "pay_data" => $pay_data ?: null,
             "income_data" => $income_data ?: null,
@@ -252,7 +255,8 @@ class Tallybook extends Controller
             "user_pay_count" => $user_pay_count ?: "0.00",
             "user_incom_count" => $user_incom_count ?: "0.00",
             "date_scope" => $date_scope,
-            "is_show_yearbill" => $is_show_yearbill
+            "is_show_yearbill" => $is_show_yearbill,
+            "store_data"=>array("pay"=>$store_pay_count,"income"=>$store_income_count)
         ];
         return respondApi($return);
     }
